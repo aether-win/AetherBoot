@@ -247,6 +247,7 @@ cp $OPT README $tmpdir/
 cp $OPT plugin $tmpdir/
 cp $OPT CreatePersistentImg.sh $tmpdir/
 cp $OPT ExtendPersistentImg.sh $tmpdir/
+cp $OPT VerificarISOs.sh $tmpdir/
 dos2unix -q $tmpdir/Ventoy2Disk.sh
 dos2unix -q $tmpdir/VentoyWeb.sh
 dos2unix -q $tmpdir/VentoyPlugson.sh
@@ -255,6 +256,7 @@ dos2unix -q $tmpdir/VentoyVlnk.sh
 
 dos2unix -q $tmpdir/CreatePersistentImg.sh
 dos2unix -q $tmpdir/ExtendPersistentImg.sh
+dos2unix -q $tmpdir/VerificarISOs.sh
 
 cp $OPT ../LinuxGUI/WebUI $tmpdir/
 sed 's/.*SCRIPT_DEL_THIS \(.*\)/\1/g' -i $tmpdir/WebUI/index.html
@@ -324,6 +326,7 @@ cp $OPT $LANG_DIR/languages.json $tmpdir/tool/
 
 chmod +x $tmpdir/CreatePersistentImg.sh
 chmod +x $tmpdir/ExtendPersistentImg.sh
+chmod +x $tmpdir/VerificarISOs.sh
 
 tar -czvf ventoy-${curver}-linux.tar.gz $tmpdir
 
@@ -335,6 +338,7 @@ cp $OPT Ventoy2Disk.exe $tmpdir/
 cp $OPT VentoyPlugson.exe $tmpdir/
 cp $OPT VentoyVlnk.exe $tmpdir/
 cp $OPT FOR_X64_ARM.txt $tmpdir/
+cp $OPT VerificarISOs.ps1 $tmpdir/
 mkdir -p $tmpdir/altexe
 cp $OPT Ventoy2Disk_*.exe $tmpdir/altexe/
 cp $OPT VentoyPlugson_*.exe $tmpdir/altexe/

@@ -1,0 +1,52 @@
+{
+    "control": [
+        { "VTOY_DEFAULT_MENU_MODE": "0" },
+        { "VTOY_FILT_DOT_UNDERSCORE_FILE": "1" },
+        { "VTOY_MENU_LANGUAGE": "es_ES" },
+        { "VTOY_MENU_TIMEOUT": "10" },
+        { "VTOY_SECONDARY_TIMEOUT": "5" }
+    ],
+
+    "theme": {
+        "file": [
+            "/ventoy/theme_moderno/theme.txt",
+            "/ventoy/theme/theme.txt"
+        ],
+        "default_file": 1,
+        "gfxmode": "1920x1080",
+        "display_mode": "GUI",
+        "ventoy_left": "15%",
+        "ventoy_top": "8%",
+        "ventoy_color": "#14b8a6"
+    },
+
+    "menu_tip": {
+        "left": "15%",
+        "top": "83%",
+        "color": "#94a3b8",
+        "tips": [
+            {
+                "image": "/ISO/Win11_Spanish_x64.iso",
+                "tip": "Instalación con cuenta local, sin TPM ni internet obligatorios"
+            },
+            {
+                "dir": "/ISO/rescate",
+                "tip": "Herramientas de rescate y reparación"
+            }
+        ]
+    },
+
+    "menu_alias": [
+        {
+            "image": "/ISO/Win11_Spanish_x64.iso",
+            "alias": "Windows 11 (español)"
+        }
+    ],
+
+    "auto_install": [
+        {
+            "image": "/ISO/Win11_Spanish_x64.iso",
+            "template": "/ventoy/script/windows11_es_desatendido.xml"
+        }
+    ]
+}
