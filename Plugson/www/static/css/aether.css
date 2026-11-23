@@ -1,0 +1,189 @@
+/* ==========================================================================
+   AetherBoot — sistema de diseño compartido
+   Lo usan AetherPlugson y Aether2Disk (versión web de Linux).
+   Paleta: azul profundo, azul eléctrico, cian, blanco y tonos oscuros.
+   Inspirado en Windows 11 Fluent: esquinas redondeadas, sombras suaves,
+   superficies claras y barras oscuras con acento de color.
+   ========================================================================== */
+
+:root {
+    --ab-azul-profundo: #050b18;
+    --ab-azul-noche:    #0a1a3f;
+    --ab-azul-medio:    #12306e;
+    --ab-electrico:     #1e6bff;
+    --ab-electrico-osc: #1452d6;
+    --ab-cian:          #22d3ee;
+    --ab-blanco:        #ffffff;
+    --ab-fondo:         #eef3fb;
+    --ab-superficie:    #ffffff;
+    --ab-borde:         #d6e2f5;
+    --ab-texto:         #0f1b33;
+    --ab-texto-suave:   #51607a;
+    --ab-exito:         #16a34a;
+    --ab-aviso:         #d97706;
+    --ab-error:         #dc2626;
+    --ab-radio:         10px;
+    --ab-radio-peq:     7px;
+    --ab-sombra:        0 1px 2px rgba(10, 26, 63, .06), 0 4px 14px rgba(10, 26, 63, .08);
+    --ab-sombra-alta:   0 10px 30px rgba(5, 11, 24, .25);
+    --ab-fuente:        "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, "Ubuntu", "Noto Sans", "DejaVu Sans", Arial, sans-serif;
+}
+
+/* ---------- base ---------- */
+body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .main-header .logo, .btn, .form-control, .modal-title {
+    font-family: var(--ab-fuente) !important;
+}
+body { color: var(--ab-texto); background: var(--ab-fondo) !important; }
+a { color: var(--ab-electrico); }
+a:hover, a:focus { color: var(--ab-electrico-osc); }
+::selection { background: var(--ab-cian); color: var(--ab-azul-profundo); }
+
+/* ---------- barra superior ---------- */
+.skin-blue .main-header .navbar,
+.main-header .navbar {
+    background: linear-gradient(90deg, var(--ab-azul-noche) 0%, var(--ab-azul-medio) 55%, var(--ab-electrico) 100%) !important;
+    border-bottom: 1px solid rgba(34, 211, 238, .45);
+}
+.skin-blue .main-header .logo,
+.main-header .logo {
+    background: var(--ab-azul-profundo) !important;
+    color: var(--ab-blanco) !important;
+    font-weight: 600;
+    letter-spacing: .2px;
+    border-bottom: 1px solid rgba(34, 211, 238, .45);
+}
+.skin-blue .main-header .logo:hover { background: var(--ab-azul-profundo) !important; }
+.aether-logo-img { width: 30px; height: 30px; margin-top: -3px; }
+.skin-blue .main-header .navbar .nav > li > a,
+.main-header .navbar .nav > li > a { color: #e6efff !important; }
+.skin-blue .main-header .navbar .nav > li > a:hover,
+.main-header .navbar .nav > li > a:hover { background: rgba(255, 255, 255, .10) !important; }
+.skin-blue .main-header .navbar .sidebar-toggle:hover { background: rgba(255, 255, 255, .10); }
+
+/* ---------- barra lateral ---------- */
+.skin-blue .main-sidebar, .skin-blue .left-side, .skin-blue .wrapper {
+    background: var(--ab-azul-noche) !important;
+}
+.skin-blue .sidebar-menu > li > a {
+    color: #c9d6f2;
+    border-left: 3px solid transparent;
+    margin: 2px 8px 2px 0;
+    border-radius: 0 var(--ab-radio-peq) var(--ab-radio-peq) 0;
+}
+.skin-blue .sidebar-menu > li:hover > a { background: var(--ab-azul-medio) !important; color: #fff; }
+.skin-blue .sidebar-menu > li.active > a {
+    background: linear-gradient(90deg, rgba(30, 107, 255, .55), rgba(30, 107, 255, .15)) !important;
+    border-left-color: var(--ab-cian) !important;
+    color: #fff !important;
+}
+
+/* ---------- área de contenido y pie ---------- */
+.content-wrapper, .right-side { background: var(--ab-fondo) !important; }
+.main-footer {
+    background: var(--ab-superficie);
+    border-top: 1px solid var(--ab-borde);
+    color: var(--ab-texto-suave);
+}
+.aether-attrib { color: var(--ab-texto-suave); font-weight: normal; }
+
+/* ---------- tarjetas ---------- */
+.box {
+    border-radius: var(--ab-radio) !important;
+    border-top: 3px solid var(--ab-electrico) !important;
+    box-shadow: var(--ab-sombra) !important;
+    background: var(--ab-superficie);
+}
+.box.box-primary { border-top-color: var(--ab-electrico) !important; }
+.box.box-success { border-top-color: var(--ab-cian) !important; }
+.box-header .box-title { color: var(--ab-azul-noche); }
+.box-header .fa { color: var(--ab-electrico); }
+legend { border-bottom-color: var(--ab-borde); }
+
+/* ---------- botones ---------- */
+.btn { border-radius: var(--ab-radio-peq) !important; font-weight: 600; transition: background .15s, box-shadow .15s, transform .05s; }
+.btn:active { transform: translateY(1px); }
+.btn-primary, .btn-primary:focus {
+    background: var(--ab-electrico) !important;
+    border-color: var(--ab-electrico-osc) !important;
+    color: #fff !important;
+}
+.btn-primary:hover { background: var(--ab-electrico-osc) !important; box-shadow: 0 0 0 3px rgba(34, 211, 238, .30); }
+.btn-success, .btn-success:focus { background: #0891b2 !important; border-color: #0e7490 !important; }
+.btn-success:hover { background: #0e7490 !important; }
+.btn-danger, .btn-danger:focus { background: var(--ab-error) !important; border-color: #b91c1c !important; }
+.btn-default { background: #f4f7fd; border-color: var(--ab-borde); color: var(--ab-texto); }
+.btn-default:hover { background: #e8effb; }
+.btn[disabled], .btn.disabled { opacity: .55; }
+
+/* ---------- formularios ---------- */
+.form-control {
+    border-radius: var(--ab-radio-peq) !important;
+    border-color: var(--ab-borde);
+    box-shadow: none !important;
+}
+.form-control:focus { border-color: var(--ab-electrico) !important; box-shadow: 0 0 0 3px rgba(30, 107, 255, .18) !important; }
+label.error, .error { color: var(--ab-error); }
+
+/* ---------- pestañas ---------- */
+.nav-tabs-custom { border-radius: var(--ab-radio); box-shadow: none; background: transparent; }
+.nav-tabs-custom > .nav-tabs > li.active { border-top-color: var(--ab-cian) !important; }
+.nav-tabs-custom > .nav-tabs > li.active > a { color: var(--ab-azul-noche); }
+.nav-tabs-custom > .nav-tabs > li > a { color: var(--ab-texto-suave); }
+
+/* ---------- tablas ---------- */
+.table-bordered { border-radius: var(--ab-radio-peq); overflow: hidden; border-color: var(--ab-borde); }
+.table > thead > tr > th, .table-bordered > thead > tr > th {
+    background: #f1f6ff;
+    color: var(--ab-azul-noche);
+    border-color: var(--ab-borde) !important;
+}
+.table > tbody > tr > td { border-color: #e6eef9 !important; vertical-align: middle; }
+.table > tbody > tr:hover > td { background: #f7faff; }
+code { color: #1452d6; background: #eaf2ff; border-radius: 4px; }
+
+/* ---------- ventanas modales y avisos ---------- */
+.modal-content { border-radius: 12px !important; overflow: hidden; box-shadow: var(--ab-sombra-alta) !important; border: 0; }
+.modal-header {
+    background: linear-gradient(90deg, var(--ab-azul-noche), var(--ab-electrico));
+    color: #fff;
+    border-bottom: 1px solid rgba(34, 211, 238, .5);
+}
+.modal-header .close { color: #fff; opacity: .85; text-shadow: none; }
+.modal-footer { background: #f7faff; border-top-color: var(--ab-borde); }
+.progress { border-radius: 999px; background: #e3ebfa; }
+.progress-bar { background: linear-gradient(90deg, var(--ab-electrico), var(--ab-cian)) !important; }
+
+/* ---------- etiquetas de estado ---------- */
+.label-success, .bg-green { background: var(--ab-exito) !important; }
+.label-danger, .bg-red { background: var(--ab-error) !important; }
+.label-warning, .bg-yellow { background: var(--ab-aviso) !important; }
+.label-primary, .bg-light-blue { background: var(--ab-electrico) !important; }
+
+/* ---------- sin enlaces a sitios externos de terceros ---------- */
+#id_a_official_doc, a#id_a_official_doc, span#id_a_official_doc { display: none !important; }
+.aether-sin-enlace { color: inherit; }
+
+/* ---------- página "Acerca de" ---------- */
+.aether-about { font-size: 15px; line-height: 1.6; max-width: 900px; }
+.aether-about-head { display: flex; align-items: center; gap: 22px; margin: 6px 0 18px; }
+.aether-about-icon { width: 96px; height: 96px; }
+.aether-about-logo { width: 340px; max-width: 100%; background: var(--ab-azul-profundo); border-radius: var(--ab-radio); padding: 10px 14px; }
+.aether-about-sub { margin: 8px 0 0; color: var(--ab-texto-suave); font-weight: 600; }
+.aether-about h4 { color: var(--ab-azul-noche); margin-top: 22px; font-weight: 700; }
+
+/* ---------- tarjetas internas con cabecera sólida ---------- */
+.box.box-solid.box-primary, .box.box-solid.box-success, .box.box-solid.box-info, .box.box-solid.box-default {
+    border: 1px solid var(--ab-borde) !important;
+    border-top: 3px solid var(--ab-cian) !important;
+    overflow: hidden;
+}
+.box.box-solid.box-primary > .box-header,
+.box.box-solid.box-success > .box-header,
+.box.box-solid.box-info > .box-header,
+.box.box-solid.box-default > .box-header {
+    background: linear-gradient(90deg, var(--ab-azul-noche), var(--ab-azul-medio)) !important;
+    color: #fff !important;
+}
+.box.box-solid > .box-header .box-title, .box.box-solid > .box-header .btn, .box.box-solid > .box-header .fa { color: #fff !important; }
+.box.box-solid > .box-header .btn { background: transparent !important; border: 0 !important; }
+.sidebar-menu > li > a > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

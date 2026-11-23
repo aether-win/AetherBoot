@@ -6,7 +6,8 @@
     <meta http-equiv="pragma" content="no-cache">
     <!-- HTTP 1.0 -->
     <meta http-equiv="cache-control" content="no-cache">
-    <title>Ventoy Plugson</title>
+    <title>AetherPlugson</title>
+    <link rel="icon" type="image/png" href="/static/img/aetherplugson_32.png">
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.5 -->
@@ -22,6 +23,8 @@
     <link rel="stylesheet" href="static/AdminLTE/css/skins/skin-blue.min.css">
     <link rel="stylesheet" href="static/datatables/dataTables.bootstrap.css">
     <link rel="stylesheet" href="static/css/vtoy.css">
+    <!-- AetherBoot: sistema de diseño compartido -->
+    <link rel="stylesheet" href="static/css/aether.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -52,7 +55,7 @@
             <!-- Logo -->
             <a href="." class="logo">
                 <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg" > <img src="/static/img/logo_32.png" > &nbsp;Ventoy Plugson</span>
+                <span class="logo-lg" > <img src="/static/img/aetherplugson_32.png" class="aether-logo-img"> &nbsp;AetherPlugson</span>
             </a>
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top" role="navigation">
@@ -68,7 +71,7 @@
                             </a>
                         </li>
 
-                        <li class="dropdown user user-menu">
+                        <li class="dropdown user user-menu" style="display:none">
                             <a href="javascript:void(0)" id="id_a_language">
                                 <span class="fa fa-language"></span>&nbsp;&nbsp;
                                 <span id="id_span_language" class="hidden-xs">English</span>
@@ -78,18 +81,11 @@
 
                         <li class="dropdown user user-menu">
                             <a id="id_top_donation" href="#plugson_donation" data-href="#plugson_donation">
-                                <span class="fa fa-paypal"></span>&nbsp;
-                                <span id="id_span_donation" class="hidden-xs">捐助</span>
+                                <span class="fa fa-info-circle"></span>&nbsp;
+                                <span id="id_span_donation" class="hidden-xs">Acerca de</span>
                             </a>
                         </li>
 
-                        <!-- User Account: style can be found in dropdown.less -->
-                        <li class="dropdown user user-menu">
-                            <a href="https://www.ventoy.net" target="_blank" >
-                                <span class="fa fa-link"></span>&nbsp;
-                                <span class="hidden-xs">Ventoy</span>
-                            </a>
-                        </li>
                     </ul>
                 </div>
 
@@ -213,7 +209,7 @@
                                 <div class="form-group" id="id_note_pwdfile_en">
                                     <div class="col-sm-3"></div>
                                     <div class="col-sm-9">
-                                        Please input the full absolute file path. For example:<br/>
+                                        Escriba la ruta absoluta completa del archivo. Por ejemplo:<br/>
                                         <span id="id_span_pwdfile_tip1" style="color:red;"></span><br/>
                                         <span id="id_span_pwdfile_tip2" style="color:red;"></span><br/>
                                     </div>
@@ -228,7 +224,7 @@
                                 <div class="form-group" id="id_note_pwddir_en">
                                     <div class="col-sm-3"></div>
                                     <div class="col-sm-9">
-                                        Please input the full absolute directory path. For example: <br/>
+                                        Escriba la ruta absoluta completa de la carpeta. Por ejemplo: <br/>
                                         <span id="id_span_pwddir_tip" style="color:red;"></span>
                                     </div>
                                 </div>
@@ -302,7 +298,7 @@
                             <div class="form-group" id="id_note_setfile_en">
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-9">
-                                    Please input the full absolute file path. For example:<br/>
+                                    Escriba la ruta absoluta completa del archivo. Por ejemplo:<br/>
                                     <span id="id_span_filepath_tip1" style="color:red;"></span><br/>
                                     <span id="id_span_filepath_tip2" style="color:red;"></span><br/>
                                 </div>
@@ -327,7 +323,7 @@
                             <div class="form-group" id="id_note_tip3_en">
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-9">
-                                    Please input the full absolute file path. For example:<br/>
+                                    Escriba la ruta absoluta completa del archivo. Por ejemplo:<br/>
                                     <span id="id_span_filepath_tip3" style="color:red;"></span><br/>
                                 </div>
                             </div>
@@ -375,7 +371,7 @@
                             <div class="form-group" id="id_note_filefile_en">
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-9">
-                                    Please input the full absolute file path. For example:<br/>
+                                    Escriba la ruta absoluta completa del archivo. Por ejemplo:<br/>
                                     <span id="id_span_filefile_tip1" style="color:red;"></span><br/>
                                     <span id="id_span_filefile_tip2" style="color:red;"></span><br/>
                                 </div>
@@ -400,7 +396,7 @@
                             <div class="form-group" id="id_note_filefile_en">
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-9">
-                                    Please input the full absolute file path. For example:<br/>
+                                    Escriba la ruta absoluta completa del archivo. Por ejemplo:<br/>
                                     <span id="id_span_filefile_tip3" style="color:red;"></span><br/>
                                 </div>
                             </div>
@@ -447,7 +443,7 @@
                             <div class="form-group" id="id_note_dirfile_en">
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-9">
-                                    Please input the full absolute directory path. For example:<br/>
+                                    Escriba la ruta absoluta completa de la carpeta. Por ejemplo:<br/>
                                     <span id="id_span_dirfile_tip1" style="color:red;"></span><br/>
                                 </div>
                             </div>
@@ -471,7 +467,7 @@
                             <div class="form-group" id="id_note_dirfile_en">
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-9">
-                                    Please input the full absolute file path. For example:<br/>
+                                    Escriba la ruta absoluta completa del archivo. Por ejemplo:<br/>
                                     <span id="id_span_dirfile_tip2" style="color:red;"></span><br/>
                                 </div>
                             </div>
@@ -496,7 +492,7 @@
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                            <h4><b>Boot Conf Replace</b> </h4>
+                            <h4><b>Reemplazo de configuración de arranque</b> </h4>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
@@ -520,7 +516,7 @@
                             <div class="form-group" id="id_note_conf_en">
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-9">
-                                    Please input the full absolute file path. For example:<br/>
+                                    Escriba la ruta absoluta completa del archivo. Por ejemplo:<br/>
                                     <span id="id_span_conf_tip1" style="color:red;"></span><br/>
                                     <span id="id_span_conf_tip2" style="color:red;"></span>
                                 </div>
@@ -544,7 +540,7 @@
                             <div class="form-group" id="id_note_conf_en">
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-9">
-                                    The original file path inside the ISO (start with /), for example:
+                                    Ruta del archivo original dentro de la ISO (empieza por /). Por ejemplo:
                                     <span style="color:red;">/boot/grub/grub.cfg</span>
                                 </div>
                             </div>
@@ -567,7 +563,7 @@
                             <div class="form-group" id="id_note_conf_en">
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-9">
-                                    Please input the full absolute file path. For example:<br/>
+                                    Escriba la ruta absoluta completa del archivo. Por ejemplo:<br/>
                                     <span id="id_span_conf_tip3" style="color:red;"></span>
                                 </div>
                             </div>
@@ -614,7 +610,7 @@
                             <div class="form-group" id="id_note_setfile_en">
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-9">
-                                    Please input the full absolute directory path. For example: <br/>
+                                    Escriba la ruta absoluta completa de la carpeta. Por ejemplo: <br/>
                                     <span id="id_span_dirpath_tip" style="color:red;"></span>
                                 </div>
                             </div>
@@ -638,7 +634,7 @@
                             <div class="form-group" id="id_note_tip3_en">
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-9">
-                                    Please input the full absolute file path. For example:<br/>
+                                    Escriba la ruta absoluta completa del archivo. Por ejemplo:<br/>
                                     <span id="id_span_dirpath_tip3" style="color:red;"></span><br/>
                                 </div>
                             </div>
@@ -762,7 +758,7 @@
             <div class="pull-right hidden-xs">
                 <b id="plugson_build_date">20260625 19:36:29</b>
             </div>
-            <strong><a href="https://www.ventoy.net" target="_blank">https://www.ventoy.net</a></strong>
+            <strong>AetherBoot</strong> &middot; Gestor de arranque multisistema &middot; <span class="aether-attrib">basado en la tecnología Ventoy (GPLv3)</span>
         </footer>
 
         <!-- Control Sidebar -->
@@ -828,7 +824,8 @@
     }
 
     function VtoyLanguageClick() {
-        var defaultPage = window.location.hash;
+        /* AetherBoot: la interfaz está solo en español */
+        return;
 
         if (g_current_language === 'cn') {
             g_current_language = 'en';
@@ -848,7 +845,7 @@
     callVtoySync({
         method : 'sysinfo'
     }, function(data) {
-        g_current_language = data.language;
+        g_current_language = 'en';   /* AetherBoot: interfaz en español */
         g_current_dir = data.curdir;
         g_current_os = data.os;
         m_syntax_error = data.syntax_error;

@@ -15,7 +15,7 @@
         </div>
 
         <div class="col-sm-2" style="font-size:16px;padding-top:8px;">
-            <a id="id_a_official_doc" target="_blank" href="https://www.ventoy.net/cn/plugin_control.html"><span class="fa fa-link"></span><span id="id_span_official_doc">官网文档</span></a>
+            <span id="id_a_official_doc"  class="aether-sin-enlace"><span class="fa fa-link"></span><span id="id_span_official_doc">官网文档</span></span>
         </div>
     </div>
     <legend></legend>
@@ -58,9 +58,9 @@
                       </td>
                     </tr>
                     <tr id="tr_title_desc_en">
-                      <td class="td_ctrl_col">Option Description</td>
+                      <td class="td_ctrl_col">Descripción de la opción</td>
                       <td>
-                        Ventoy menu language. Default is "en_US",
+                        Idioma del menú de arranque. En AetherBoot el valor por defecto es "es_ES",
                       </td>
                     </tr>
                 </table>
@@ -106,12 +106,10 @@
                       </td>
                     </tr>
                     <tr id="tr_title_desc_en">
-                      <td class="td_ctrl_col">Option Description</td>
+                      <td class="td_ctrl_col">Descripción de la opción</td>
                       <td>
-                        The root path where to search the image files. By default, Ventoy will search all the directories and subdirectories in the USB. This will be very slow when you have huge number of files in the USB.
-                        In this case, you can put all the image files in one subdirectory and use this to specify the search path.
-                        After that Ventoy will only search this directory and its subdirectories for image files.<br/>
-                        Note: the path must not be the mountpoint of the first partition, but a subdirectory.
+                        Carpeta raíz donde se buscan las imágenes. Por defecto, AetherBoot busca en todas las carpetas y subcarpetas del USB, lo que puede ser muy lento si hay muchísimos archivos. En ese caso, guarde todas las imágenes en una subcarpeta e indíquela aquí: AetherBoot solo buscará en esa carpeta y sus subcarpetas.<br/>
+                        Nota: la ruta no puede ser la raíz de la primera partición; debe ser una subcarpeta.
                       </td>
                     </tr>
                 </table>
@@ -136,12 +134,12 @@
                       <label class="radio-inline">
                           <input type="radio" id="id_ctrl_uefi_sb_policy_radio0" name="id_ctrl_uefi_sb_policy_radio" data-type="0" value="0"/>
                           <span id="id_span_desc_cn">绕过安全启动检查</span>
-                          <span id="id_span_desc_en">ByPass Secure Boot</span>
+                          <span id="id_span_desc_en">Omitir Secure Boot</span>
                       </label>
                       <label class="radio-inline label-rt">
                           <input type="radio" id="id_ctrl_uefi_sb_policy_radio1" name="id_ctrl_uefi_sb_policy_radio" data-type="1" value="1"/>
                           <span id="id_span_desc_cn">遵循UEFI安全启动检查规则</span>
-                          <span id="id_span_desc_en">Follow UEFI Secure Boot Check</span>
+                          <span id="id_span_desc_en">Respetar la comprobación de Secure Boot de UEFI</span>
                       </label>
                     </td>
                   </tr>
@@ -168,22 +166,22 @@
                       <label class="radio-inline">
                           <input type="radio" id="id_ctrl_uefi_res_lock_radio0" name="id_ctrl_uefi_res_lock_radio" data-type="0" value="0"/>
                           <span id="id_span_desc_cn">不锁定</span>
-                          <span id="id_span_desc_en">None</span>
+                          <span id="id_span_desc_en">Ninguno</span>
                       </label>
                       <label class="radio-inline label-rt">
                           <input type="radio" id="id_ctrl_uefi_res_lock_radio1" name="id_ctrl_uefi_res_lock_radio" data-type="1" value="1"/>
                           <span id="id_span_desc_cn">锁定最高分辨率</span>
-                          <span id="id_span_desc_en">Highest</span>
+                          <span id="id_span_desc_en">Máxima</span>
                       </label>
                       <label class="radio-inline label-rt">
                           <input type="radio" id="id_ctrl_uefi_res_lock_radio2" name="id_ctrl_uefi_res_lock_radio" data-type="1" value="2"/>
                           <span id="id_span_desc_cn">锁定 1024x768</span>
-                          <span id="id_span_desc_en">Fixed 1024x768</span>
+                          <span id="id_span_desc_en">Fija 1024x768</span>
                       </label>
                       <label class="radio-inline label-rt">
                           <input type="radio" id="id_ctrl_uefi_res_lock_radio3" name="id_ctrl_uefi_res_lock_radio" data-type="1" value="3"/>
                           <span id="id_span_desc_cn">锁定 1024x768及以上</span>
-                          <span id="id_span_desc_en">At least 1024x768</span>
+                          <span id="id_span_desc_en">Al menos 1024x768</span>
                       </label>
                     </td>
                   </tr>
@@ -208,12 +206,12 @@
                       <label class="radio-inline">
                           <input type="radio" id="id_ctrl_bypass_win11_radio0" name="id_ctrl_bypass_win11_radio" data-type="0" value="0"/>
                           <span id="id_span_desc_cn">不绕过Windows 11安装时的硬件检查</span>
-                          <span id="id_span_desc_en">Do not bypass Windows 11 hardware check</span>
+                          <span id="id_span_desc_en">No omitir la comprobación de hardware de Windows 11</span>
                       </label>
                       <label class="radio-inline label-rt">
                           <input type="radio" id="id_ctrl_bypass_win11_radio1" name="id_ctrl_bypass_win11_radio" data-type="1" value="1"/>
                           <span id="id_span_desc_cn">绕过Windows 11安装时的硬件检查</span>
-                          <span id="id_span_desc_en">Bypass Windows 11 hardware check</span>
+                          <span id="id_span_desc_en">Omitir la comprobación de hardware de Windows 11</span>
                       </label>
                     </td>
                   </tr>
@@ -229,10 +227,9 @@
                     </td>
                   </tr>
                   <tr id="tr_title_desc_en">
-                    <td class="td_ctrl_col" id="td_title_desc">Option Description</td>
+                    <td class="td_ctrl_col" id="td_title_desc">Descripción de la opción</td>
                     <td>
-                      This option only avaliable for standard Windows 11 ISO files.
-                      When set to 1, Ventoy will create the following registries to bypass Windows 11 hardware check when install. <br/>
+                      Solo para ISO estándar de Windows 11. Con el valor 1, AetherBoot crea durante la instalación las siguientes claves de registro para omitir la comprobación de hardware de Windows 11. <br/>
                       <code>HKEY_LOCAL_MACHINE\SYSTEM\Setup\LabConfig\BypassRAMCheck</code><br/>
                       <code>HKEY_LOCAL_MACHINE\SYSTEM\Setup\LabConfig\BypassTPMCheck</code><br/>
                       <code>HKEY_LOCAL_MACHINE\SYSTEM\Setup\LabConfig\BypassSecureBootCheck</code><br/>
@@ -262,12 +259,12 @@
                       <label class="radio-inline">
                           <input type="radio" id="id_ctrl_bypass_nro_radio0" name="id_ctrl_bypass_nro_radio" data-type="0" value="0"/>
                           <span id="id_span_desc_cn">不绕过Windows 11安装时的在线账户需求</span>
-                          <span id="id_span_desc_en">Do not bypass Windows 11 online account requirement</span>
+                          <span id="id_span_desc_en">No omitir la cuenta en línea obligatoria de Windows 11</span>
                       </label>
                       <label class="radio-inline label-rt">
                           <input type="radio" id="id_ctrl_bypass_nro_radio1" name="id_ctrl_bypass_nro_radio" data-type="1" value="1"/>
                           <span id="id_span_desc_cn">绕过Windows 11安装时的在线账户需求</span>
-                          <span id="id_span_desc_en">Bypass Windows 11 online account requirement</span>
+                          <span id="id_span_desc_en">Omitir la cuenta en línea obligatoria de Windows 11</span>
                       </label>
                     </td>
                   </tr>
@@ -280,10 +277,9 @@
                     </td>
                   </tr>
                   <tr id="tr_title_desc_en">
-                    <td class="td_ctrl_col" id="td_title_desc">Option Description</td>
+                    <td class="td_ctrl_col" id="td_title_desc">Descripción de la opción</td>
                     <td>
-                      This option only avaliable for standard Windows 11 ISO files.
-                      When set to 1, Ventoy will create the following registry to bypass Windows 11 online account requirement when install. <br/>
+                      Solo para ISO estándar de Windows 11. Con el valor 1, AetherBoot crea durante la instalación la siguiente clave de registro para omitir la cuenta en línea obligatoria de Windows 11. <br/>
                       <code>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE\BypassNRO</code>
                     </td>
                   </tr>
@@ -312,12 +308,12 @@
                       <label class="radio-inline">
                           <input type="radio" id="id_ctrl_radio_menu_mode0" name="id_ctrl_radio_menu_mode" data-type="0" value="0">
                           <span id="id_span_desc_cn">文件列表模式</span>
-                          <span id="id_span_desc_en">ListView Mode</span>
+                          <span id="id_span_desc_en">Vista de lista</span>
                       </label>
                       <label class="radio-inline label-rt">
                           <input type="radio" id="id_ctrl_radio_menu_mode1" name="id_ctrl_radio_menu_mode" data-type="1" value="1">
                           <span id="id_span_desc_cn">目录树模式</span>
-                          <span id="id_span_desc_en">TreeView Mode</span>
+                          <span id="id_span_desc_en">Vista de árbol</span>
                       </label>
                     </td>
                   </tr>
@@ -356,11 +352,10 @@
                       </td>
                     </tr>
                     <tr id="tr_title_desc_en">
-                      <td class="td_ctrl_col">Option Description</td>
+                      <td class="td_ctrl_col">Descripción de la opción</td>
                       <td>
-                        Menu timeout (seconds). Default value is 0 (no timeout is set). <br/>
-                        When you set it to 10 for example, the selected image will be booted automatically after 10 seconds.
-                        During the countdown, pressing any key will stop the countdown and wait for user operation.
+                        Tiempo de espera del menú (segundos). El valor por defecto es 0 (sin tiempo de espera). <br/>
+                        Por ejemplo, con 10 la imagen seleccionada arrancará sola a los 10 segundos. Durante la cuenta atrás, cualquier tecla la detiene y espera a que el usuario elija.
                       </td>
                     </tr>
                 </table>
@@ -406,10 +401,10 @@
                       </td>
                     </tr>
                     <tr id="tr_title_desc_en">
-                      <td class="td_ctrl_col">Option Description</td>
+                      <td class="td_ctrl_col">Descripción de la opción</td>
                       <td>
-                        Default selected image path. Normally used with VTOY_MENU_TIMEOUT. <br/>It can be ISO/WIM/VHD/IMG ... and supported in both ListView mode and TreeView mode.<br/>
-                        Attention that, when VTOY_DEFAULT_SEARCH_ROOT is set, VTOY_DEFAULT_IMAGE must be in the directory (or sub-directory) of VTOY_DEFAULT_SEARCH_ROOT, otherwise it will not take effect.
+                        Ruta de la imagen seleccionada por defecto. Normalmente se usa junto con VTOY_MENU_TIMEOUT. <br/>Puede ser ISO/WIM/VHD/IMG... y funciona tanto en vista de lista como en vista de árbol.<br/>
+                        Importante: si se define VTOY_DEFAULT_SEARCH_ROOT, VTOY_DEFAULT_IMAGE debe estar dentro de esa carpeta (o de una subcarpeta); si no, no tendrá efecto.
                       </td>
                     </tr>
                 </table>
@@ -468,19 +463,19 @@
                       </td>
                     </tr>
                     <tr id="tr_title_desc_en">
-                      <td class="td_ctrl_col">Option Description</td>
+                      <td class="td_ctrl_col">Descripción de la opción</td>
                       <td>
-                        Max subdirectory level when search for image files. It's value can be: <code>max</code> <code>0</code> <code>1</code> <code>2</code> <code>3</code> <code>...</code>
-                        &nbsp;&nbsp;&nbsp;default is : <code>max</code><br/>
-                        By default, Ventoy will search all the directories and sub directories recursively no matter how deep the directory level is.<br/>
-                        You can use this parameter to set a max-depth for the search path.<br/><br/>
-                        <code>max</code> : Maximum, search all the directories and subdirectories. This is Ventoy's default value.<br/>
-                        <code>0</code> : Only search files in the root and don't search any subdirectories.<br/>
-                        <code>1</code> : Search up to level 1 of subdirectories.<br/>
-                        <code>2</code> : Search up to level 2 of subdirectories.<br/>
-                        <code>3</code> : Search up to level 3 of subdirectories.<br/>
+                        Nivel máximo de subcarpetas al buscar imágenes. Valores posibles: <code>max</code> <code>0</code> <code>1</code> <code>2</code> <code>3</code> <code>...</code>
+                        &nbsp;&nbsp;&nbsp;por defecto: <code>max</code><br/>
+                        Por defecto, AetherBoot busca de forma recursiva en todas las carpetas y subcarpetas, sin importar su profundidad.<br/>
+                        Con este parámetro puede limitar la profundidad de la búsqueda.<br/><br/>
+                        <code>max</code> : Máximo; busca en todas las carpetas y subcarpetas. Es el valor por defecto de AetherBoot.<br/>
+                        <code>0</code> : Solo busca en la raíz, sin entrar en subcarpetas.<br/>
+                        <code>1</code> : Busca hasta el nivel 1 de subcarpetas.<br/>
+                        <code>2</code> : Busca hasta el nivel 2 de subcarpetas.<br/>
+                        <code>3</code> : Busca hasta el nivel 3 de subcarpetas.<br/>
                         <code>...</code><br/><br/>
-                        If <code>VTOY_DEFAULT_SEARCH_ROOT</code> is set at the same time. Then the level is counted from <code>VTOY_DEFAULT_SEARCH_ROOT</code> .
+                        Si <code>VTOY_DEFAULT_SEARCH_ROOT</code> está definido a la vez, el nivel se cuenta a partir de <code>VTOY_DEFAULT_SEARCH_ROOT</code> .
                       </td>
                     </tr>
                 </table>
@@ -505,12 +500,12 @@
                         <label class="radio-inline">
                             <input type="radio" id="id_ctrl_secondary_radio0" name="id_ctrl_secondary_radio" data-type="0" value="0">
                              <span id="id_span_desc_cn">不显示二级启动菜单</span>
-                             <span id="id_span_desc_en">Don't show secondary boot menu</span>
+                             <span id="id_span_desc_en">No mostrar el menú de arranque secundario</span>
                         </label>
                         <label class="radio-inline label-rt">
                             <input type="radio" id="id_ctrl_secondary_radio1" name="id_ctrl_secondary_radio" data-type="1" value="1">
                             <span id="id_span_desc_cn">显示二级启动菜单</span>
-                            <span id="id_span_desc_en">Show show secondary boot menu</span>
+                            <span id="id_span_desc_en">Mostrar el menú de arranque secundario</span>
                         </label>
                       </td>
                     </tr>
@@ -535,12 +530,12 @@
                         <label class="radio-inline">
                             <input type="radio" id="id_ctrl_asterisk_radio0" name="id_ctrl_asterisk_radio" data-type="0" value="0">
                             <span id="id_span_desc_cn">隐藏</span>
-                            <span id="id_span_desc_en">Hide</span>
+                            <span id="id_span_desc_en">Ocultar</span>
                         </label>
                         <label class="radio-inline label-rt">
                             <input type="radio" id="id_ctrl_asterisk_radio1" name="id_ctrl_asterisk_radio" data-type="1" value="1">
                             <span id="id_span_desc_cn">显示</span>
-                            <span id="id_span_desc_en">Show</span>
+                            <span id="id_span_desc_en">Mostrar</span>
                         </label>
                       </td>
                     </tr>
@@ -577,10 +572,10 @@
                       </td>
                     </tr>
                     <tr id="tr_title_desc_en">
-                      <td class="td_ctrl_col">Option Description</td>
+                      <td class="td_ctrl_col">Descripción de la opción</td>
                       <td>
-                        Timeout seconds for the secondary boot menu. Only take effect when <code>VTOY_SECONDARY_BOOT_MENU</code> is 1.<br/>
-                        By default no timeout is set. When you set it to 10 for example, the first entry (<code>Boot in normal mode</code>) will be selected an run after 10 seconds.
+                        Segundos de espera del menú de arranque secundario. Solo tiene efecto cuando <code>VTOY_SECONDARY_BOOT_MENU</code> vale 1.<br/>
+                        Por defecto no hay tiempo de espera. Por ejemplo, con 10 la primera opción (<code>Arrancar en modo normal</code>) se elegirá y arrancará a los 10 segundos.
                       </td>
                     </tr>
                 </table>
@@ -634,9 +629,9 @@
                       </td>
                     </tr>
                     <tr id="tr_title_desc_en">
-                      <td class="td_ctrl_col">Option Description</td>
+                      <td class="td_ctrl_col">Descripción de la opción</td>
                       <td>
-                        Keyboard Layout
+                        Distribución del teclado
                       </td>
                     </tr>
                 </table>
@@ -675,11 +670,11 @@
                       </td>
                     </tr>
                     <tr id="tr_title_desc_en">
-                      <td class="td_ctrl_col" id="td_title_desc">Option Description</td>
+                      <td class="td_ctrl_col" id="td_title_desc">Descripción de la opción</td>
                       <td>
-                        Menu style in TreeView mode.
-                        <code style="font-weight: bold;">0</code> with DIR and file size prefix &nbsp;&nbsp;&nbsp;
-                        <code style="font-weight: bold;">1</code> No DIR and file size. Default is 0.
+                        Estilo del menú en vista de árbol.
+                        <code style="font-weight: bold;">0</code> con prefijo DIR y tamaño de archivo &nbsp;&nbsp;&nbsp;
+                        <code style="font-weight: bold;">1</code> sin DIR ni tamaño de archivo. Por defecto es 0.
                       </td>
                     </tr>
                 </table>
@@ -716,11 +711,11 @@
                       </td>
                     </tr>
                     <tr id="tr_title_desc_en">
-                      <td class="td_ctrl_col" id="td_title_desc">Option Description</td>
+                      <td class="td_ctrl_col" id="td_title_desc">Descripción de la opción</td>
                       <td>
-                      Filter for files with prefix ._ in name. This will be useful when you use macOS (a lot of ._xxx file generated when you copy files).
-                      <code style="font-weight: bold;">0</code> Don't filt &nbsp;&nbsp;&nbsp;
-                      <code style="font-weight: bold;">1</code> Filt
+                      Filtra los archivos cuyo nombre empieza por ._ (útil con macOS, que crea muchos archivos ._xxx al copiar).
+                      <code style="font-weight: bold;">0</code> No filtrar &nbsp;&nbsp;&nbsp;
+                      <code style="font-weight: bold;">1</code> Filtrar
                       </td>
                     </tr>
                 </table>
@@ -757,10 +752,10 @@
                       </td>
                     </tr>
                     <tr id="tr_title_desc_en">
-                      <td class="td_ctrl_col" id="td_title_desc">Option Description</td>
+                      <td class="td_ctrl_col" id="td_title_desc">Descripción de la opción</td>
                       <td>
-                      Case sensitive when sort the ISO files or directories. &nbsp;&nbsp;&nbsp;
-                      <code style="font-weight: bold;">0</code> case insensitive &nbsp;&nbsp;&nbsp;<code style="font-weight: bold;">1</code> case sensitive
+                      Distinguir mayúsculas y minúsculas al ordenar imágenes y carpetas. &nbsp;&nbsp;&nbsp;
+                      <code style="font-weight: bold;">0</code> sin distinguir &nbsp;&nbsp;&nbsp;<code style="font-weight: bold;">1</code> distinguiendo mayúsculas
                       </td>
                     </tr>
                 </table>
@@ -797,10 +792,10 @@
                       </td>
                     </tr>
                     <tr id="tr_title_desc_en">
-                      <td class="td_ctrl_col" id="td_title_desc">Option Description</td>
+                      <td class="td_ctrl_col" id="td_title_desc">Descripción de la opción</td>
                       <td>
-                        <code style="font-weight: bold;">0</code> Show a warning message if the partition is not NTFS when booting VHD(x) file.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <code style="font-weight: bold;">1</code> No warning message.
+                        <code style="font-weight: bold;">0</code> Mostrar un aviso si la partición no es NTFS al arrancar un archivo VHD(x).&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <code style="font-weight: bold;">1</code> Sin aviso.
                       </td>
                     </tr>
                 </table>
@@ -842,11 +837,10 @@
                       </td>
                     </tr>
                     <tr id="tr_title_desc_en">
-                      <td class="td_ctrl_col" id="td_title_desc">Option Description</td>
+                      <td class="td_ctrl_col" id="td_title_desc">Descripción de la opción</td>
                       <td>
-                        <code style="font-weight: bold;">0</code> List .iso files. &nbsp;&nbsp;&nbsp;&nbsp;
-                        <code style="font-weight: bold;">1</code> Filter .iso files. &nbsp;&nbsp;&nbsp;&nbsp;
-                        The iso files will not be shown in the boot menu if set to 1.
+                        <code style="font-weight: bold;">0</code> Mostrar archivos .iso. &nbsp;&nbsp;&nbsp;&nbsp;
+                        <code style="font-weight: bold;">1</code> Ocultar archivos .iso. &nbsp;&nbsp;&nbsp;&nbsp; Con 1, los archivos iso no aparecen en el menú.
                       </td>
                     </tr>
                 </table>
@@ -884,11 +878,10 @@
                     </td>
                   </tr>
                   <tr id="tr_title_desc_en">
-                    <td class="td_ctrl_col" id="td_title_desc">Option Description</td>
+                    <td class="td_ctrl_col" id="td_title_desc">Descripción de la opción</td>
                     <td>
-                      <code style="font-weight: bold;">0</code> List .wim files. &nbsp;&nbsp;&nbsp;&nbsp;
-                      <code style="font-weight: bold;">1</code> Filter .wim files. &nbsp;&nbsp;&nbsp;&nbsp;
-                      The wim files will not be shown in the boot menu if set to 1.
+                      <code style="font-weight: bold;">0</code> Mostrar archivos .wim. &nbsp;&nbsp;&nbsp;&nbsp;
+                      <code style="font-weight: bold;">1</code> Ocultar archivos .wim. &nbsp;&nbsp;&nbsp;&nbsp; Con 1, los archivos wim no aparecen en el menú.
                     </td>
                   </tr>
               </table>
@@ -927,11 +920,10 @@
                   </td>
                 </tr>
                 <tr id="tr_title_desc_en">
-                  <td class="td_ctrl_col" id="td_title_desc">Option Description</td>
+                  <td class="td_ctrl_col" id="td_title_desc">Descripción de la opción</td>
                   <td>
-                    <code style="font-weight: bold;">0</code> List .efi files. &nbsp;&nbsp;&nbsp;&nbsp;
-                    <code style="font-weight: bold;">1</code> Filter .efi files. &nbsp;&nbsp;&nbsp;&nbsp;
-                    The efi files will not be shown in the boot menu if set to 1.
+                    <code style="font-weight: bold;">0</code> Mostrar archivos .efi. &nbsp;&nbsp;&nbsp;&nbsp;
+                    <code style="font-weight: bold;">1</code> Ocultar archivos .efi. &nbsp;&nbsp;&nbsp;&nbsp; Con 1, los archivos efi no aparecen en el menú.
                   </td>
                 </tr>
             </table>
@@ -970,11 +962,10 @@
                   </td>
                 </tr>
                 <tr id="tr_title_desc_en">
-                  <td class="td_ctrl_col" id="td_title_desc">Option Description</td>
+                  <td class="td_ctrl_col" id="td_title_desc">Descripción de la opción</td>
                   <td>
-                    <code style="font-weight: bold;">0</code> List .img files. &nbsp;&nbsp;&nbsp;&nbsp;
-                    <code style="font-weight: bold;">1</code> Filter .img files. &nbsp;&nbsp;&nbsp;&nbsp;
-                    The img files will not be shown in the boot menu if set to 1.
+                    <code style="font-weight: bold;">0</code> Mostrar archivos .img. &nbsp;&nbsp;&nbsp;&nbsp;
+                    <code style="font-weight: bold;">1</code> Ocultar archivos .img. &nbsp;&nbsp;&nbsp;&nbsp; Con 1, los archivos img no aparecen en el menú.
                   </td>
                 </tr>
             </table>
@@ -1013,11 +1004,10 @@
                   </td>
                 </tr>
                 <tr id="tr_title_desc_en">
-                  <td class="td_ctrl_col" id="td_title_desc">Option Description</td>
+                  <td class="td_ctrl_col" id="td_title_desc">Descripción de la opción</td>
                   <td>
-                    <code style="font-weight: bold;">0</code> List .vhd(x) files. &nbsp;&nbsp;&nbsp;&nbsp;
-                    <code style="font-weight: bold;">1</code> Filter .vhd(x) files. &nbsp;&nbsp;&nbsp;&nbsp;
-                    The vhd(x) files will not be shown in the boot menu if set to 1.
+                    <code style="font-weight: bold;">0</code> Mostrar archivos .vhd(x). &nbsp;&nbsp;&nbsp;&nbsp;
+                    <code style="font-weight: bold;">1</code> Ocultar archivos .vhd(x). &nbsp;&nbsp;&nbsp;&nbsp; Con 1, los archivos vhd(x) no aparecen en el menú.
                   </td>
                 </tr>
             </table>
@@ -1056,11 +1046,10 @@
                   </td>
                 </tr>
                 <tr id="tr_title_desc_en">
-                  <td class="td_ctrl_col" id="td_title_desc">Option Description</td>
+                  <td class="td_ctrl_col" id="td_title_desc">Descripción de la opción</td>
                   <td>
-                    <code style="font-weight: bold;">0</code> List .vtoy files. &nbsp;&nbsp;&nbsp;&nbsp;
-                    <code style="font-weight: bold;">1</code> Filter .vtoy files. &nbsp;&nbsp;&nbsp;&nbsp;
-                    The vtoy files will not be shown in the boot menu if set to 1.
+                    <code style="font-weight: bold;">0</code> Mostrar archivos .vtoy. &nbsp;&nbsp;&nbsp;&nbsp;
+                    <code style="font-weight: bold;">1</code> Ocultar archivos .vtoy. &nbsp;&nbsp;&nbsp;&nbsp; Con 1, los archivos vtoy no aparecen en el menú.
                   </td>
                 </tr>
             </table>

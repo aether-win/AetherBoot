@@ -8,7 +8,7 @@
           <button id="id_btn_reset" class="btn btn-sm btn-danger btn-del"><i class="fa fa-trash"></i><span id="id_btn_span_reset">Reset</span></button>
         </div>
         <div class="col-sm-2" style="font-size:16px;padding-top:8px;">
-            <a id="id_a_official_doc" target="_blank" href="https://www.ventoy.net/cn/plugin_theme.html"><span class="fa fa-link"></span><span id="id_span_official_doc">官网文档</span></a>
+            <span id="id_a_official_doc"  class="aether-sin-enlace"><span class="fa fa-link"></span><span id="id_span_official_doc">官网文档</span></span>
         </div>
     </div>
     <legend></legend>
@@ -62,9 +62,9 @@
                       </td>
                     </tr>
                     <tr id="tr_title_desc_en">
-                      <td class="td_ctrl_col">Option Description</td>
+                      <td class="td_ctrl_col">Descripción de la opción</td>
                       <td>
-                        The theme.txt file path. You can add one or more files. You can switch between themes with <code>F5 Tools --> Theme Select</code> menu if you set more than one themes.
+                        Ruta del archivo theme.txt. Puede añadir uno o varios. Para cambiar de tema use <code>F5 Herramientas --> Selección de tema</code> cuando haya más de un tema.
                       </td>
                     </tr>
                 </table>
@@ -99,16 +99,16 @@
                       <code style="font-weight: bold;">0</code> 不过滤 &nbsp;&nbsp;
                       <code style="font-weight: bold;">1</code> 过滤 <br/>
                       注意，这个选项必须在上面设置了多个主题配置文件，同时 "默认" 设置为 “随机选择” 时才有效，其他情况下均无效。<br/>
-                      关于这个选项的详细解释，请参考 <a href="https://www.ventoy.net/cn/plugin_theme.html#vtoy_theme_res_fit">resolution_fit 选项说明</a>
+                      关于这个选项的详细解释，请参考 <span  class="aether-sin-enlace">resolution_fit 选项说明</span>
                     </td>
                   </tr>
                   <tr id="tr_title_desc_en">
-                    <td class="td_ctrl_col">Option Description</td>
+                    <td class="td_ctrl_col">Descripción de la opción</td>
                     <td>
-                      Filter by current resolution when you set more than one themes. &nbsp;&nbsp;
-                      <code style="font-weight: bold;">0</code> No filter &nbsp;&nbsp
-                      <code style="font-weight: bold;">1</code> Filter <br/>
-                      You can refer <a href="https://www.ventoy.net/en/plugin_theme.html#vtoy_theme_res_fit">About resolution_fit</a> for details about this option.
+                      Elegir el tema según la resolución actual cuando hay varios. &nbsp;&nbsp;
+                      <code style="font-weight: bold;">0</code> Sin filtro &nbsp;&nbsp
+                      <code style="font-weight: bold;">1</code> Filtrar <br/>
+                      Consulte <span  class="aether-sin-enlace">Acerca de resolution_fit</span> para más detalles sobre esta opción (documentación de AetherBoot).
                     </td>
                   </tr>
               </table>
@@ -147,13 +147,13 @@
                       </td>
                     </tr>
                     <tr id="tr_title_desc_en">
-                      <td class="td_ctrl_col">Option Description</td>
+                      <td class="td_ctrl_col">Descripción de la opción</td>
                       <td>
-                        Boot menu display mode, default is <code>GUI</code>. <code>GUI</code> or <code>CLI</code> corresponding to the GUI mode and TEXT mode respectively.<br/>
-                        On very few machines Ventoy's menu can't be shown or the cursor moves extremely slow. In this case you can set the default mode to "CLI". <br/>
-                        However, both "GUI" and "CLI" need a VGA device, if your machine only has serial, you can use <code>serial</code><br/>
-                        Also you can use <code>serial_console</code> if you have both serial and VGA device. <br/>
-                        <span style='color:red;font-weight:bold;'>Attention: Unicode characters will NOT be displayed normally in CLI or serial mode.</span>
+                        Modo de visualización del menú; por defecto es <code>GUI</code>. <code>GUI</code> or <code>CLI</code> que corresponden al modo gráfico y al modo texto.<br/>
+                        En algunos equipos el menú de AetherBoot no se ve o el cursor se mueve muy lento. En ese caso, use el modo "CLI". <br/>
+                        Tanto "GUI" como "CLI" necesitan una salida VGA; si el equipo solo tiene puerto serie, use <code>serial</code><br/>
+                        También puede usar <code>serial_console</code> si tiene puerto serie y salida VGA. <br/>
+                        <span style='color:red;font-weight:bold;'>Atención: los caracteres Unicode NO se muestran bien en modo CLI ni por puerto serie.</span>
                       </td>
                     </tr>
                 </table>
@@ -193,9 +193,9 @@
                       </td>
                     </tr>
                     <tr id="tr_title_desc_en">
-                      <td class="td_ctrl_col">Option Description</td>
+                      <td class="td_ctrl_col">Descripción de la opción</td>
                       <td>
-                        Default screen resolution, default is "1024x768". Only take effect when <code>display_mode</code> option is <code>GUI</code>.
+                        Resolución de pantalla; por defecto "1024x768". Solo tiene efecto cuando <code>display_mode</code> vale <code>GUI</code>.
                       </td>
                     </tr>
                 </table>
@@ -237,9 +237,9 @@
                       </td>
                     </tr>
                     <tr id="tr_title_desc_en">
-                      <td class="td_ctrl_col">Option Description</td>
+                      <td class="td_ctrl_col">Descripción de la opción</td>
                       <td>
-                        Full path of fonts file. Ventoy will load each of them when boot.                        
+                        Ruta completa de los archivos de fuentes. AetherBoot los carga todos al arrancar.                        
                       </td>
                     </tr>
                 </table>

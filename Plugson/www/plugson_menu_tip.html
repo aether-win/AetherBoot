@@ -8,7 +8,7 @@
           <button id="id_btn_reset" class="btn btn-sm btn-danger btn-del"><i class="fa fa-trash"></i><span id="id_btn_span_reset">Reset</span></button>
         </div>
         <div class="col-sm-2" style="font-size:16px;padding-top:8px;">
-            <a id="id_a_official_doc" target="_blank" href="https://www.ventoy.net/en/plugin_menutip.html"><span class="fa fa-link"></span><span id="id_span_official_doc">官网文档</span></a>
+            <span id="id_a_official_doc"  class="aether-sin-enlace"><span class="fa fa-link"></span><span id="id_span_official_doc">官网文档</span></span>
         </div>
     </div>
     <legend></legend>
@@ -77,7 +77,7 @@
                 </td>
                 <td>
                   <span id="id_span_desc_cn">提示信息显示的 X 坐标百分比（相对于左上角）</span>
-                  <span id="id_span_desc_en">X position of the tip message. (Percentage form relative to the upper left corner)</span>
+                  <span id="id_span_desc_en">Posición X del consejo (porcentaje desde la esquina superior izquierda)</span>
                 </td>
               </tr>
               <tr>
@@ -87,7 +87,7 @@
                 </td>
                 <td>
                   <span id="id_span_desc_cn">提示信息显示的 Y 坐标百分比（相对于左上角）</span>
-                  <span id="id_span_desc_en">Y position of the tip message. (Percentage form relative to the upper left corner)</span>
+                  <span id="id_span_desc_en">Posición Y del consejo (porcentaje desde la esquina superior izquierda)</span>
                 </td>
               </tr>
               <tr>
@@ -97,7 +97,7 @@
                 </td>
                 <td>
                   <span id="id_span_desc_cn">提示信息的颜色。可以是 <code>blue/red/green/...</code> 等这种格式，也可以设置为 <code>#00ff00</code> 这种格式。</span>
-                  <span id="id_span_desc_en">Color of the tip message. Can be in <code>blue/red/green/...</code> or <code>#00ff00</code> format.</span>
+                  <span id="id_span_desc_en">Color del consejo. Puede indicarse en formato <code>blue/red/green/...</code> or <code>#00ff00</code> .</span>
                 </td>
               </tr>
             </tbody>
@@ -135,12 +135,12 @@
     
 
     if (newlang === 'en') {
-      $('#id_th_tip_path').text('Absolute Path');
-      $('#id_th_tip_tip').text('Tip');
-      $('#id_th_tip_type').text('Type');
-      $("th[id=id_th_tip_opt]").text('Option');
-      $("th[id=id_th_tip_set]").text('Setting');
-      $("th[id=id_th_tip_notes]").text('Notes');
+      $('#id_th_tip_path').text('Ruta absoluta');
+      $('#id_th_tip_tip').text('Consejo');
+      $('#id_th_tip_type').text('Tipo');
+      $("th[id=id_th_tip_opt]").text('Opción');
+      $("th[id=id_th_tip_set]").text('Ajuste');
+      $("th[id=id_th_tip_notes]").text('Notas');
 
       $("span[id=id_span_desc_cn]").each(function(){
           $(this).hide();

@@ -307,145 +307,145 @@ String.prototype.endsWith = function(str) {
 
 var g_vtoy_cur_language_en =
 {
-    "STR_INFO": "Info",
+    "STR_INFO": "Información",
     "STR_BTN_OK": "OK",
-    "STR_BTN_CANCEL": "Cancel",
-    "STR_SAVE": " Save",
-    "STR_RESET": " Reset",
-    "STR_DISCARD": " Discard",
-    "STR_ENABLE": " Enable",
-    "STR_ADD": "Add",
-    "STR_DEL": "Delete",
-    "STR_DEL_SHORT": "Del",
-    "STR_CLEAR": "Clear",
-    "STR_STATUS": "Status",
-    "STR_DEFAULT": "Default",
-    "STR_DEFAULT_SEL": "Default",
-    "STR_RANDOM_SEL": "Random",
-    "STR_OPERATION": "Operation",
-    "STR_VALID": "Valid",
-    "STR_INVALID": "Invalid",
-    "STR_OPT_SETTING": "Option Setting",
-    "STR_OPT_DESC": "Option Description",
-    "STR_EDIT": "Edit",
-    "STR_RESET": "Reset",
-    "STR_FILE": "File",
-    "STR_DIR": "Dir",
-    "STR_SAVE_TIP": "Data in current page has been modified. Do you want to save it?",
-    "STR_SAVE_SUCCESS": "Configuration successfully saved!",
+    "STR_BTN_CANCEL": "Cancelar",
+    "STR_SAVE": " Guardar",
+    "STR_RESET": " Restablecer",
+    "STR_DISCARD": " Descartar",
+    "STR_ENABLE": " Activar",
+    "STR_ADD": "Añadir",
+    "STR_DEL": "Eliminar",
+    "STR_DEL_SHORT": "Quitar",
+    "STR_CLEAR": "Vaciar",
+    "STR_STATUS": "Estado",
+    "STR_DEFAULT": "Por defecto",
+    "STR_DEFAULT_SEL": "Por defecto",
+    "STR_RANDOM_SEL": "Aleatorio",
+    "STR_OPERATION": "Acción",
+    "STR_VALID": "Válido",
+    "STR_INVALID": "No válido",
+    "STR_OPT_SETTING": "Valor",
+    "STR_OPT_DESC": "Descripción de la opción",
+    "STR_EDIT": "Editar",
+    "STR_RESET": "Restablecer",
+    "STR_FILE": "Archivo",
+    "STR_DIR": "Carpeta",
+    "STR_SAVE_TIP": "Los datos de esta página han cambiado. ¿Desea guardarlos?",
+    "STR_SAVE_SUCCESS": "¡Configuración guardada correctamente!",
     "STR_FILE_EXIST": "OK",
-    "STR_FILE_NONEXIST": "Invalid",
-    "STR_FILE_FUZZY": "Fuzzy",
+    "STR_FILE_NONEXIST": "No válido",
+    "STR_FILE_FUZZY": "Aproximada",
     "STR_DIR_EXIST": "OK",
-    "STR_DIR_NONEXIST": "Invalid",
-    "STR_DUPLICATE_PATH": "Duplicate path",
-    "STR_DELETE_CONFIRM": "Delete this item, Continue?",
-    "STR_FILE_PATH": "File Path",
-    "STR_DIR_PATH": "Directory Path",
+    "STR_DIR_NONEXIST": "No válido",
+    "STR_DUPLICATE_PATH": "Ruta duplicada",
+    "STR_DELETE_CONFIRM": "Se eliminará este elemento. ¿Continuar?",
+    "STR_FILE_PATH": "Ruta del archivo",
+    "STR_DIR_PATH": "Ruta de la carpeta",
 
-    "STR_SET_ALIAS": "Set Menu Alias",
+    "STR_SET_ALIAS": "Definir alias de menú",
     "STR_ALIAS": "Alias",
-    "STR_SET_TIP": "Set Menu Tip",
-    "STR_TIP": "Tip",
-    "STR_SET_CLASS": "Set Menu Class",
-    "STR_CLASS": "Class",
-    "STR_SET_INJECTION": "Set Injection",
-    "STR_SET_AUTO_INS": "Set Auto Install",
-    "STR_SET_AUTO_TEMPLATE": "Template",
+    "STR_SET_TIP": "Definir consejo de menú",
+    "STR_TIP": "Consejo",
+    "STR_SET_CLASS": "Definir clase de menú",
+    "STR_CLASS": "Clase",
+    "STR_SET_INJECTION": "Definir inyección",
+    "STR_SET_AUTO_INS": "Definir instalación automática",
+    "STR_SET_AUTO_TEMPLATE": "Plantilla",
 
-    "STR_SET_PERSISTENCE": "Set Persistence",
-    "STR_SET_PERSISTENCE_DAT": "Dat File",
+    "STR_SET_PERSISTENCE": "Definir persistencia",
+    "STR_SET_PERSISTENCE_DAT": "Archivo dat",
 
-    "STR_SET_DUD": "Set DUD",
-    "STR_SET_DUD_FILE": "DUD File",
+    "STR_SET_DUD": "Definir DUD",
+    "STR_SET_DUD_FILE": "Archivo DUD",
 
-    "STR_PASSWORD": "Password",
-    "STR_SET_PASSWORD": "Set Password",
-    "STR_PASSWORD_TYPE": "Password Type",
-    "STR_PASSWORD_VALUE": "Password Value",
+    "STR_PASSWORD": "Contraseña",
+    "STR_SET_PASSWORD": "Definir contraseña",
+    "STR_PASSWORD_TYPE": "Tipo de contraseña",
+    "STR_PASSWORD_VALUE": "Contraseña",
 
 
-    "STR_WEB_COMMUNICATION_ERR":"Communication error:",
-    "STR_WEB_REMOTE_ABNORMAL":"Communication error: remote abnormal",
-    "STR_WEB_REQUEST_TIMEOUT":"Communication error: Request timed out",
-    "STR_WEB_SERVICE_UNAVAILABLE":"Communication error: Service Unavailable",
-    "STR_WEB_SERVICE_BUSY":"Service is busy, please retry later.",
+    "STR_WEB_COMMUNICATION_ERR":"Error de comunicación:",
+    "STR_WEB_REMOTE_ABNORMAL":"Error de comunicación: respuesta anómala del servicio",
+    "STR_WEB_REQUEST_TIMEOUT":"Error de comunicación: tiempo de espera agotado",
+    "STR_WEB_SERVICE_UNAVAILABLE":"Error de comunicación: servicio no disponible",
+    "STR_WEB_SERVICE_BUSY":"El servicio está ocupado; inténtelo de nuevo más tarde.",
 
-    "STR_PLUG_DEVICE": "Device Information",
-    "STR_PLUG_CONTROL": "Global Control Plugin",
-    "STR_PLUG_THEME": "Theme Plugin",
-    "STR_PLUG_ALIAS": "Menu Alias Plugin",
-    "STR_PLUG_CLASS": "Menu Class Plugin",
-    "STR_PLUG_TIP": "Menu Tip Plugin",
-    "STR_PLUG_AUTO_INSTALL": "Auto Install Plugin",
-    "STR_PLUG_PERSISTENCE": "Persistence Plugin",
-    "STR_PLUG_INJECTION": "Injection Plugin",
-    "STR_PLUG_CONF_REPLACE": "Boot Conf Replace Plugin",
-    "STR_PLUG_PASSWORD": "Password Plugin",
-    "STR_PLUG_IMAGELIST": "Image List Plugin",
-    "STR_PLUG_AUTO_MEMDISK": "Auto Memdisk Plugin",
-    "STR_PLUG_DUD": "DUD Plugin",
-    "STR_PLUG_DONATION": "Donation",
+    "STR_PLUG_DEVICE": "Información del dispositivo",
+    "STR_PLUG_CONTROL": "Control global",
+    "STR_PLUG_THEME": "Tema",
+    "STR_PLUG_ALIAS": "Alias de menú",
+    "STR_PLUG_CLASS": "Clases de menú",
+    "STR_PLUG_TIP": "Consejos de menú",
+    "STR_PLUG_AUTO_INSTALL": "Instalación automática",
+    "STR_PLUG_PERSISTENCE": "Persistencia",
+    "STR_PLUG_INJECTION": "Inyección de archivos",
+    "STR_PLUG_CONF_REPLACE": "Reemplazo de config.",
+    "STR_PLUG_PASSWORD": "Contraseñas",
+    "STR_PLUG_IMAGELIST": "Lista de imágenes",
+    "STR_PLUG_AUTO_MEMDISK": "Memdisk automático",
+    "STR_PLUG_DUD": "Controladores DUD",
+    "STR_PLUG_DONATION": "Acerca de",
 
-    "STR_PATH_TOO_LONG": "The path exceeds the maximum supported length, please check!",
-    "STR_INPUT_TOO_LONG": "The string exceeds the maximum supported length, please check!",
-    "STR_INVALID_FILE_PATH": "Invalid or nonexist full file path, please check!",
-    "STR_INVALID_FILE_PATH1": "The 1st file path is invalid or nonexist!",
-    "STR_INVALID_FILE_PATH2": "The 2nd file path is invalid or nonexist!",
-    "STR_INVALID_NEW_FILE_PATH": "The full file path of new is invalid or nonexist, please check!",
-    "STR_INVALID_DIR_PATH": "Invalid directory path, please check!",
-    "STR_INVALID_NUMBER": "Please input valid non-negative integer!",
-    "STR_INVALID_AUTOSEL": "autosel exceeds the length of the list!",
-    "STR_INVALID_TIMEOUT": "Please input valid timeout integer!",
-    "STR_CONF_REPLACE_MAX_ENTRY": "At most 2 entries are allowed for each mode, please delete an existing entry first!",
-    "STR_INVALID_PERCENT": "Please input integer between 0-100 !",
-    "STR_INVALID_COLOR": "Please input valid color!",
-    "STR_SELECT": "Please Select",
-    "STR_SET_ALIAS_FOR_FILE": "Set Menu Alias For File",
-    "STR_SET_ALIAS_FOR_DIR": "Set Menu Alias For Directory",
-    "STR_SET_TIP_FOR_FILE": "Set Menu Tip For File",
-    "STR_SET_TIP_FOR_DIR": "Set Menu Tip For Directory",
-    "STR_SET_INJECTION_FOR_FILE": "[image] Set injection for a file",
-    "STR_SET_INJECTION_FOR_DIR": "[parent] Set the same injection for all the files under a directory.",
-    "STR_INVALID_ARCHIVE_PATH": "Invalid or nonexist archive file path, please check!",
-    "STR_SET_PWD_FOR_FILE": "[file] Set password for a file.",
-    "STR_SET_PWD_FOR_DIR": "[parent] Set the same password for all the files under a directory.",
-    "STR_SET_AUTO_INSTALL_FOR_FILE": "[image] Set auto install template for a file",
-    "STR_SET_AUTO_INSTALL_FOR_DIR": "[parent] Set the same auto install template for all the files under a directory.",
+    "STR_PATH_TOO_LONG": "La ruta supera la longitud máxima permitida. ¡Revísela!",
+    "STR_INPUT_TOO_LONG": "El texto supera la longitud máxima permitida. ¡Revíselo!",
+    "STR_INVALID_FILE_PATH": "La ruta del archivo no es válida o no existe. ¡Revísela!",
+    "STR_INVALID_FILE_PATH1": "¡La primera ruta no es válida o no existe!",
+    "STR_INVALID_FILE_PATH2": "¡La segunda ruta no es válida o no existe!",
+    "STR_INVALID_NEW_FILE_PATH": "La ruta del archivo nuevo no es válida o no existe. ¡Revísela!",
+    "STR_INVALID_DIR_PATH": "La ruta de la carpeta no es válida. ¡Revísela!",
+    "STR_INVALID_NUMBER": "¡Escriba un número entero no negativo!",
+    "STR_INVALID_AUTOSEL": "¡autosel supera la longitud de la lista!",
+    "STR_INVALID_TIMEOUT": "¡Escriba un tiempo de espera válido (número entero)!",
+    "STR_CONF_REPLACE_MAX_ENTRY": "Se permiten como máximo 2 entradas por modo; elimine primero una existente.",
+    "STR_INVALID_PERCENT": "¡Escriba un número entero entre 0 y 100!",
+    "STR_INVALID_COLOR": "¡Escriba un color válido!",
+    "STR_SELECT": "Seleccione",
+    "STR_SET_ALIAS_FOR_FILE": "Alias de menú para un archivo",
+    "STR_SET_ALIAS_FOR_DIR": "Alias de menú para una carpeta",
+    "STR_SET_TIP_FOR_FILE": "Consejo de menú para un archivo",
+    "STR_SET_TIP_FOR_DIR": "Consejo de menú para una carpeta",
+    "STR_SET_INJECTION_FOR_FILE": "[image] Definir inyección para un archivo",
+    "STR_SET_INJECTION_FOR_DIR": "[parent] Misma inyección para todos los archivos de una carpeta.",
+    "STR_INVALID_ARCHIVE_PATH": "La ruta del archivo comprimido no es válida o no existe. ¡Revísela!",
+    "STR_SET_PWD_FOR_FILE": "[file] Definir contraseña para un archivo.",
+    "STR_SET_PWD_FOR_DIR": "[parent] Misma contraseña para todos los archivos de una carpeta.",
+    "STR_SET_AUTO_INSTALL_FOR_FILE": "[image] Definir plantilla de instalación automática para un archivo",
+    "STR_SET_AUTO_INSTALL_FOR_DIR": "[parent] Misma plantilla de instalación automática para todos los archivos de una carpeta.",
 
-    "STR_SET_CLASS_BY_KEY": "[key] Set menu class by filename keyword.",
-    "STR_SET_CLASS_BY_DIR": "[dir] Set menu class for a directory.",
-    "STR_SET_CLASS_BY_PARENT": "[parent] Set menu class for all the files under a directory.",
-    "STR_SET_IMAGE_PWD": "[file] Set Password For A File",
-    "STR_SET_PARENT_PWD": "[parent] Set the same password for all the files under a directory.",
+    "STR_SET_CLASS_BY_KEY": "[key] Definir clase de menú según una palabra del nombre de archivo.",
+    "STR_SET_CLASS_BY_DIR": "[dir] Definir clase de menú para una carpeta.",
+    "STR_SET_CLASS_BY_PARENT": "[parent] Definir clase de menú para todos los archivos de una carpeta.",
+    "STR_SET_IMAGE_PWD": "[file] Definir contraseña para un archivo",
+    "STR_SET_PARENT_PWD": "[parent] Misma contraseña para todos los archivos de una carpeta.",
 
-    "STR_SET_SEARCH_ROOT": "Set Search Root",
-    "STR_SET_DEFAULT_IMAGE": "Set Default Image",
-    "STR_ADD_THEME": "Add Theme",
-    "STR_ADD_FONT": "Set Font",
-    "STR_ADD_FILE_TO_LIST": "Add File To List",
-    "STR_DEFAULT_SELECT": " Default",
-    "STR_AUTO_TEMPLATE": "Auto Install Template",
-    "STR_ADD_AUTO_TEMPLATE": "Add Auto Install Template",
+    "STR_SET_SEARCH_ROOT": "Definir carpeta de búsqueda",
+    "STR_SET_DEFAULT_IMAGE": "Definir imagen por defecto",
+    "STR_ADD_THEME": "Añadir tema",
+    "STR_ADD_FONT": "Definir fuente",
+    "STR_ADD_FILE_TO_LIST": "Añadir archivo a la lista",
+    "STR_DEFAULT_SELECT": " Por defecto",
+    "STR_AUTO_TEMPLATE": "Plantilla de instalación automática",
+    "STR_ADD_AUTO_TEMPLATE": "Añadir plantilla de instalación automática",
 
-    "STR_PERSISTENCE_DAT": "Persistence Dat File",
-    "STR_ADD_PERSISTENCE_DAT": "Add Persistence Dat File",
+    "STR_PERSISTENCE_DAT": "Archivo de persistencia",
+    "STR_ADD_PERSISTENCE_DAT": "Añadir archivo de persistencia",
 
-    "STR_DUD_FILE": "DUD File",
-    "STR_ADD_DUD_FILE": "Add DUD File",
+    "STR_DUD_FILE": "Archivo DUD",
+    "STR_ADD_DUD_FILE": "Añadir archivo DUD",
 
-    "STR_DEL_LAST": "The entry will be deleted if you delete the this last item. Continue?",
+    "STR_DEL_LAST": "Si elimina este último elemento, se eliminará la entrada completa. ¿Continuar?",
 
-    "STR_CLOSE_TIP": "Service unavailable, the page will close!",
-    "STR_SECURE_BOOT_ENABLE": "Enable",
-    "STR_SECURE_BOOT_DISABLE": "Disable",
-    "STR_SYNTAX_ERROR_TIP": "Syntax error detected in ventoy.json, so the configuration is not loaded!",
-    "STR_INVALID_CONFIG_TIP": "Invalid configuration detected in ventoy.json, so the configuration is not loaded!",
-    "STR_CONFIG_SAVE_ERROR_TIP": "Failed to write ventoy.json file. Check VentoyPlugson.log for more details!",
+    "STR_CLOSE_TIP": "Servicio no disponible: la página se cerrará.",
+    "STR_SECURE_BOOT_ENABLE": "Activado",
+    "STR_SECURE_BOOT_DISABLE": "Desactivado",
+    "STR_SYNTAX_ERROR_TIP": "Se detectó un error de sintaxis en ventoy.json; la configuración no se ha cargado.",
+    "STR_INVALID_CONFIG_TIP": "Se detectó una configuración no válida en ventoy.json; la configuración no se ha cargado.",
+    "STR_CONFIG_SAVE_ERROR_TIP": "No se pudo escribir ventoy.json. Revise VentoyPlugson.log para más detalles.",
 
-    "STR_JSON_PREVIEW": "JSON Preview",
-    "STR_JSON_COPY_SUCCESS": "JSON Copy Success",
-    "STR_JSON_COPY_FAILED": "JSON Copy Failed",
+    "STR_JSON_PREVIEW": "Vista previa del JSON",
+    "STR_JSON_COPY_SUCCESS": "JSON copiado",
+    "STR_JSON_COPY_FAILED": "No se pudo copiar el JSON",
 
     "STR_XXX": "xxx"
 };
@@ -595,7 +595,7 @@ var g_vtoy_cur_language_cn =
 
 var g_current_dir;
 var g_current_os;
-var g_current_language = 'cn';
+var g_current_language = 'en';  // AetherBoot: 'en' = interfaz en español
 var g_vtoy_cur_language = g_vtoy_cur_language_cn;
 var g_vtoy_data_default_index = 6;
 
@@ -611,7 +611,7 @@ function GetResetTabConfigTipMsg(index, name) {
     var msgstr;
 
     if (g_current_language === 'en') {
-        msgstr = 'Are you sure to reset all the configurations on the <code>' + name + g_bios_postfix[index] + '</code> tab ?';
+        msgstr = '¿Seguro que desea restablecer toda la configuración de la pestaña <code>' + name + g_bios_postfix[index] + '</code>?';
     } else {
         msgstr = '确认要重置 <code>' + name + g_bios_postfix[index] + '</code> 标签页下的所有配置？';
     }
@@ -785,14 +785,14 @@ function VtoySelectFilePath(cb, para) {
 
     if (g_current_language === 'en') {
         if (para.title.length === 0) {
-            $('#SetFileForm #SetFileForm_lang_1').text("Set File Path");
+            $('#SetFileForm #SetFileForm_lang_1').text("Indicar ruta del archivo");
         } else {
             $('#SetFileForm #SetFileForm_lang_1').text(para.title);
         }
 
-        $('#SetFileForm #SetFileForm_lang_2').text("File Path");
-        $('#SetFileForm #SetFileForm_lang_3').text(" OK");
-        $('#SetFileForm #SetFileForm_lang_4').text("Cancel");
+        $('#SetFileForm #SetFileForm_lang_2').text("Ruta del archivo");
+        $('#SetFileForm #SetFileForm_lang_3').text(" Aceptar");
+        $('#SetFileForm #SetFileForm_lang_4').text("Cancelar");
         $('#SetFileForm #id_note_setfile_cn').hide();
         $('#SetFileForm #id_note_setfile_en').show();
     } else {
@@ -846,13 +846,13 @@ function VtoySelectDirPath(cb, para) {
 
     if (g_current_language === 'en') {
         if (para.title.length === 0) {
-            $('#SetDirForm #SetDirForm_lang_1').text("Set Directory Path");
+            $('#SetDirForm #SetDirForm_lang_1').text("Indicar ruta de la carpeta");
         } else {
             $('#SetDirForm #SetDirForm_lang_1').text(para.title);
         }
-        $('#SetDirForm #SetDirForm_lang_2').text("Directory Path");
-        $('#SetDirForm #SetDirForm_lang_3').text(" OK");
-        $('#SetDirForm #SetDirForm_lang_4').text("Cancel");
+        $('#SetDirForm #SetDirForm_lang_2').text("Ruta de la carpeta");
+        $('#SetDirForm #SetDirForm_lang_3').text(" Aceptar");
+        $('#SetDirForm #SetDirForm_lang_4').text("Cancelar");
         $('#SetDirForm #id_note_setfile_cn').hide();
         $('#SetDirForm #id_note_setfile_en').show();
     } else {
@@ -892,19 +892,19 @@ function VtoyCommonChangeLanguage(newlang) {
     if (newlang === 'en') {
         g_vtoy_cur_language = g_vtoy_cur_language_en;
         ;$.extend($.validator.messages, {
-            required: "This field is required",
-            remote: "Please modify this field",
-            maxlength: $.validator.format("You can enter up to {0} characters"),
-            minlength: $.validator.format("Must enter at least {0} characters"),
-            rangelength: $.validator.format("Please input {0} to {1} characters"),
-            range: $.validator.format("The input range is from {0} to {1}"),
-            max: $.validator.format("Please input a number less than or equal to {0}"),
-            min: $.validator.format("Please input a number bigger than or equal to {0}"),
-            utfmaxlen: $.validator.format("The string exceeds the maximum supported length"),
-            start_slash: $.validator.format("Must start with /"),
-            noquotes: $.validator.format("Can not include double quotes"),
-            filenamepart:$.validator.format("As part of file name, can not include invalid characters"),
-            printascii: $.validator.format("Can not include non-ascii characters.")
+            required: "Este campo es obligatorio",
+            remote: "Corrija este campo",
+            maxlength: $.validator.format("Puede escribir hasta {0} caracteres"),
+            minlength: $.validator.format("Debe escribir al menos {0} caracteres"),
+            rangelength: $.validator.format("Escriba entre {0} y {1} caracteres"),
+            range: $.validator.format("El valor debe estar entre {0} y {1}"),
+            max: $.validator.format("Escriba un número menor o igual que {0}"),
+            min: $.validator.format("Escriba un número mayor o igual que {0}"),
+            utfmaxlen: $.validator.format("El texto supera la longitud máxima permitida"),
+            start_slash: $.validator.format("Debe empezar por /"),
+            noquotes: $.validator.format("No puede contener comillas dobles"),
+            filenamepart:$.validator.format("Forma parte de un nombre de archivo: no puede contener caracteres no válidos"),
+            printascii: $.validator.format("No puede contener caracteres fuera de ASCII.")
         });
 
         $("a[id=id_a_official_doc]").each(function(){
@@ -914,11 +914,11 @@ function VtoyCommonChangeLanguage(newlang) {
         });
 
         $("span[id=id_span_official_doc]").each(function(){
-            $(this).text(" Plugin Official Document");
+            $(this).text(" Documentación del plugin");
         });
 
-        $('#id_span_copy').text("Copy");
-        $('#id_span_preview').text("Preview");
+        $('#id_span_copy').text("Copiar");
+        $('#id_span_preview').text("Vista previa");
         $('#id_span_language').text("中文");
 
         $("tr[id=tr_title_desc_cn]").each(function(){
@@ -930,7 +930,7 @@ function VtoyCommonChangeLanguage(newlang) {
         });
 
         $("th[id=id_th_file_path]").each(function(){
-            $(this).text("Full File Path");
+            $(this).text("Ruta completa del archivo");
         });
 
         $("span[id=id_span_desc_cn]").each(function(){
@@ -1087,8 +1087,8 @@ function VtoySelectType(cb, para) {
     $('#TypeSelectForm #TypeSelForm_lang_1').text(g_vtoy_cur_language.STR_SELECT);
 
     if (g_current_language === 'en') {
-        $('#TypeSelectForm #TypeSelForm_lang_2').text(" OK");
-        $('#TypeSelectForm #TypeSelForm_lang_3').text("Cancel");
+        $('#TypeSelectForm #TypeSelForm_lang_2').text(" Aceptar");
+        $('#TypeSelectForm #TypeSelForm_lang_3').text("Cancelar");
     } else {
         $('#TypeSelectForm #TypeSelForm_lang_2').text("确定");
         $('#TypeSelectForm #TypeSelForm_lang_3').text("取消");
@@ -1154,8 +1154,8 @@ function VtoySetKey(cb, para) {
     $('#SetKeyForm #SetKeyForm_lang_3').text(para.title2);
 
     if (g_current_language === 'en') {
-        $('#SetKeyForm #SetKeyForm_lang_4').text(" OK");
-        $('#SetKeyForm #SetKeyForm_lang_5').text("Cancel");
+        $('#SetKeyForm #SetKeyForm_lang_4').text(" Aceptar");
+        $('#SetKeyForm #SetKeyForm_lang_5').text("Cancelar");
     } else {
         $('#SetKeyForm #SetKeyForm_lang_4').text("确定");
         $('#SetKeyForm #SetKeyForm_lang_5').text("取消");
@@ -1318,8 +1318,8 @@ function VtoySetFileFile(cb, para) {
     $('#SetFileFileForm #SetFileFileForm_label2').text(para.label2);
 
     if (g_current_language === 'en') {
-        $('#SetFileFileForm #SetFileFileForm_ok').text(" OK");
-        $('#SetFileFileForm #SetFileFileForm_cancel').text("Cancel");
+        $('#SetFileFileForm #SetFileFileForm_ok').text(" Aceptar");
+        $('#SetFileFileForm #SetFileFileForm_cancel').text("Cancelar");
 
         $('#SetFileFileForm #id_note_filefile_cn').hide();
         $('#SetFileFileForm #id_note_filefile_en').show();
@@ -1416,8 +1416,8 @@ function VtoySetDirFile(cb, para) {
     $('#SetDirFileModal #SetDirFileForm_label2').text(para.label2);
 
     if (g_current_language === 'en') {
-        $('#SetDirFileModal #SetDirFileForm_ok').text(" OK");
-        $('#SetDirFileModal #SetDirFileForm_cancel').text("Cancel");
+        $('#SetDirFileModal #SetDirFileForm_ok').text(" Aceptar");
+        $('#SetDirFileModal #SetDirFileForm_cancel').text("Cancelar");
 
         $('#SetDirFileModal #id_note_dirfile_cn').hide();
         $('#SetDirFileModal #id_note_dirfile_en').show();

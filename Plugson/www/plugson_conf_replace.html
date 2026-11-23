@@ -8,7 +8,7 @@
           <button id="id_btn_reset" class="btn btn-sm btn-danger btn-del"><i class="fa fa-trash"></i><span id="id_btn_span_reset">Reset</span></button>
         </div>
         <div class="col-sm-2" style="font-size:16px;padding-top:8px;">
-            <a id="id_a_official_doc" target="_blank" href="https://www.ventoy.net/en/plugin_bootconf_replace.html"><span class="fa fa-link"></span><span id="id_span_official_doc">官网文档</span></a>
+            <span id="id_a_official_doc"  class="aether-sin-enlace"><span class="fa fa-link"></span><span id="id_span_official_doc">官网文档</span></span>
         </div>
     </div>
     <legend></legend>
@@ -59,7 +59,7 @@
     });
 
     if (newlang === 'en') {
-      $('#id_th_conf_path').text('Absolute Path');
+      $('#id_th_conf_path').text('Ruta absoluta');
       $('#id_th_conf_org').text('org');
       $('#id_th_conf_new').text('new');
     } else {
@@ -220,9 +220,9 @@
     }
 
     if (g_current_language === 'en') {
-        $('#ConfReplaceForm #ConfReplaceForm_lang_1').text("ISO Path");
-        $('#ConfReplaceForm #ConfReplaceForm_lang_2').text(" OK");
-        $('#ConfReplaceForm #ConfReplaceForm_lang_3').text("Cancel");
+        $('#ConfReplaceForm #ConfReplaceForm_lang_1').text("Ruta de la ISO");
+        $('#ConfReplaceForm #ConfReplaceForm_lang_2').text(" Aceptar");
+        $('#ConfReplaceForm #ConfReplaceForm_lang_3').text("Cancelar");
         $('#ConfReplaceForm #id_note_conf_cn').hide();
         $('#ConfReplaceForm #id_note_conf_en').show();
     } else {

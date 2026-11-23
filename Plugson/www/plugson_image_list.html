@@ -8,7 +8,7 @@
           <button id="id_btn_reset" class="btn btn-sm btn-danger btn-del"><i class="fa fa-trash"></i><span id="id_btn_span_reset">Reset</span></button>
         </div>
         <div class="col-sm-2" style="font-size:16px;padding-top:8px;">
-            <a id="id_a_official_doc" target="_blank" href="https://www.ventoy.net/en/plugin_imagelist.html"><span class="fa fa-link"></span><span id="id_span_official_doc">官网文档</span></a>
+            <span id="id_a_official_doc"  class="aether-sin-enlace"><span class="fa fa-link"></span><span id="id_span_official_doc">官网文档</span></span>
         </div>
     </div>
     <legend></legend>
@@ -58,12 +58,12 @@
                   </td>
                 </tr>
                 <tr id="tr_title_desc_en">
-                  <td class="td_ctrl_col">Option Description</td>
+                  <td class="td_ctrl_col">Descripción de la opción</td>
                   <td>
-                    <span style="font-weight: bold;">Permit Mode</span><br/>
-                    Ventoy will no longer search for the files but just use your file list. Also, Ventoy will NOT sort these files anymore, but directly display the boot menu according to the order given in the list.<br/>
-                    <span style="font-weight: bold;">Deny Mode</span><br/>
-                    Firstly, Ventoy will search as normal. And then remove the files in the blacklist from the search result.<br/>
+                    <span style="font-weight: bold;">Modo permitir</span><br/>
+                    AetherBoot deja de buscar archivos y usa solo su lista. Además, NO los ordena: el menú muestra los archivos en el mismo orden de la lista.<br/>
+                    <span style="font-weight: bold;">Modo denegar</span><br/>
+                    AetherBoot busca de forma normal y después quita del resultado los archivos de la lista negra.<br/>
                   </td>
                 </tr>
             </table>
@@ -114,11 +114,11 @@
     });
 
     if (newlang === 'en') {
-      $('h3[id=id_image_list_mode]').text('Mode');
-      $('h3[id=id_image_list_list]').text('List');
-      $('#id_th_imglist_path').text('Absolute Path');
-      $('span[id=id_span_image_list_permit]').text('Permit');
-      $('span[id=id_span_image_list_deny]').text('Deny');
+      $('h3[id=id_image_list_mode]').text('Modo');
+      $('h3[id=id_image_list_list]').text('Lista');
+      $('#id_th_imglist_path').text('Ruta absoluta');
+      $('span[id=id_span_image_list_permit]').text('Permitir');
+      $('span[id=id_span_image_list_deny]').text('Denegar');
     } else {
       $('h3[id=id_image_list_mode]').text('模式');
       $('h3[id=id_image_list_list]').text('列表');
