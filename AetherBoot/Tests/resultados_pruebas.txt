@@ -43,5 +43,7 @@ Terminated
   [PASA]   AetherBoot/Build/empaquetar_windows.sh
   [PASA]   AetherBoot/Backup/restaurar.sh
   [PASA]   vtoy.js (AetherPlugson) es JavaScript válido
+== 8. Auditoría de referencias
+  [PASA]   sin referencias visuales/comerciales (A) ni enlaces (B): Total: 13699  A=0  B=0  C=13699
 
-RESULTADO: 35 pasan, 0 fallan, 0 omitidas
+RESULTADO: 36 pasan, 0 fallan, 0 omitidas
