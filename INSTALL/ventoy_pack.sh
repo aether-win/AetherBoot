@@ -158,7 +158,7 @@ ls -1 menu/ | grep -v 'zh_CN' | sort | while read vtlang; do
     echo "}"  >> menulang.cfg
 done
 echo "menuentry \"\$VTLANG_RETURN_PREVIOUS\" --class=vtoyret VTOY_RET {" >> menulang.cfg
-echo "        echo \"Return ...\"" >> menulang.cfg
+echo "        echo \"Volviendo ...\"" >> menulang.cfg
 echo "}" >> menulang.cfg
 
 tar czf menu.tar.gz ./menu/

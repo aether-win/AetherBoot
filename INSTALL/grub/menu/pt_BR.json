@@ -43,7 +43,7 @@
     
     "VTLANG_THEME_SELECT": "Selecao de Tema",
     
-    "VTLANG_UEFI_UTIL": "Utilitarios UEFI do Ventoy",
+    "VTLANG_UEFI_UTIL": "Utilitarios UEFI do AetherBoot",
     "VTLANG_UTIL_SHOW_EFI_DRV": "Mostrar os Drivers EFI",
     "VTLANG_UTIL_FIX_BLINIT_FAIL": "Consertar a Falha BlinitializeLibrary do Windows",
     
@@ -86,7 +86,7 @@
     "VTLANG_CTRL_TEMP_SET": "Configuracoes do Controle Temporario",
     "VTLANG_WIN11_BYPASS_CHECK": "Ignorar a verificacao da CPU/TPM/SecureBoot quando instalar o Windows 11",
     "VTLANG_WIN11_BYPASS_NRO": "Ignorar o requerimento de conta online quanto instalar o Windows 11",
-    "VTLANG_LINUX_REMOUNT": "Montar a particao do Ventoy apos iniciar o Linux",
+    "VTLANG_LINUX_REMOUNT": "Montar a particao do AetherBoot apos iniciar o Linux",
     "VTLANG_SECONDARY_BOOT_MENU": "Mostrar o menu secundario da inicializacao",
     "VTLANG_WIN_UEFI_RES_LOCK": "Bloquear a resolucao ao iniciar o Windows/WinPE via UEFI",
     "VTLANG_UEFI_RES_LOCK_NONE": "Nenhuma",

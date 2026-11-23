@@ -1,0 +1,135 @@
+# ==========================================================================
+#  AetherBoot - tema oficial del menú de arranque
+#  Gestor de arranque multisistema basado en la tecnología Ventoy (GPLv3)
+#
+#  Diseñado para GRUB 2.04: los paneles son PNG con transparencia real
+#  (mezcla alfa); no hay animaciones ni desenfoque en vivo porque GRUB no
+#  los admite. Funciona en cualquier resolución: las posiciones son relativas.
+# ==========================================================================
+
+desktop-image: "background.png"
+desktop-image-scale-method: "crop"
+desktop-color: "#050b18"
+title-text: ""
+message-color: "#e2e8f0"
+message-bg-color: "#050b18"
+
+terminal-box: "terminal_box_*.png"
+
+# ---------------------------------------------------------- cabecera: logotipo
++ image {
+    left = 50%-230
+    top = 3%
+    width = 460
+    height = 98
+    file = "logo.png"
+}
+
+# versión y plataforma (variable de GRUB: AetherBoot <versión> UEFI/BIOS)
++ label {
+    left = 0
+    top = 3%+104
+    width = 100%
+    height = 20
+    align = "center"
+    color = "#22d3ee"
+    text = "@@VTOY_TEXT_MENU_VER"
+}
+
+# ------------------------------------------------- panel central (cristal)
++ boot_menu {
+  left = 12%
+  width = 76%
+  top = 3%+134
+  height = 79%-134
+
+  menu_pixmap_style = "menu_*.png"
+
+  item_color = "#cbd5e1"
+  selected_item_color = "#ffffff"
+  selected_item_pixmap_style = "select_*.png"
+
+  item_height = 36
+  item_padding = 10
+  item_spacing = 4
+
+  icon_width = 28
+  icon_height = 28
+  item_icon_space = 14
+
+  scrollbar = true
+  scrollbar_width = 8
+  scrollbar_thumb = "slider_*.png"
+}
+
+# --------------------------------------------------- cuenta atrás de arranque
++ progress_bar {
+  id = "__timeout__"
+  text = "@TIMEOUT_NOTIFICATION_SHORT@"
+
+  left = 12%
+  width = 76%
+  top = 88%
+  height = 20
+
+  text_color = "#e2e8f0"
+  fg_color = "#1e6bff"
+  bg_color = "#0a1a3f"
+  border_color = "#22d3ee"
+}
+
+# ------------------------------------------------ modos activos del motor
++ hbox {
+    left = 12%
+    top = 82%+6
+    width = 20%
+    height = 22
+    + label { text = "@VTOY_MEM_DISK@" color = "#fbbf24" align = "left" }
+}
++ hbox {
+    left = 12%+160
+    top = 82%+6
+    width = 20%
+    height = 22
+    + label { text = "@VTOY_ISO_RAW@" color = "#fbbf24" align = "left" }
+}
++ hbox {
+    left = 12%+320
+    top = 82%+6
+    width = 20%
+    height = 22
+    + label { text = "@VTOY_GRUB2_MODE@" color = "#fbbf24" align = "left" }
+}
++ hbox {
+    left = 12%+480
+    top = 82%+6
+    width = 20%
+    height = 22
+    + label { text = "@VTOY_WIMBOOT_MODE@" color = "#fbbf24" align = "left" }
+}
++ hbox {
+    left = 88%-120
+    top = 82%+6
+    width = 120
+    height = 22
+    + label { text = "@VTOY_ISO_UEFI_DRV@" color = "#f87171" align = "left" }
+}
+
+# -------------------------------------------------- barra inferior de info
++ image {
+    left = 0
+    top = 100%-40
+    width = 100%
+    height = 40
+    file = "barra_inferior.png"
+}
+
++ label {
+    left = 0
+    top = 100%-30
+    width = 100%
+    height = 22
+    align = "center"
+    color = "#cbd5e1"
+    text = "@VTOY_HOTKEY_TIP@"
+}
