@@ -46,6 +46,7 @@
 #include <ventoy_disk.h>
 #include <ventoy_http.h>
 #include "fat_filelib.h"
+#include "ventoy_http_guard.h"
 
 static const char *g_json_title_postfix[bios_max + 1] =
 {
@@ -4047,21 +4048,29 @@ static int ventoy_request_handler(struct mg_connection *conn)
 
     ri = mg_get_request_info(conn);
 
+    /* reject DNS-rebinding / cross-site requests before doing anything */
+    if (!ventoy_http_guard_check(conn))
+    {
+        return 1;
+    }
+
     if (strcmp(ri->uri, "/vtoy/json") == 0)
     {
-        if (ri->content_length > 500)
+        if (strcmp(ri->request_method, "POST") != 0)
         {
-            post_data_buf = malloc((int)(ri->content_length + 4));
-            post_buf_len  = (int)(ri->content_length + 1);
-        }
-        else
-        {
-            post_data_buf = stack_buf;
-            post_buf_len = sizeof(stack_buf);
+            ventoy_json_result(conn, VTOY_JSON_INVALID_RET);
+            return 1;
         }
 
-        post_data_len = mg_read(conn, post_data_buf, post_buf_len);
-        post_data_buf[post_data_len] = 0;
+        post_data_buf = ventoy_http_guard_read_body(conn, (long long)ri->content_length, stack_buf, (int)sizeof(stack_buf));
+        if (!post_data_buf)
+        {
+            ventoy_json_result(conn, VTOY_JSON_INVALID_RET);
+            return 1;
+        }
+        post_data_len = (int)strlen(post_data_buf);
+        post_buf_len = post_data_len;
+        (void)post_buf_len;
 
         json = vtoy_json_create();
         if (JSON_SUCCESS == vtoy_json_parse(json, post_data_buf))
@@ -5426,6 +5435,7 @@ int ventoy_http_start(const char *ip, const char *port)
     options[1] = addr;
 
     memset(&callbacks, 0, sizeof(callbacks));
+    ventoy_http_guard_init(ip, port);
     callbacks.begin_request = ventoy_request_handler;
 #ifndef VENTOY_SIM
     callbacks.open_file = ventoy_web_openfile;
