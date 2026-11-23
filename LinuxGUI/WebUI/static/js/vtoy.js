@@ -1,3 +1,13 @@
+// Escape text coming from the system (USB vendor/model strings, etc.)
+// before it is inserted as HTML, so a crafted device name cannot inject script.
+function vtoy_html_escape(str) {
+    if (str === undefined || str === null) {
+        return '';
+    }
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
 
 // 包装ajax请求
 function callVtoy(p1, p2, p3) {

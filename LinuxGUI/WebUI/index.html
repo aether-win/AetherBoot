@@ -805,7 +805,7 @@
         }
         
         var curDev = vtoy_cur_dev_list[index];
-        model = curDev.name + '&nbsp;&nbsp;[' + curDev.size + ']&nbsp;&nbsp;' + curDev.model + '<br/>';        
+        model = vtoy_html_escape(curDev.name) + '&nbsp;&nbsp;[' + vtoy_html_escape(curDev.size) + ']&nbsp;&nbsp;' + vtoy_html_escape(curDev.model) + '<br/>';        
         var msgstrex1 = '<span style="font-size:14px; font-weight:bold;"> ' + model + msgstr1 + '</span>';
         var msgstrex2 = '<span style="font-size:14px; font-weight:bold; color:#f39c12;"> ' + model + msgstr2 + '</span>';
         
@@ -865,7 +865,7 @@
         }
         
         var curDev = vtoy_cur_dev_list[index];
-        model = curDev.name + '&nbsp;&nbsp;[' + curDev.size + ']&nbsp;&nbsp;' + curDev.model + '<br/>';        
+        model = vtoy_html_escape(curDev.name) + '&nbsp;&nbsp;[' + vtoy_html_escape(curDev.size) + ']&nbsp;&nbsp;' + vtoy_html_escape(curDev.model) + '<br/>';        
         var msgstrex1 = '<span style="font-size:14px; font-weight:bold;"> ' + model + msgstr1 + '</span>';
         
         Modal.confirm({title:titlestr, msg:msgstrex1, btnok:vtoy_cur_language.STR_BTN_OK, btncl:vtoy_cur_language.STR_BTN_CANCEL }).on(function(e) {
@@ -892,7 +892,7 @@
         }
         
         var curDev = vtoy_cur_dev_list[index];
-        model = curDev.name + '&nbsp;&nbsp;[' + curDev.size + ']&nbsp;&nbsp;' + curDev.model + '<br/>';        
+        model = vtoy_html_escape(curDev.name) + '&nbsp;&nbsp;[' + vtoy_html_escape(curDev.size) + ']&nbsp;&nbsp;' + vtoy_html_escape(curDev.model) + '<br/>';        
         var msgstrex1 = '<span style="font-size:14px; font-weight:bold;"> ' + model + msgstr1 + '</span>';
         var msgstrex2 = '<span style="font-size:14px; font-weight:bold; color:#f39c12;"> ' + model + msgstr2 + '</span>';
         
@@ -941,7 +941,7 @@
         $('span#vtoy_dev_secure_icon').css("visibility","hidden");
         
         for (var i = 0; i < vtoy_cur_dev_list.length; i++) {
-            model = vtoy_cur_dev_list[i].name + '&nbsp;&nbsp;[' + vtoy_cur_dev_list[i].size + ']&nbsp;&nbsp;' + vtoy_cur_dev_list[i].model;            
+            model = vtoy_html_escape(vtoy_cur_dev_list[i].name) + '&nbsp;&nbsp;[' + vtoy_html_escape(vtoy_cur_dev_list[i].size) + ']&nbsp;&nbsp;' + vtoy_html_escape(vtoy_cur_dev_list[i].model);            
             $("#vtoy_dev_list").append("<option value='" + i + "'>" + model + "</option>");
         }
         

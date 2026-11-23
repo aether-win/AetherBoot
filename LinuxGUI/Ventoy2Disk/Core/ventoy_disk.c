@@ -338,14 +338,38 @@ uint64_t ventoy_get_disk_size_in_byte(const char *disk)
     return size;
 }
 
+/*
+ * vendor/model strings come straight from the USB device descriptor, which
+ * the device itself controls. They are later embedded in hand-built JSON
+ * and shown in the web UI, so drop anything that could break out of a JSON
+ * string or be interpreted as HTML.
+ */
+static void ventoy_sanitize_disk_string(char *str)
+{
+    unsigned char *p;
+
+    for (p = (unsigned char *)str; p && *p; p++)
+    {
+        if (*p < 0x20 || *p == 0x7F || *p == '"' || *p == '\\' ||
+            *p == '<' || *p == '>' || *p == '&' || *p == '\'')
+        {
+            *p = ' ';
+        }
+    }
+}
+
 int ventoy_get_disk_vendor(const char *name, char *vendorbuf, int bufsize)
 {
-    return ventoy_get_sys_file_line(vendorbuf, bufsize, "/sys/block/%s/device/vendor", name);
+    int ret = ventoy_get_sys_file_line(vendorbuf, bufsize, "/sys/block/%s/device/vendor", name);
+    ventoy_sanitize_disk_string(vendorbuf);
+    return ret;
 }
 
 int ventoy_get_disk_model(const char *name, char *modelbuf, int bufsize)
 {
-    return ventoy_get_sys_file_line(modelbuf, bufsize, "/sys/block/%s/device/model", name);
+    int ret = ventoy_get_sys_file_line(modelbuf, bufsize, "/sys/block/%s/device/model", name);
+    ventoy_sanitize_disk_string(modelbuf);
+    return ret;
 }
 
 static int fatlib_media_sector_read(uint32 sector, uint8 *buffer, uint32 sector_count)
