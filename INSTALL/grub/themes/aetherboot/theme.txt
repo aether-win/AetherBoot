@@ -5,6 +5,10 @@
 #  Diseñado para GRUB 2.04: los paneles son PNG con transparencia real
 #  (mezcla alfa); no hay animaciones ni desenfoque en vivo porque GRUB no
 #  los admite. Funciona en cualquier resolución: las posiciones son relativas.
+#
+#  Fuentes: "AetherBoot Sans" (generada desde DejaVu Sans con
+#  Scripts/generar_fuente_pf2.py). Los caracteres que no contiene se toman
+#  de unicode.pf2. La terminal sigue usando unicode.pf2 (monoespaciada).
 # ==========================================================================
 
 desktop-image: "background.png"
@@ -15,6 +19,12 @@ message-color: "#e2e8f0"
 message-bg-color: "#050b18"
 
 terminal-box: "terminal_box_*.png"
+# la terminal (mensajes, F1, F6...) aparece dentro del panel central, sin tapar el logotipo
+terminal-left: "12%"
+terminal-top: "3%+142"
+terminal-width: "76%"
+terminal-height: "79%-142"
+terminal-border: "6"
 
 # ---------------------------------------------------------- cabecera: logotipo
 + image {
@@ -33,6 +43,7 @@ terminal-box: "terminal_box_*.png"
     height = 20
     align = "center"
     color = "#22d3ee"
+    font = "AetherBoot Sans Bold 16"
     text = "@@VTOY_TEXT_MENU_VER"
 }
 
@@ -45,13 +56,17 @@ terminal-box: "terminal_box_*.png"
 
   menu_pixmap_style = "menu_*.png"
 
+  item_font = "AetherBoot Sans Regular 20"
+  selected_item_font = "AetherBoot Sans Bold 20"
   item_color = "#cbd5e1"
   selected_item_color = "#ffffff"
   selected_item_pixmap_style = "select_*.png"
 
-  item_height = 36
-  item_padding = 10
-  item_spacing = 4
+  # El resaltado crece 6 px arriba y abajo (cortes select_n/select_s):
+  # item_spacing = 12 evita que se monte sobre las entradas vecinas.
+  item_height = 40
+  item_padding = 14
+  item_spacing = 12
 
   icon_width = 28
   icon_height = 28
@@ -72,6 +87,7 @@ terminal-box: "terminal_box_*.png"
   top = 88%
   height = 20
 
+  font = "AetherBoot Sans Regular 16"
   text_color = "#e2e8f0"
   fg_color = "#1e6bff"
   bg_color = "#0a1a3f"
@@ -84,35 +100,35 @@ terminal-box: "terminal_box_*.png"
     top = 82%+6
     width = 20%
     height = 22
-    + label { text = "@VTOY_MEM_DISK@" color = "#fbbf24" align = "left" }
+    + label { font = "AetherBoot Sans Bold 16" text = "@VTOY_MEM_DISK@" color = "#fbbf24" align = "left" }
 }
 + hbox {
     left = 12%+160
     top = 82%+6
     width = 20%
     height = 22
-    + label { text = "@VTOY_ISO_RAW@" color = "#fbbf24" align = "left" }
+    + label { font = "AetherBoot Sans Bold 16" text = "@VTOY_ISO_RAW@" color = "#fbbf24" align = "left" }
 }
 + hbox {
     left = 12%+320
     top = 82%+6
     width = 20%
     height = 22
-    + label { text = "@VTOY_GRUB2_MODE@" color = "#fbbf24" align = "left" }
+    + label { font = "AetherBoot Sans Bold 16" text = "@VTOY_GRUB2_MODE@" color = "#fbbf24" align = "left" }
 }
 + hbox {
     left = 12%+480
     top = 82%+6
     width = 20%
     height = 22
-    + label { text = "@VTOY_WIMBOOT_MODE@" color = "#fbbf24" align = "left" }
+    + label { font = "AetherBoot Sans Bold 16" text = "@VTOY_WIMBOOT_MODE@" color = "#fbbf24" align = "left" }
 }
 + hbox {
     left = 88%-120
     top = 82%+6
     width = 120
     height = 22
-    + label { text = "@VTOY_ISO_UEFI_DRV@" color = "#f87171" align = "left" }
+    + label { font = "AetherBoot Sans Bold 16" text = "@VTOY_ISO_UEFI_DRV@" color = "#f87171" align = "left" }
 }
 
 # -------------------------------------------------- barra inferior de info
@@ -130,6 +146,7 @@ terminal-box: "terminal_box_*.png"
     width = 100%
     height = 22
     align = "center"
-    color = "#cbd5e1"
+    color = "#e2e8f0"
+    font = "AetherBoot Sans Regular 16"
     text = "@VTOY_HOTKEY_TIP@"
 }

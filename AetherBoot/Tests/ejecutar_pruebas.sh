@@ -37,7 +37,8 @@ import os, sys, hashlib
 def t(r): return {os.path.relpath(os.path.join(d,f),r): hashlib.sha256(open(os.path.join(d,f),'rb').read()).hexdigest() for d,_,fs in os.walk(r) for f in fs}
 a, b = t(sys.argv[1]), t(sys.argv[2])
 dist = [k for k in set(a) | set(b) if a.get(k) != b.get(k)]
-malos = [k for k in dist if not (k.startswith('grub/') and (k.endswith(('.cfg', '.tar.gz')) or k.startswith('grub/themes/')))]
+malos = [k for k in dist if not (k.startswith('grub/') and (k.endswith(('.cfg', '.tar.gz')) or k.startswith('grub/themes/')
+         or (k.startswith('grub/fonts/aetherboot_') and k.endswith('.pf2'))))]
 print(f"     {sum(1 for k in a if a.get(k)==b.get(k))} idénticos, {len(dist)} distintos, fuera de lo permitido: {malos or 'ninguno'}")
 sys.exit(1 if malos else 0)
 EOF
@@ -49,9 +50,12 @@ for f in grub.cfg checksum.cfg localboot.cfg power.cfg hwinfo.cfg; do
     [ "$f" = grub.cfg ] && o="$T/orig.cfg" || { "$FAT" "$T/a.img" get /grub/$f "$T/o_$f"; o="$T/o_$f"; }
     n=INSTALL/grub/$f
     c() { grep -cE "$1" "$2"; }
-    if [ "$(c '^\s*if ' $o)" = "$(c '^\s*if ' $n)" ] && [ "$(c '^\s*fi\b' $o)" = "$(c '^\s*fi\b' $n)" ] \
-       && [ "$(c '^\s*(menuentry|submenu|function) ' $o)" = "$(c '^\s*(menuentry|submenu|function) ' $n)" ] \
-       && [ "$(tr -cd '{' < $o | wc -c)" = "$(tr -cd '{' < $n | wc -c)" ] && [ "$(tr -cd '}' < $o | wc -c)" = "$(tr -cd '}' < $n | wc -c)" ]; then
+    # Cambios de estructura intencionados de AetherBoot (if, fi, menús/funciones, llaves):
+    # grub.cfg: +1 función (ventoy_aether_fonts, con un if/fi y un bucle).
+    d=0; [ "$f" = grub.cfg ] && d=1
+    if [ "$(( $(c '^\s*if ' $o) + d ))" = "$(c '^\s*if ' $n)" ] && [ "$(( $(c '^\s*fi\b' $o) + d ))" = "$(c '^\s*fi\b' $n)" ] \
+       && [ "$(( $(c '^\s*(menuentry|submenu|function) ' $o) + d ))" = "$(c '^\s*(menuentry|submenu|function) ' $n)" ] \
+       && [ "$(( $(tr -cd '{' < $o | wc -c) + d ))" = "$(tr -cd '{' < $n | wc -c)" ] && [ "$(( $(tr -cd '}' < $o | wc -c) + d ))" = "$(tr -cd '}' < $n | wc -c)" ]; then
         ok "$f: mismos bloques if/fi, menús, funciones y llaves que el original"
     else mal "$f: la estructura difiere del original"; fi
 done

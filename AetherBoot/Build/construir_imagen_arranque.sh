@@ -38,7 +38,7 @@ echo "    libre antes: $(( $("$FAT" "$IMG" free) / 1024 )) KiB"
 
 # --- archivos de configuración (grub.cfg primero, como hace el empaquetador)
 echo "==> Copiando configuración de GRUB"
-for f in grub.cfg checksum.cfg debug.cfg hwinfo.cfg keyboard.cfg localboot.cfg power.cfg; do
+for f in grub.cfg checksum.cfg debug.cfg extmenu.cfg hwinfo.cfg keyboard.cfg localboot.cfg power.cfg; do
     "$FAT" "$IMG" put "$GRUB/$f" "/grub/$f"
 done
 
@@ -82,6 +82,12 @@ done < "$TMP/viejo"
     "$FAT" "$IMG" put "$GRUB/themes/aetherboot/$f" "/grub/themes/aetherboot/$f"
 done
 
+# --- fuentes del tema (AetherBoot Sans, derivada de DejaVu Sans)
+echo "==> Instalando fuentes AetherBoot Sans"
+for f in "$GRUB"/fonts/aetherboot_*.pf2; do
+    "$FAT" "$IMG" put "$f" "/grub/fonts/$(basename "$f")"
+done
+
 echo "    libre después: $(( $("$FAT" "$IMG" free) / 1024 )) KiB"
 
 # --- verificación: lo escrito debe leerse idéntico
@@ -90,12 +96,13 @@ errores=0
 verificar() {
     "$FAT" "$IMG" get "$2" "$TMP/chk" && cmp -s "$1" "$TMP/chk" || { echo "    ERROR: $2"; errores=$((errores+1)); }
 }
-for f in grub.cfg checksum.cfg debug.cfg hwinfo.cfg keyboard.cfg localboot.cfg power.cfg; do
+for f in grub.cfg checksum.cfg debug.cfg extmenu.cfg hwinfo.cfg keyboard.cfg localboot.cfg power.cfg; do
     verificar "$GRUB/$f" "/grub/$f"
 done
 for f in menulang.cfg menu.tar.gz help.tar.gz; do verificar "$TMP/g/$f" "/grub/$f"; done
 ( cd "$GRUB/themes/aetherboot" && find . -type f | sed 's|^\./||' ) > "$TMP/lista"
 while read -r f; do verificar "$GRUB/themes/aetherboot/$f" "/grub/themes/aetherboot/$f"; done < "$TMP/lista"
+for f in "$GRUB"/fonts/aetherboot_*.pf2; do verificar "$f" "/grub/fonts/$(basename "$f")"; done
 [ "$errores" -eq 0 ] || { echo "Hubo $errores errores de verificación"; exit 1; }
 echo "    $(( $(wc -l < "$TMP/lista") + 10 )) archivos verificados byte a byte"
 

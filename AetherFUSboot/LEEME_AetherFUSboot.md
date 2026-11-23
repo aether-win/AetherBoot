@@ -27,7 +27,7 @@ componentes que incluye (ms-sys, FreeDOS, libcdio, wimlib, syslinux, GRUB, etc.)
 Lo que **no** cambia: los métodos de escritura y de arranque, el soporte de
 Windows To Go, la omisión de requisitos de Windows 11, la persistencia de Linux,
 UEFI:NTFS, las comprobaciones de Secure Boot y la compatibilidad con archivos
-VTSI de AetherBoot/Ventoy.
+VTSI generados por Aether2Disk.
 
 ## Recursos que se siguen descargando de servidores de Rufus
 

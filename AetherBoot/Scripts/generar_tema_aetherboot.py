@@ -109,8 +109,12 @@ def nueve(prefijo, tam, radio, relleno, borde=None, ancho_borde=1, brillo_sup=No
 
 
 def seleccion():
-    """Barra de selección azul iluminada con acento cian a la izquierda."""
-    s, c, k = 36, 10, 4
+    """Barra de selección azul iluminada con acento cian a la izquierda.
+
+    Las esquinas miden 6 px: GRUB agranda el resaltado por arriba y por abajo
+    en el alto de los cortes n/s, así que con item_spacing = 2*6 los
+    resaltados no se montan sobre las entradas vecinas."""
+    s, c, k = 36, 6, 4
     big = Image.new("RGBA", (s * k, s * k), (0, 0, 0, 0))
     d = ImageDraw.Draw(big)
     for y in range(s * k):
@@ -122,7 +126,7 @@ def seleccion():
     big.putalpha(mascara.point(lambda v: int(v * 0.92)))
     d = ImageDraw.Draw(big)
     d.rounded_rectangle((0, 0, s * k - 1, s * k - 1), radius=c * k, outline=CIAN + (200,), width=k)
-    d.rounded_rectangle((3 * k, 8 * k, 6 * k, s * k - 8 * k), radius=2 * k, fill=CIAN + (255,))
+    d.rounded_rectangle((2 * k, 8 * k, 5 * k, s * k - 8 * k), radius=2 * k, fill=CIAN + (255,))
     img = big.resize((s, s), Image.LANCZOS)
     m = s - 2 * c
     cortes = {
@@ -294,6 +298,7 @@ iconos = {
     "boot_xorboot": i_unidad(), "debug_util": i_herramienta(), "debug_json": i_herramienta(),
     "debug_theme": i_engranaje(), "debug_power": i_encendido(), "debug_reboot": i_encendido(),
     "debug_hwinfo": i_info(), "custom": i_herramienta(), "customsub": i_carpeta(),
+    "debug_info": i_info(), "debug_halt": i_encendido(), "debug_efisetup": i_chip(),
 }
 for k in ("checksum_md5", "checksum_sha1", "checksum_sha256", "checksum_sha512"):
     iconos[k] = i_escudo()

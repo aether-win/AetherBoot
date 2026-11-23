@@ -115,6 +115,8 @@ def main():
     ap.add_argument("--espera-menu", type=int, default=0,
                     help="segundos hasta la captura del menú (0 = automático)")
     ap.add_argument("--espera-iso", type=int, default=240)
+    ap.add_argument("--galeria", action="store_true",
+                    help="solo capturas de las pantallas del menú (F6, F5, F1, submenú); no arranca la ISO")
     a = ap.parse_args()
 
     os.makedirs(a.salida, exist_ok=True)
@@ -166,8 +168,32 @@ def main():
         else:
             print("[%s] No se pudo obtener la captura del menú" % a.modo)
 
+        if a.galeria:
+            def captura(nombre):
+                ruta = os.path.join(a.salida, "%s-%s.ppm" % (nombre, a.modo))
+                m.cmd("screendump %s" % ruta)
+                time.sleep(1.5)
+                if os.path.exists(ruta):
+                    w, h, datos = leer_ppm(ruta)
+                    guardar_png(os.path.join(a.salida, "%s-%s.png" % (nombre, a.modo)), w, h, datos)
+                    os.remove(ruta)
+            pasos = [("f6", "02_f6_menu_extendido"), ("esc", None),
+                     ("f5", "03_f5_herramientas"), ("esc", None),
+                     ("f1", "04_f1_ayuda"), ("esc", None), ("esc", None),
+                     ("l", "05_idioma"), ("esc", None),
+                     ("ret", "06_submenu_iso"), ("down", "07_submenu_segunda")]
+            for tecla, nombre in pasos:
+                m.cmd("sendkey %s" % tecla)
+                time.sleep(4)
+                if nombre:
+                    captura(nombre)
+            ok_iso = True      # en modo galería no se arranca la ISO
+            fin = 0
+        else:
+            fin = None
+
         # 2) Elegir la ISO (primera entrada) y esperar la marca por el puerto serie
-        fin = time.time() + a.espera_iso
+        fin = time.time() + a.espera_iso if fin is None else 0
         siguiente_tecla = 0
         n = 0
         while time.time() < fin:
@@ -192,7 +218,7 @@ def main():
                         os.remove(ppm2)
             time.sleep(1)
 
-        if not ok_iso:
+        if not ok_iso and not a.galeria:
             ppm3 = os.path.join(a.salida, "final-%s.ppm" % a.modo)
             try:
                 m.cmd("screendump %s" % ppm3)

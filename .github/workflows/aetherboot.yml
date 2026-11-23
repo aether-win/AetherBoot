@@ -121,6 +121,61 @@ jobs:
           name: aetherfusboot-windows
           path: salida/
 
+      - name: Captura de pantalla de AetherFUSboot
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          New-Item -ItemType Directory -Force capturas | Out-Null
+          Add-Type -AssemblyName System.Windows.Forms, System.Drawing
+          Add-Type @"
+          using System; using System.Runtime.InteropServices;
+          public static class W {
+            [DllImport("user32.dll")] public static extern bool SetProcessDPIAware();
+            [DllImport("user32.dll")] public static extern IntPtr FindWindow(string c, string t);
+            [DllImport("user32.dll")] public static extern bool GetWindowRect(IntPtr h, out RECT r);
+            [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr h);
+            [DllImport("user32.dll")] public static extern bool SetCursorPos(int x, int y);
+            [StructLayout(LayoutKind.Sequential)] public struct RECT { public int L, T, R, B; }
+          }
+          "@
+          [W]::SetProcessDPIAware() | Out-Null
+          function Foto($nombre, $x, $y, $w, $h) {
+            $bmp = New-Object System.Drawing.Bitmap $w, $h
+            $g = [System.Drawing.Graphics]::FromImage($bmp)
+            $g.CopyFromScreen($x, $y, 0, 0, $bmp.Size)
+            $bmp.Save("capturas\$nombre.png", [System.Drawing.Imaging.ImageFormat]::Png)
+            $g.Dispose(); $bmp.Dispose()
+          }
+          $p = Start-Process -FilePath salida\AetherFUSboot.exe -PassThru
+          Start-Sleep -Seconds 8
+          $h = [IntPtr]::Zero
+          foreach ($t in 1..10) {
+            $h = (Get-Process -Id $p.Id -ErrorAction SilentlyContinue).MainWindowHandle
+            if ($h -ne [IntPtr]::Zero) { break }
+            Start-Sleep -Seconds 1
+          }
+          $s = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+          Foto 'pantalla_completa' 0 0 $s.Width $s.Height
+          if ($h -ne [IntPtr]::Zero) {
+            [W]::SetForegroundWindow($h) | Out-Null
+            Start-Sleep -Milliseconds 800
+            $r = New-Object W+RECT
+            [W]::GetWindowRect($h, [ref]$r) | Out-Null
+            Foto 'aetherfusboot' $r.L $r.T ($r.R - $r.L) ($r.B - $r.T)
+            # pasar el ratón por encima del botón CERRAR (abajo a la derecha)
+            [W]::SetCursorPos($r.R - 90, $r.B - 70) | Out-Null
+            Start-Sleep -Milliseconds 900
+            Foto 'aetherfusboot_hover' $r.L $r.T ($r.R - $r.L) ($r.B - $r.T)
+          } else { Write-Host 'No se encontró la ventana' }
+          Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
+          Get-ChildItem capturas
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aetherfusboot-capturas
+          path: capturas/
+
   paquete:
     name: Armar paquete de AetherBoot
     needs: windows
@@ -191,3 +246,37 @@ jobs:
         with:
           name: prueba-arranque-capturas
           path: resultados/
+
+  publicar-capturas:
+    name: Publicar capturas en la rama "capturas"
+    needs: [aetherfusboot, prueba-arranque]
+    if: always() && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: aetherfusboot-capturas
+          path: pub/aetherfusboot
+        continue-on-error: true
+      - uses: actions/download-artifact@v4
+        with:
+          name: prueba-arranque-capturas
+          path: pub/arranque
+        continue-on-error: true
+      - name: Subir a la rama capturas
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd pub
+          find . -type f ! -name '*.png' -delete || true
+          ls -R
+          git init -q
+          git config user.name "aetherboot-ci"
+          git config user.email "ci@users.noreply.github.com"
+          git checkout -q -b capturas
+          git add -A
+          git commit -q -m "Capturas de ${GITHUB_SHA::7}"
+          git push -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" capturas
+

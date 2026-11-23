@@ -109,6 +109,12 @@ echo "==> Arranque en modo UEFI"
 python3 "$RAIZ/AetherBoot/Tests/prueba_qemu.py" --modo uefi --disco "$TMP/disk.img" --salida "$OUT" \
         --ovmf-code "$OVMF_CODE" --ovmf-vars "$OVMF_VARS" || RC=1
 
+echo "==> Galería de pantallas del menú (BIOS y UEFI)"
+python3 "$RAIZ/AetherBoot/Tests/prueba_qemu.py" --modo bios --disco "$TMP/disk.img" --salida "$OUT/galeria" --galeria || true
+python3 "$RAIZ/AetherBoot/Tests/prueba_qemu.py" --modo uefi --disco "$TMP/disk.img" --salida "$OUT/galeria" \
+        --ovmf-code "$OVMF_CODE" --ovmf-vars "$OVMF_VARS" --galeria || true
+rm -f "$OUT"/galeria/*.sock "$OUT"/galeria/OVMF_VARS-copia.fd "$OUT"/galeria/serie-*.log
+
 rm -f "$OUT"/*.sock "$OUT"/OVMF_VARS-copia.fd
 chmod -R a+r "$OUT"
 if [ $RC -eq 0 ]; then
