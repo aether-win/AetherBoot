@@ -1670,12 +1670,17 @@ void OnPaint(HDC hdc)
  * fondo, la cabecera y las tarjetas de sección (también se usa cuando un control
  * pide el fondo de su padre con DrawThemeParentBackground()).
  */
+static void AetherGetChildRect(HWND hDlg, int id, RECT* rc)
+{
+	GetWindowRect(GetDlgItem(hDlg, id), rc);
+	MapWindowPoints(NULL, hDlg, (POINT*)rc, 2);
+}
+
 void AetherLayoutMainDialog(HWND hDlg)
 {
 	HWND h;
 	RECT rc;
-	int i, dx, dy;
-
+	int i, dx, dy, gap, top_fmt, top_status;
 	static HWND laid_out = NULL;
 
 	// Solo una vez por ventana (al cambiar de idioma la ventana se vuelve a crear)
@@ -1686,17 +1691,26 @@ void AetherLayoutMainDialog(HWND hDlg)
 	dx = AetherScale(16);
 	dy = aether_header_height + AetherScale(8);
 
+	// Separación extra entre secciones para que las tarjetas respiren
+	gap = AetherScale(18);
+	AetherGetChildRect(hDlg, IDS_FORMAT_OPTIONS_TXT, &rc);
+	top_fmt = rc.top;
+	AetherGetChildRect(hDlg, IDS_STATUS_TXT, &rc);
+	top_status = rc.top;
+
 	for (h = GetWindow(hDlg, GW_CHILD); h != NULL; h = GetWindow(h, GW_HWNDNEXT)) {
+		int extra;
 		GetWindowRect(h, &rc);
 		MapWindowPoints(NULL, hDlg, (POINT*)&rc, 2);
-		SetWindowPos(h, NULL, rc.left + dx, rc.top + dy, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+		extra = (rc.top >= top_status) ? 2 * gap : ((rc.top >= top_fmt) ? gap : 0);
+		SetWindowPos(h, NULL, rc.left + dx, rc.top + dy + extra, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 	}
 	mw += dx;
 	for (i = 0; i < ARRAYSIZE(section_vpos); i++)
-		section_vpos[i] += dy;
+		section_vpos[i] += dy + i * gap;
 
 	GetWindowRect(hDlg, &rc);
-	SetWindowPos(hDlg, NULL, 0, 0, rc.right - rc.left + 2 * dx, rc.bottom - rc.top + dy,
+	SetWindowPos(hDlg, NULL, 0, 0, rc.right - rc.left + 2 * dx, rc.bottom - rc.top + dy + 2 * gap,
 		SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
 	InvalidateRect(hDlg, NULL, TRUE);
 
@@ -1737,11 +1751,6 @@ BOOL AetherMainTimer(HWND hDlg, WPARAM id)
 	return FALSE;
 }
 
-static void AetherGetChildRect(HWND hDlg, int id, RECT* rc)
-{
-	GetWindowRect(GetDlgItem(hDlg, id), rc);
-	MapWindowPoints(NULL, hDlg, (POINT*)rc, 2);
-}
 
 static void AetherPaintHeader(HWND hDlg, HDC hdc, const RECT* client)
 {
@@ -1862,10 +1871,10 @@ void AetherPaintMainBackground(HWND hDlg, HDC hdc)
 		}
 		card.left = mw - pad;
 		card.right = mw + fw + pad;
-		card.top = top - AetherScale(8);
-		card.bottom = bottom + AetherScale(10);
-		if ((i + 1 < ARRAYSIZE(section_control_ids)) && (card.bottom > limit - AetherScale(12)))
-			card.bottom = limit - AetherScale(12);
+		card.top = top - AetherScale(10);
+		card.bottom = bottom + AetherScale(12);
+		if ((i + 1 < ARRAYSIZE(section_control_ids)) && (card.bottom > limit - AetherScale(14)))
+			card.bottom = limit - AetherScale(14);
 		AetherFillRound(hdc, &card, AetherScale(14), AETHER_CARD_COLOR, AETHER_CARD_EDGE_COLOR, TRUE);
 	}
 }
