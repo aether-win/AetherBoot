@@ -1,11 +1,8 @@
 name: Ventoy CI
 
+# AetherBoot: compilación completa con Docker (larga). Solo se ejecuta a mano
+# desde Actions; el paquete de Windows lo genera aetherboot.yml.
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-  
   workflow_dispatch:
 
 jobs:
