@@ -1,14 +1,15 @@
 # AetherBoot — compila Aether2Disk, AetherPlugson y AetherVInk para Windows
 # y arma el paquete final aetherboot-<versión>-windows.zip.
 #
-# Se ejecuta a mano (pestaña Actions → AetherBoot → Run workflow) o al subir
-# una etiqueta que empiece por "aetherboot-".
+# Se ejecuta al subir cambios a main, a mano (pestaña Actions → AetherBoot →
+# Run workflow) o al subir una etiqueta que empiece por "aetherboot-".
 
 name: AetherBoot
 
 on:
   workflow_dispatch:
   push:
+    branches: [ main ]
     tags: [ 'aetherboot-*' ]
 
 env:
