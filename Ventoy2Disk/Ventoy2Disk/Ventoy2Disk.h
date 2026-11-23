@@ -400,4 +400,14 @@ PHY_DRIVE_INFO* CLI_PhyDrvInfo(void);
 int ExpandDlg(HWND hParent, UINT uiID, int WidthDelta);
 int MoveDlg(HWND hParent, UINT uiID, int WidthDelta);
 
+
+/* AetherBoot: AetherChecks.c */
+BOOL AetherPreInstallChecks(HWND hWnd, PHY_DRIVE_INFO *pPhyDrive);
+int AetherCapacityTest(HANDLE hDrive, UINT64 SizeInBytes);
+BOOL AetherAskContinueAfterCapacityFail(void);
+BOOL AetherCapacityUserAborted(void);
+void AetherOpBegin(void);
+void AetherOpSummary(const char *Operation, const PHY_DRIVE_INFO *pPhyDrive, int rc);
+void AetherOfferOpenLog(HWND hWnd);
+
 #endif

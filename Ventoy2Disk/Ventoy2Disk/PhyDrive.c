@@ -1483,6 +1483,53 @@ static int ZeroPart1FileSystem(HANDLE hDrive, UINT64 Part2StartSector)
     return 0;
 }
 
+static int AetherFormatWholeDisk(HANDLE hDrive, PHY_DRIVE_INFO *pPhyDrive)
+{
+    MKFS_PARM Option;
+    FRESULT Ret;
+    FATFS FS;
+    BOOL UseFat32;
+
+    // AetherBoot: deja la USB como memoria normal (una sola particion formateada).
+    // <= 32 GB: FAT32 (maxima compatibilidad: TV, radios, consolas)
+    // >  32 GB: exFAT (permite archivos de mas de 4 GB)
+    UseFat32 = (pPhyDrive->SizeInBytes <= 32ULL * 1024 * 1024 * 1024) ? TRUE : FALSE;
+
+    memset(&Option, 0, sizeof(Option));
+    Option.fmt = UseFat32 ? FM_FAT32 : FM_EXFAT;
+    Option.n_fat = UseFat32 ? 2 : 1;
+    Option.align = 8;
+    Option.n_root = 1;
+    Option.au_size = UseFat32 ? 0 : 131072;
+
+    Log("[Aether] Formateando el disco completo como %s ...", UseFat32 ? "FAT32" : "exFAT");
+
+    disk_io_set_param(hDrive, pPhyDrive->SizeInBytes / 512);
+    disk_io_reset_write_error();
+
+    Ret = f_mkfs(TEXT("0:"), &Option, 0, 8 * 1024 * 1024);
+    if (FR_OK != Ret || disk_io_is_write_error())
+    {
+        Log("[Aether] Formateo del disco completo fallo ret:%d writeerr:%d", Ret, disk_io_is_write_error());
+        return 1;
+    }
+
+    Ret = f_mount(&FS, TEXT("0:"), 1);
+    if (FR_OK == Ret)
+    {
+        Ret = f_setlabel(TEXT("0:USB"));
+        Log("[Aether] Etiqueta USB ret:%d", Ret);
+        f_unmount(TEXT("0:"));
+    }
+    else
+    {
+        Log("[Aether] f_mount tras formateo fallo %d", Ret);
+    }
+
+    Log("[Aether] Formateo del disco completo correcto");
+    return 0;
+}
+
 int ClearVentoyFromPhyDrive(HWND hWnd, PHY_DRIVE_INFO *pPhyDrive, char *pDrvLetter)
 {
     int i;
@@ -1656,6 +1703,12 @@ int ClearVentoyFromPhyDrive(HWND hWnd, PHY_DRIVE_INFO *pPhyDrive, char *pDrvLett
         {
             rc = 1;
             goto End;
+        }
+
+        // AetherBoot: formatear para que la USB quede lista para usarse como memoria normal
+        if (AetherFormatWholeDisk(hDrive, pPhyDrive) != 0)
+        {
+            Log("[Aether] La USB quedo limpia pero sin formatear; se puede formatear desde el Explorador.");
         }
     }
 
@@ -2065,6 +2118,19 @@ int InstallVentoy2PhyDrive(PHY_DRIVE_INFO *pPhyDrive, int PartStyle, int TryId)
 
     //Refresh Drive Layout
     DeviceIoControl(hDrive, IOCTL_DISK_UPDATE_PROPERTIES, NULL, 0, NULL, 0, &dwSize, NULL);
+
+    // AetherBoot: prueba rapida de capacidad real (detecta USB falsas o danadas)
+    if (TryId == 1)
+    {
+        if (AetherCapacityTest(hDrive, pPhyDrive->SizeInBytes) == 1)
+        {
+            if (!AetherAskContinueAfterCapacityFail())
+            {
+                rc = 1;
+                goto End;
+            }
+        }
+    }
 
     disk_io_set_param(hDrive, Part1StartSector + Part1SectorCount);// include the 2048 sector gap
 

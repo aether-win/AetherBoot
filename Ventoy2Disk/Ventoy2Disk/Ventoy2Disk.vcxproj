@@ -342,6 +342,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AetherChecks.c" />
     <ClCompile Include="AlertSuppress.c" />
     <ClCompile Include="crc32.c" />
     <ClCompile Include="DiskService.c" />
