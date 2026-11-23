@@ -11,7 +11,7 @@
   o un archivo con solo el hash.
 
 .PARAMETER Carpeta
-  Raíz de la partición Ventoy. Si se omite, se busca la unidad con etiqueta "Ventoy".
+  Raíz de la partición de datos del USB. Si se omite, se busca la unidad con etiqueta "Aether" (o "Ventoy" en USB antiguos).
 
 .PARAMETER Generar
   Crea "imagen.sha256" para las imágenes sin referencia.
@@ -28,7 +28,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 if (-not $Carpeta) {
-    $vol = Get-Volume -ErrorAction SilentlyContinue | Where-Object { $_.FileSystemLabel -eq "Ventoy" -and $_.DriveLetter } | Select-Object -First 1
+    $vol = Get-Volume -ErrorAction SilentlyContinue | Where-Object { $_.FileSystemLabel -in @("Aether", "Ventoy") -and $_.DriveLetter } | Sort-Object { $_.FileSystemLabel -ne "Aether" } | Select-Object -First 1
     if ($vol) { $Carpeta = "$($vol.DriveLetter):\" } else { $Carpeta = (Get-Location).Path }
 }
 if (-not (Test-Path -LiteralPath $Carpeta -PathType Container)) {

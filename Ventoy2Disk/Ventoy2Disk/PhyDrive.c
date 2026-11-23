@@ -1373,7 +1373,7 @@ static int FormatPart1LargeFAT32(UINT64 DiskSizeBytes, int CluserSize)
         if (FR_OK == Ret)
         {
             Log("f_mount SUCCESS");
-            Ret = f_setlabel(TEXT("0:Ventoy"));
+            Ret = f_setlabel(TEXT("0:Aether"));
             if (FR_OK == Ret)
             {
                 Log("f_setlabel SUCCESS");

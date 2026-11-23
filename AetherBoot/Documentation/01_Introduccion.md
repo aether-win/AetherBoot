@@ -5,12 +5,14 @@ el USB queda dividido en dos partes:
 
 | Partición | Etiqueta | Contenido |
 |---|---|---|
-| 1 (la grande) | `Ventoy` | Sus imágenes ISO/WIM/IMG/VHD(x)/EFI y la carpeta de configuración `ventoy/`. Se puede usar como un USB normal. |
+| 1 (la grande) | `Aether` | Sus imágenes ISO/WIM/IMG/VHD(x)/EFI y la carpeta de configuración `ventoy/`. Se puede usar como un USB normal. |
 | 2 (32 MB) | `VTOYEFI` | El menú de arranque AetherBoot (GRUB2, temas, idiomas). No hay que tocarla. |
 
-> Las etiquetas `Ventoy` y `VTOYEFI`, la carpeta `ventoy/` y el archivo `ventoy.json` mantienen esos
-> nombres a propósito: el motor de arranque los busca por nombre, y cambiarlos dejaría el USB sin
-> arrancar. Son nombres técnicos, no la marca del producto.
+> La etiqueta `Aether` de la partición de datos se puede cambiar libremente (clic derecho → Cambiar
+> nombre); los USB preparados con Ventoy conservan la etiqueta `Ventoy` y funcionan igual. En cambio,
+> la etiqueta `VTOYEFI`, la carpeta `ventoy/` y el archivo `ventoy.json` mantienen esos nombres a
+> propósito: el motor de arranque los busca por nombre, y cambiarlos dejaría el USB sin arrancar.
+> Son nombres técnicos, no la marca del producto.
 
 ## Cómo se usa, en tres pasos
 

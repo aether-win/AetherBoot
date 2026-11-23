@@ -29,8 +29,8 @@
 Terminated
 == 6. Interfaz de AetherPlugson
   [PASA]   15 páginas en español, sin chino visible ni errores de JavaScript
-Terminated
 == 7. Sintaxis de scripts
+Terminated
   [PASA]   INSTALL/tool/VentoyWorker.sh
   [PASA]   INSTALL/Ventoy2Disk.sh
   [PASA]   INSTALL/VentoyWeb.sh
@@ -44,6 +44,6 @@ Terminated
   [PASA]   AetherBoot/Backup/restaurar.sh
   [PASA]   vtoy.js (AetherPlugson) es JavaScript válido
 == 8. Auditoría de referencias
-  [PASA]   sin referencias visuales/comerciales (A) ni enlaces (B): Total: 13699  A=0  B=0  C=13699
+  [PASA]   sin referencias visuales/comerciales (A) ni enlaces (B): Total: 13689  A=0  B=0  C=13689
 
 RESULTADO: 36 pasan, 0 fallan, 0 omitidas

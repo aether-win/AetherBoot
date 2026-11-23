@@ -28,7 +28,7 @@ de menú `aetherboot` y `moderno`, y sus iconos, se generan con los scripts de `
 
 ## Nombres técnicos conservados
 
-Por compatibilidad, AetherBoot mantiene nombres internos de Ventoy: la etiqueta de partición `Ventoy`,
+Por compatibilidad, AetherBoot mantiene nombres internos de Ventoy:
 la partición `VTOYEFI`, la carpeta `ventoy/`, el archivo `ventoy.json` y los nombres de archivos
 internos del motor. No son la marca del producto, sino identificadores que el motor y los sistemas
 operativos usan para encontrar el USB. El informe de auditoría (`AetherBoot/Informes`) los enumera

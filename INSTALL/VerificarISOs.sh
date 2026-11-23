@@ -12,7 +12,7 @@
 #   sh VerificarISOs.sh [-g] [carpeta]
 #
 #   carpeta   raíz de la partición Ventoy (por defecto: se busca la partición
-#             montada con etiqueta "Ventoy", o la carpeta actual)
+#             montada con etiqueta "Aether" o "Ventoy", o la carpeta actual)
 #   -g        genera "imagen.sha256" para las imágenes que no tienen referencia,
 #             para poder comprobarlas más adelante (p. ej. tras copiar a otra USB)
 #
@@ -37,7 +37,8 @@ done
 
 if [ -z "$ROOT" ]; then
     if command -v findmnt >/dev/null 2>&1; then
-        ROOT=$(findmnt -rn -o TARGET -S LABEL=Ventoy 2>/dev/null | head -n1)
+        ROOT=$(findmnt -rn -o TARGET -S LABEL=Aether 2>/dev/null | head -n1)
+        [ -z "$ROOT" ] && ROOT=$(findmnt -rn -o TARGET -S LABEL=Ventoy 2>/dev/null | head -n1)
     fi
     [ -z "$ROOT" ] && ROOT="."
 fi

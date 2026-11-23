@@ -19,6 +19,7 @@ sudo sh Aether2Disk.sh { -i | -I | -u | -l } /dev/sdX     sdX es el USB, por eje
    -s / -S     activa / desactiva Secure Boot (por defecto activado)
    -g          usa particiones GPT; por defecto MBR (solo al instalar)
    -n          intenta una instalación no destructiva (solo al instalar)
+   -L NOMBRE   etiqueta de la partición de datos (por defecto Aether)
 
 (Aether2Disk.sh llama a Ventoy2Disk.sh, que conserva su nombre por compatibilidad.)
 

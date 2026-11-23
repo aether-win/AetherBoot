@@ -33,7 +33,7 @@ LUKS o RAID. Si lo está, se detiene.
 
 ## Después de instalar
 
-- Copie las imágenes a la partición **Ventoy** (la grande). Puede organizarlas en carpetas.
+- Copie las imágenes a la partición **Aether** (la grande). Puede organizarlas en carpetas.
 - Para comprobar que se copiaron bien, ejecute `VerificarISOs` (ver [capítulo 4](04_Menu_de_arranque.md)).
 - El USB se puede seguir usando para guardar otros archivos.
 

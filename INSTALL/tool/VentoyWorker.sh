@@ -15,14 +15,14 @@ print_usage() {
     echo '   -r MiB      reserva espacio (MiB) al final del disco (solo al instalar)'
     echo '   -s/-S       activa/desactiva Secure Boot (por defecto activado)'
     echo '   -g          usa particiones GPT; por defecto MBR (solo al instalar)'
-    echo '   -L          etiqueta de la 1.ª partición exFAT (por defecto Ventoy, necesaria para el motor)'
+    echo '   -L          etiqueta de la 1.ª partición exFAT (por defecto Aether)'
     echo '   -n          intenta una instalación no destructiva (solo al instalar)'
     echo ''
 }
 
 
 SECUREBOOT="YES"
-VTNEW_LABEL='Ventoy'
+VTNEW_LABEL='Aether'
 RESERVE_SIZE_MB=0
 while [ -n "$1" ]; do
     if [ "$1" = "-i" ]; then
