@@ -236,7 +236,7 @@
     <ResourceCompile Include="VentoyPlugson.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Res\plugson.ico" />
+    <Image Include="Res\aetherplugson.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

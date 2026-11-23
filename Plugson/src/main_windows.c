@@ -90,7 +90,51 @@ const WCHAR *g_msg_en[MSGID_BUTT] =
 }
 
 
+/* AetherPlugson: textos en español (idioma por defecto) */
+const WCHAR *g_msg_es[MSGID_BUTT] =
+{
+    L"Error",
+    L"Información",
+    L"Ejecute AetherPlugson desde la raíz de la partición AetherBoot (donde están las imágenes ISO).",
+    L"¡No se pudo crear la carpeta ventoy!",
+    L"La carpeta ventoy existe pero sus mayúsculas no coinciden; cámbiele el nombre primero.",
+    L"Error interno: el programa se cerrará.",
+    L"Actualizar",
+    L"Iniciar",
+    L"Detener",
+    L"Abrir",
+    L"Salir",
+
+    L"Al detener el servicio se cerrará la página del navegador. ¿Continuar?",
+    L"El servicio está en marcha. ¿Continuar?",
+    L"¡Cierre primero la otra ventana de AetherPlugson que está abierta!",
+    L"No existe ventoy\\plugson.tar.xz; ejecute el programa desde la carpeta correcta.",
+};
+
 const WCHAR **g_msg_lang = NULL;
+
+/* AetherBoot: estilo Windows 11 (esquinas redondeadas y paleta de la marca).
+   Se carga dinámicamente; en versiones anteriores de Windows no hace nada. */
+typedef HRESULT (WINAPI *PF_DwmSetWindowAttribute)(HWND, DWORD, LPCVOID, DWORD);
+static void AetherApplyWindowStyle(HWND hWnd)
+{
+    PF_DwmSetWindowAttribute pfSetAttr = NULL;
+    HMODULE hDwm = LoadLibraryW(L"dwmapi.dll");
+    DWORD corner = 2;
+    COLORREF caption = RGB(10, 26, 63), text = RGB(255, 255, 255), border = RGB(34, 211, 238);
+
+    if (hDwm)
+    {
+        pfSetAttr = (PF_DwmSetWindowAttribute)GetProcAddress(hDwm, "DwmSetWindowAttribute");
+    }
+    if (pfSetAttr)
+    {
+        pfSetAttr(hWnd, 33, &corner, sizeof(corner));
+        pfSetAttr(hWnd, 34, &border, sizeof(border));
+        pfSetAttr(hWnd, 35, &caption, sizeof(caption));
+        pfSetAttr(hWnd, 36, &text, sizeof(text));
+    }
+}
 
 HINSTANCE g_hInst;
 
@@ -406,6 +450,8 @@ INT_PTR CALLBACK DialogProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lPara
         case WM_INITDIALOG:
         {
             InitDialog(hWnd, wParam, lParam);
+            SetWindowTextW(hWnd, L"AetherPlugson");
+            AetherApplyWindowStyle(hWnd);
             break;
         }
         case WM_CLOSE:
@@ -558,16 +604,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	DllProtect();
 
-    if (GetUserDefaultUILanguage() == 0x0804)
-    {
-        g_sysinfo.language = LANGUAGE_CN;
-        g_msg_lang = g_msg_cn;
-    }
-    else
-    {
-        g_sysinfo.language = LANGUAGE_EN;
-        g_msg_lang = g_msg_en;
-    }
+    /* AetherBoot: interfaz en español (la web usa la rama "en", traducida) */
+    g_sysinfo.language = LANGUAGE_EN;
+    g_msg_lang = g_msg_es;
 
 	hMutex = CreateMutexA(NULL, TRUE, "PlugsonMUTEX");
 	if ((hMutex != NULL) && (GetLastError() == ERROR_ALREADY_EXISTS))

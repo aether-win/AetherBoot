@@ -170,7 +170,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Res\plugson.ico">
+    <Image Include="Res\aetherplugson.ico">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>
