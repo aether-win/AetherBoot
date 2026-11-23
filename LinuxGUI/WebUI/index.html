@@ -6,7 +6,8 @@
     <meta http-equiv="pragma" content="no-cache">  
     <!-- HTTP 1.0 -->  
     <meta http-equiv="cache-control" content="no-cache">  
-    <title>Ventoy2Disk</title>
+    <title>Aether2Disk</title>
+    <link rel="icon" type="image/png" href="static/img/aether2disk_32.png">
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.5 -->
@@ -39,11 +40,13 @@
     <script src="static/js/jquery.vtoy.alert.js"></script>
     <script src="static/js/vtoy.js"></script>    
     <script src="static/js/languages.js"></script>        
+    <!-- AetherBoot: sistema de diseño compartido -->
+    <link rel="stylesheet" href="static/css/aether.css">
     
     
     <style type="text/css">
     * {
-         font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+         font-family: "Segoe UI Variable Text", "Segoe UI", system-ui, "Ubuntu", "Noto Sans", "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
      }
     .modal {
         padding-top: 80px;
@@ -55,7 +58,7 @@
         display:inline-block;
         font-size:28px;
         font-weight:bold;
-        color:red; 
+        color:#1e6bff; 
         width:60%; 
         text-align:center;
     }
@@ -232,6 +235,11 @@
         
 <!-- Main content -->
 <section class="content" id="vtoy-content">
+<!-- AetherBoot: cabecera de Aether2Disk -->
+<div class="aether2disk-cabecera">
+    <img src="static/img/aether2disk_logo.png" alt="Aether2Disk" class="aether2disk-logo">
+    <span class="aether2disk-sub">Instalador de AetherBoot</span>
+</div>
 <div >
     <div class="row" style="margin-top:-10px; width:535px; font-family:courier new; font-weight:bold;align:center;text-align:center;">
         <ul class="nav nav-tabs" style="margin-left:5px;">
@@ -253,7 +261,7 @@
             </ul>
           </li>
           <li class="dropdown">
-            <a class="dropdown-toggle noselect" id='vtoy_language' data-toggle="dropdown" aria-expanded="false" style="cursor: pointer;;">Languages <span class="caret"></span></a>
+            <a class="dropdown-toggle noselect" id='vtoy_language' data-toggle="dropdown" aria-expanded="false" style="cursor: pointer;;">Idioma <span class="caret"></span></a>
             <ul class="dropdown-menu pull-left noselect" style="height:300px;overflow:scroll"  id='vtoy_language_dropbox'>              
             </ul>
           </li>
@@ -1038,11 +1046,8 @@
         vtoy_client_language = navigator.browserLanguage.toLowerCase();
     }
     
-    if (vtoy_client_language === 'zh-cn') {
-        select_language_by_index(0, 0);
-    } else {
-        select_language_by_name('English (English)', 0);
-    }
+    /* AetherBoot: interfaz en español por defecto (se puede cambiar en el menú Idioma) */
+    select_language_by_name('Spanish (Latinoamérica)', 0);
     
     on_select_mbr();
     secure_boot_check(1);

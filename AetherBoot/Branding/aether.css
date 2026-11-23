@@ -190,3 +190,14 @@ code { color: #1452d6; background: #eaf2ff; border-radius: 4px; }
 
 /* iconos dentro de botones: siempre del color del texto del botón */
 .box-header .btn .fa, .btn .fa { color: inherit !important; }
+
+/* ---------- Aether2Disk (instalador web de Linux) ---------- */
+.aether2disk-cabecera {
+    width: 535px; display: flex; align-items: center; gap: 14px;
+    background: linear-gradient(90deg, var(--ab-azul-profundo), var(--ab-azul-noche) 60%, var(--ab-azul-medio));
+    border-radius: var(--ab-radio); padding: 10px 16px; margin: -6px 0 18px 0;
+    border-bottom: 2px solid var(--ab-cian); box-shadow: var(--ab-sombra);
+}
+.aether2disk-logo { height: 44px; }
+.aether2disk-sub { color: #bcd3ff; font-weight: 600; font-size: 13px; }
+#vtoy-content .nav-tabs > li > a { color: var(--ab-azul-noche); }
