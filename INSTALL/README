@@ -1,66 +1,73 @@
+========== AetherBoot - paquete para Linux ===============
 
-========== Ventoy2Disk.sh ===============
-
-sudo bash Ventoy2Disk.sh { -i | -I | -u } /dev/sdX   sdX is the USB device, for example /dev/sdb.
-
-Ventoy2Disk.sh CMD [ OPTION ] /dev/sdX
-  CMD:
-    -i   install ventoy to sdX (fail if disk already installed with ventoy)
-    -I   force install ventoy to sdX (no matter installed or not)
-    -u   update ventoy in sdX
-    
-  OPTION: (optional)
-   -r SIZE_MB  preserve some space at the bottom of the disk (only for install)
-   -s          enable  secure boot support (default is enabled)
-   -S          disable secure boot support (default is enabled)
-   -g          use GPT partition style, default is MBR style (only for install)
-
-Please refer https://www.ventoy.net/en/doc_start.html for details.   
+Documentación completa en español: carpeta Documentacion/ o
+AetherBoot/Documentation en el código fuente.
 
 
-========== VentoyWeb.sh ===============
-1. sudo bash VentoyWeb.sh 
-2. open your browser and visit http://127.0.0.1:24680
+========== Aether2Disk.sh (instalar / actualizar en consola) ===============
+
+sudo sh Aether2Disk.sh { -i | -I | -u | -l } /dev/sdX     sdX es el USB, por ejemplo /dev/sdb
+
+  ORDEN:
+    -i   instala AetherBoot en sdX (falla si el disco ya lo tiene)
+    -I   fuerza la instalación de AetherBoot en sdX (lo tenga o no)
+    -u   actualiza AetherBoot en sdX (no borra las imágenes)
+    -l   muestra la información de AetherBoot en sdX
+
+  OPCIÓN: (opcional)
+   -r MiB      reserva espacio al final del disco (solo al instalar)
+   -s / -S     activa / desactiva Secure Boot (por defecto activado)
+   -g          usa particiones GPT; por defecto MBR (solo al instalar)
+   -n          intenta una instalación no destructiva (solo al instalar)
+
+(Aether2Disk.sh llama a Ventoy2Disk.sh, que conserva su nombre por compatibilidad.)
 
 
-========== VentoyPlugson.sh ===============
-1. sudo bash VentoyPlugson.sh /dev/sdX
-2. open your browser and visit http://127.0.0.1:24681
-
-========== VentoyVlnk.sh ===============
-Usage:  sudo bash VentoyVlnk.sh CMD FILE
-  CMD:
-   -c FILE      create vlnk for FILE
-   -l VLNK      parse vlnk file
-   -v           print verbose info
-   -h           print this help
+========== AetherWeb.sh (instalador con interfaz web) ===============
+1. sudo bash AetherWeb.sh
+2. Abra el navegador y visite http://127.0.0.1:24680
 
 
-========= VentoyGUI ===================
-VentoyGUI is native GUI program for Linux (GTK/QT)
-1. Just double-click the file (e.g. VentoyGUI.x86_64)
-2. If it can not startup after double-click, you can open the terminal and just execute the file (e.g.  ./VentoyGUI.x86_64)
+========== AetherPlugson.sh (configurar plugins) ===============
+1. sudo bash AetherPlugson.sh /dev/sdX
+2. Abra el navegador y visite http://127.0.0.1:24681
+
+
+========== AetherVInk.sh (enlaces .vlnk) ===============
+Uso:  sudo sh AetherVInk.sh ORDEN ARCHIVO
+   -c ARCHIVO   crea un enlace vlnk para ARCHIVO
+   -l VLNK      analiza un archivo vlnk
+   -v           información detallada
+   -h           ayuda
+
+
+========== VentoyGUI (instalador gráfico GTK/Qt) ===============
+1. Haga doble clic en el archivo (por ejemplo VentoyGUI.x86_64).
+2. Si no se abre, ejecútelo desde una terminal: ./VentoyGUI.x86_64
+
+
+========== VerificarISOs.sh ===============
+sh VerificarISOs.sh [-g] [carpeta del USB]
+Comprueba las sumas de verificación de todas las imágenes del USB.
 
 
 ========== CreatePersistentImg.sh ===============
+sudo bash CreatePersistentImg.sh [ -s TAMAÑO_MB ] [ -t SISTEMA ] [ -l ETIQUETA ]
 
-sudo bash CreatePersistentImg.sh  [ -s SIZE_IN_MB ] [ -t FSTYPE ] [ -l LABEL ]   for example:
+bash CreatePersistentImg.sh                 ---->  persistence.dat de 1 GB, ext4, etiqueta casper-rw
+bash CreatePersistentImg.sh -l MX-Persist   ---->  persistence.dat de 1 GB, ext4, etiqueta MX-Persist
+bash CreatePersistentImg.sh -s 2048         ---->  persistence.dat de 2 GB, ext4, etiqueta casper-rw
+bash CreatePersistentImg.sh -s 4096 -t xfs  ---->  persistence.dat de 4 GB, xfs (admite ext2/3/4 y xfs)
 
-bash CreatePersistentImg.sh                 ---->  persistence.dat in 1GB size and ext4 filesystem and casper-rw label
-bash CreatePersistentImg.sh -l MX-Persist   ---->  persistence.dat in 1GB size and ext4 filesystem and MX-Persist label
-bash CreatePersistentImg.sh -s 2048         ---->  persistence.dat in 2GB size and ext4 filesystem and casper-rw label
-bash CreatePersistentImg.sh -s 4096 -t xfs  ---->  persistence.dat in 4GB size and xfs  filesystem  (ext2/3/4 xfs are supported)  and casper-rw label
-
-Please refer https://www.ventoy.net/en/plugin_persistence.html for details.
-
+Más información: Documentacion/05_Plugins_AetherPlugson.md (Persistencia).
 
 
 ========== ExtendPersistentImg.sh ===============
-sudo bash ExtendPersistentImg.sh  file size   
-For example:
-bash ExtendPersistentImg.sh persistence.dat 2048  ---->  Extend persistence.dat by 2048MB
-That is to say, persistence.dat file will grow to 3GB size (assume that it is 1GB size before extend)
-
-Please refer https://www.ventoy.net/en/plugin_persistence.html for details.
+sudo bash ExtendPersistentImg.sh archivo tamaño
+Ejemplo:
+bash ExtendPersistentImg.sh persistence.dat 2048  ---->  amplía persistence.dat en 2048 MB
+(si medía 1 GB, pasará a medir 3 GB)
 
 
+AetherBoot es una distribución personalizada basada en la tecnología Ventoy
+(c) longpanda, bajo licencia GNU GPL v3 o posterior.

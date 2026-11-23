@@ -1,0 +1,47 @@
+== 1. Partición de arranque
+  [PASA]   construcción y verificación byte a byte (70 archivos verificados)
+  [PASA]   tamaño exacto de 32 MiB
+  [PASA]   etiqueta VTOYEFI conservada
+     960 idénticos, 92 distintos, fuera de lo permitido: ninguno
+  [PASA]   binarios idénticos; solo cambian cfg, idiomas, ayuda y tema
+  [PASA]   compresión igual a la oficial (xz, CRC32, 8 MiB)
+== 2. Estructura de los .cfg de GRUB frente al original
+  [PASA]   grub.cfg: mismos bloques if/fi, menús, funciones y llaves que el original
+  [PASA]   checksum.cfg: mismos bloques if/fi, menús, funciones y llaves que el original
+  [PASA]   localboot.cfg: mismos bloques if/fi, menús, funciones y llaves que el original
+  [PASA]   power.cfg: mismos bloques if/fi, menús, funciones y llaves que el original
+  [PASA]   hwinfo.cfg: mismos bloques if/fi, menús, funciones y llaves que el original
+== 3. Idiomas y configuración
+  [PASA]   30 idiomas del menú válidos y sin la marca antigua
+  [PASA]   languages.json válido (verificador del proyecto)
+  [PASA]   ventoy.json válido
+  [PASA]   ventoy_ejemplo_es.json válido
+  [PASA]   plantilla de Windows 11 es XML válido
+== 4. VerificarISOs.sh
+  [PASA]   imágenes correctas → código 0
+  [PASA]   imagen dañada → código 1
+== 5. Seguridad del servidor local (Aether2Disk Linux)
+  [PASA]   compila el servidor web de Linux
+  [PASA]   petición legítima aceptada
+  [PASA]   DNS rebinding (Host ajeno) rechazado
+  [PASA]   CSRF (Origin ajeno) rechazado
+  [PASA]   cuerpo gigante rechazado y el servidor sigue vivo
+Terminated
+== 6. Interfaz de AetherPlugson
+  [PASA]   15 páginas en español, sin chino visible ni errores de JavaScript
+Terminated
+== 7. Sintaxis de scripts
+  [PASA]   INSTALL/tool/VentoyWorker.sh
+  [PASA]   INSTALL/Ventoy2Disk.sh
+  [PASA]   INSTALL/VentoyWeb.sh
+  [PASA]   INSTALL/VentoyPlugson.sh
+  [PASA]   INSTALL/Aether2Disk.sh
+  [PASA]   INSTALL/AetherWeb.sh
+  [PASA]   INSTALL/AetherPlugson.sh
+  [PASA]   INSTALL/VerificarISOs.sh
+  [PASA]   AetherBoot/Build/construir_imagen_arranque.sh
+  [PASA]   AetherBoot/Build/empaquetar_windows.sh
+  [PASA]   AetherBoot/Backup/restaurar.sh
+  [PASA]   vtoy.js (AetherPlugson) es JavaScript válido
+
+RESULTADO: 35 pasan, 0 fallan, 0 omitidas

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   Plantilla de instalación semi-desatendida de Windows 10/11 en español
-  para el plugin "auto_install" de Ventoy.
+  para el plugin "auto_install" de AetherBoot.
 
   Qué hace:
     * Idioma, teclado y región en español (Latinoamérica). Cambie es-MX por

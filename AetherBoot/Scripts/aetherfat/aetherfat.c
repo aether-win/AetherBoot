@@ -109,22 +109,30 @@ static int list_dir(const char *path, int dump, const char *outdir)
         return 1;
     }
     {
-        static char subs[128][1024];
-        int nsub = 0, i;
+        /* propio de cada nivel de recursión (no static) */
+        char (*subs)[1024] = malloc(512 * 1024);
+        int nsub = 0, i, rc2 = 0;
+        if (!subs)
+        {
+            fl_closedir(&dir);
+            return 1;
+        }
         while (fl_readdir(&dir, &ent) == 0)
         {
-            if (ent.is_dir && strcmp(ent.filename, ".") && strcmp(ent.filename, "..") && nsub < 128)
+            if (ent.is_dir && strcmp(ent.filename, ".") && strcmp(ent.filename, "..") && nsub < 512)
             {
                 snprintf(subs[nsub++], 1024, "%s%s%s", path, (path[strlen(path) - 1] == '/') ? "" : "/", ent.filename);
             }
         }
         fl_closedir(&dir);
-        for (i = 0; i < nsub; i++)
+        for (i = 0; i < nsub && rc2 == 0; i++)
         {
-            if (list_dir(subs[i], dump, outdir))
-            {
-                return 1;
-            }
+            rc2 = list_dir(subs[i], dump, outdir);
+        }
+        free(subs);
+        if (rc2)
+        {
+            return 1;
         }
     }
     return 0;
