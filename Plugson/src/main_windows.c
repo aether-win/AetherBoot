@@ -66,7 +66,7 @@ const WCHAR *g_msg_en[MSGID_BUTT] =
 {
     L"Error",
 	L"Info",
-    L"Please run me at the root of Ventoy partition.",
+    L"Please run me at the root of the AetherBoot partition.",
 	L"Failed to create ventoy directory!",
 	L"ventoy directory case mismatch, please rename it first!",
 	L"Internal error, the program will exit!",

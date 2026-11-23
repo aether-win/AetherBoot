@@ -1,0 +1,115 @@
+# AetherBoot — compila Aether2Disk, AetherPlugson y AetherVInk para Windows
+# y arma el paquete final aetherboot-<versión>-windows.zip.
+#
+# Se ejecuta a mano (pestaña Actions → AetherBoot → Run workflow) o al subir
+# una etiqueta que empiece por "aetherboot-".
+
+name: AetherBoot
+
+on:
+  workflow_dispatch:
+  push:
+    tags: [ 'aetherboot-*' ]
+
+env:
+  VENTOY_VER: "1.1.18"
+  # SHA-256 del paquete oficial de Ventoy usado como base (comprobado)
+  VENTOY_WIN_SHA256: "082c478e8c432e1ac653899fcf50e3a4077a2851bc6112b5ddd30545962164a9"
+
+jobs:
+  windows:
+    name: Compilar programas de Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: microsoft/setup-msbuild@v2
+
+      - name: Compilar Aether2Disk (Win32, x64, ARM64)
+        shell: pwsh
+        run: |
+          foreach ($p in @('Win32', 'x64', 'ARM64')) {
+            msbuild Ventoy2Disk\Ventoy2Disk.sln /m /p:Configuration=Release /p:Platform=$p `
+                    /p:PlatformToolset=v143 /p:WindowsTargetPlatformVersion=10.0
+            if ($LASTEXITCODE -ne 0) { throw "Falló la compilación de Aether2Disk ($p)" }
+          }
+
+      - name: Compilar Aether2Disk (ARM 32 bits, opcional)
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          msbuild Ventoy2Disk\Ventoy2Disk.sln /m /p:Configuration=Release /p:Platform=ARM `
+                  /p:PlatformToolset=v143 /p:WindowsTargetPlatformVersion=10.0
+
+      - name: Compilar AetherPlugson (Win32, x64)
+        shell: pwsh
+        run: |
+          foreach ($p in @('Win32', 'x64')) {
+            msbuild Plugson\vs\VentoyPlugson\VentoyPlugson.sln /m /p:Configuration=Release /p:Platform=$p `
+                    /p:PlatformToolset=v143 /p:WindowsTargetPlatformVersion=10.0
+            if ($LASTEXITCODE -ne 0) { throw "Falló la compilación de AetherPlugson ($p)" }
+          }
+
+      - name: Compilar AetherVInk (Win32)
+        shell: pwsh
+        run: |
+          msbuild Vlnk\vs\VentoyVlnk\VentoyVlnk.sln /m /p:Configuration=Release /p:Platform=Win32 `
+                  /p:PlatformToolset=v143 /p:WindowsTargetPlatformVersion=10.0
+          if ($LASTEXITCODE -ne 0) { throw "Falló la compilación de AetherVInk" }
+
+      - name: Reunir ejecutables
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force exe | Out-Null
+          $nombres = 'Ventoy2Disk.exe','Ventoy2Disk_X64.exe','Ventoy2Disk_ARM64.exe','Ventoy2Disk_ARM.exe',
+                     'VentoyPlugson.exe','VentoyPlugson_X64.exe','VentoyVlnk.exe'
+          foreach ($n in $nombres) {
+            $f = Get-ChildItem -Recurse -File -Filter $n -Path Ventoy2Disk, Plugson\vs, Vlnk\vs |
+                 Where-Object { $_.FullName -match '\\Release\\' } | Select-Object -First 1
+            if ($f) { Copy-Item $f.FullName exe\ ; Write-Host "OK  $n" } else { Write-Host "--  $n (no generado)" }
+          }
+          foreach ($n in 'Ventoy2Disk.exe','VentoyPlugson.exe','VentoyVlnk.exe') {
+            if (-not (Test-Path "exe\$n")) { throw "Falta $n" }
+          }
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ejecutables-windows
+          path: exe/
+
+  paquete:
+    name: Armar paquete de AetherBoot
+    needs: windows
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: ejecutables-windows
+          path: exe
+
+      - name: Descargar y verificar el paquete base de Ventoy
+        run: |
+          curl -fsSL -o base.zip \
+            "https://github.com/ventoy/Ventoy/releases/download/v${VENTOY_VER}/ventoy-${VENTOY_VER}-windows.zip"
+          echo "${VENTOY_WIN_SHA256}  base.zip" | sha256sum -c -
+
+      - name: Construir la partición de arranque AetherBoot
+        run: |
+          unzip -q base.zip "ventoy-${VENTOY_VER}/ventoy/ventoy.disk.img.xz"
+          bash AetherBoot/Build/construir_imagen_arranque.sh \
+               "ventoy-${VENTOY_VER}/ventoy/ventoy.disk.img.xz" ventoy.disk.img.xz
+
+      - name: Empaquetar
+        run: |
+          bash AetherBoot/Build/empaquetar_windows.sh base.zip ventoy.disk.img.xz \
+               "aetherboot-${VENTOY_VER}-windows.zip" exe
+          sha256sum "aetherboot-${VENTOY_VER}-windows.zip" > SHA256SUMS.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aetherboot-windows
+          path: |
+            aetherboot-*-windows.zip
+            SHA256SUMS.txt

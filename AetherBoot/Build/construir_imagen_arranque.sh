@@ -100,5 +100,5 @@ while read -r f; do verificar "$GRUB/themes/aetherboot/$f" "/grub/themes/aetherb
 echo "    $(( $(wc -l < "$TMP/lista") + 10 )) archivos verificados byte a byte"
 
 echo "==> Comprimiendo"
-xz --check=crc32 -9 -c "$IMG" > "$SALIDA"
+xz --check=crc32 -c "$IMG" > "$SALIDA"   # mismo formato que ventoy_pack.sh
 echo "Listo: $SALIDA ($(du -h "$SALIDA" | cut -f1))"

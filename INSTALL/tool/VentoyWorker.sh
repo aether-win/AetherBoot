@@ -4,19 +4,19 @@
 
 print_usage() {
 
-    echo 'Usage:  Ventoy2Disk.sh CMD [ OPTION ] /dev/sdX'
-    echo '  CMD:'
-    echo '   -i  install Ventoy to sdX (fails if disk already installed with Ventoy)'
-    echo '   -I  force install Ventoy to sdX (no matter if installed or not)'
-    echo '   -u  update Ventoy in sdX'
-    echo '   -l  list Ventoy information in sdX'
+    echo 'Uso:  Aether2Disk.sh ORDEN [ OPCIÓN ] /dev/sdX'
+    echo '  ORDEN:'
+    echo '   -i  instala AetherBoot en sdX (falla si el disco ya lo tiene)'
+    echo '   -I  fuerza la instalación de AetherBoot en sdX (lo tenga o no)'
+    echo '   -u  actualiza AetherBoot en sdX'
+    echo '   -l  muestra la información de AetherBoot en sdX'
     echo ''
-    echo '  OPTION: (optional)'
-    echo '   -r SIZE_MiB preserve some space (MiB) at the bottom of the disk (only for install)'
-    echo '   -s/-S       enable/disable secure boot support (default is enabled)'
-    echo '   -g          use GPT partition style, default is MBR (only for install)'
-    echo '   -L          Label of the 1st exfat partition (default is Ventoy)'
-    echo '   -n          try non-destructive installation (only for install)'
+    echo '  OPCIÓN: (opcional)'
+    echo '   -r MiB      reserva espacio (MiB) al final del disco (solo al instalar)'
+    echo '   -s/-S       activa/desactiva Secure Boot (por defecto activado)'
+    echo '   -g          usa particiones GPT; por defecto MBR (solo al instalar)'
+    echo '   -L          etiqueta de la 1.ª partición exFAT (por defecto Ventoy, necesaria para el motor)'
+    echo '   -n          intenta una instalación no destructiva (solo al instalar)'
     echo ''
 }
 
@@ -56,7 +56,7 @@ while [ -n "$1" ]; do
         exit 0
     else
         if ! [ -b "$1" ]; then
-            vterr "$1 is NOT a valid device"
+            vterr "$1 NO es un dispositivo válido"
             print_usage
             exit 1
         fi
@@ -78,15 +78,15 @@ if [ -z "$MODE" ]; then
 fi
 
 if ! [ -b "$DISK" ]; then
-    vterr "Disk $DISK does not exist"
+    vterr "El disco $DISK no existe"
     exit 1
 fi
 
 if [ -e /sys/class/block/${DISK#/dev/}/start ]; then
-    vterr  "$DISK is a partition, please use the whole disk."
-    echo   "For example:"
-    vterr  "    sudo sh Ventoy2Disk.sh -i /dev/sdb1 <=== This is wrong"
-    vtinfo "    sudo sh Ventoy2Disk.sh -i /dev/sdb  <=== This is right"
+    vterr  "$DISK es una partición; indique el disco completo."
+    echo   "Por ejemplo:"
+    vterr  "    sudo sh Aether2Disk.sh -i /dev/sdb1 <=== Incorrecto"
+    vtinfo "    sudo sh Aether2Disk.sh -i /dev/sdb  <=== Correcto"
     echo ""
     exit 1
 fi
@@ -95,7 +95,7 @@ if [ -n "$RESERVE_SPACE" -a "$MODE" = "install" ]; then
     if echo $RESERVE_SIZE_MB | grep -q '^[0-9][0-9]*$'; then
         vtdebug "User will reserve $RESERVE_SIZE_MB MiB disk space"
     else
-        vterr "$RESERVE_SIZE_MB is invalid for reserved space"
+        vterr "$RESERVE_SIZE_MB no es un espacio reservado válido"
         exit 1
     fi
 fi
@@ -106,29 +106,29 @@ vtdebug "MODE=$MODE FORCE=$FORCE RESERVE_SPACE=$RESERVE_SPACE RESERVE_SIZE_MB=$R
 if check_tool_work_ok; then
     vtdebug "check tool work ok"
 else
-    vterr "Some tools can not run on current system. Please check log.txt for details."
+    vterr "Algunas herramientas no funcionan en este sistema. Revise log.txt para más detalles."
     exit 1
 fi
 
 if [ "$MODE" = "list" ]; then
     version=$(get_disk_ventoy_version $DISK)
     if [ $? -eq 0 ]; then
-        echo "Ventoy Version in Disk: $version"
+        echo "Versión de AetherBoot en el disco: $version"
 
         vtPart1Type=$(dd if=$DISK bs=1 count=1 skip=450 status=none | hexdump -n1 -e  '1/1 "%02X"')
         if [ "$vtPart1Type" = "EE" ]; then
-            echo "Disk Partition Style  : GPT"
+            echo "Estilo de partición   : GPT"
         else
-            echo "Disk Partition Style  : MBR"
+            echo "Estilo de partición   : MBR"
         fi
 
         if check_disk_secure_boot $DISK; then
-            echo "Secure Boot Support   : YES"
+            echo "Secure Boot           : SÍ"
         else
-            echo "Secure Boot Support   : NO"
+            echo "Secure Boot           : NO"
         fi
     else
-        echo "Ventoy Version: NA"
+        echo "Versión de AetherBoot: no instalada"
     fi
     echo ""
     exit 0
@@ -138,14 +138,14 @@ fi
 check_umount_disk "$DISK"
 
 if grep "$DISK" /proc/mounts; then
-    vterr "$DISK is already mounted, please umount it first!"
+    vterr "$DISK está montado; desmóntelo primero."
     exit 1
 fi
 
 #check swap partition
 if swapon --help 2>&1 | grep -q '^ -s,'; then
     if swapon -s | grep -q "^${DISK}[0-9]"; then
-        vterr "$DISK is used as swap, please swapoff it first!"
+        vterr "$DISK se usa como swap; desactívelo primero (swapoff)."
         exit 1
     fi
 fi
@@ -155,7 +155,7 @@ fi
 vtDiskName=${DISK#/dev/}
 for vtholder in /sys/class/block/$vtDiskName/holders/* /sys/class/block/$vtDiskName/$vtDiskName*/holders/*; do
     if [ -e "$vtholder" ]; then
-        vterr "$DISK is in use by $(basename $vtholder) (LVM/LUKS/RAID), please release it first!"
+        vterr "$DISK está en uso por $(basename $vtholder) (LVM/LUKS/RAID); libérelo primero."
         exit 1
     fi
 done
@@ -164,7 +164,7 @@ done
 if dd if="$DISK" of=/dev/null bs=1 count=1 >/dev/null 2>&1; then
     vtdebug "root permission check ok ..."
 else
-    vterr "Failed to access $DISK, maybe root privilege is needed!"
+    vterr "No se pudo acceder a $DISK; puede que necesite permisos de root."
     echo ''
     exit 1
 fi
@@ -176,7 +176,7 @@ if [ -d ./tmp_mnt ]; then
     umount ./tmp_mnt >/dev/null 2>&1
     rm -rf ./tmp_mnt
     if [ -d ./tmp_mnt ]; then
-        vterr "tmp_mnt directory exists, please delete it first."
+        vterr "Ya existe la carpeta tmp_mnt; bórrela primero."
         exit 1
     fi
 fi
@@ -189,8 +189,8 @@ if [ "$MODE" = "install" -a -z "$NONDESTRUCTIVE" ]; then
         if parted -v > /dev/null 2>&1; then
             PARTTOOL='parted'
         else
-            vterr "parted is not found in the system, Ventoy can't create new partitions without it."
-            vterr "You should install \"GNU parted\" first."
+            vterr "No se encontró parted; AetherBoot no puede crear particiones sin él."
+            vterr "Instale primero \"GNU parted\"."
             exit 1
         fi
     else
@@ -199,19 +199,19 @@ if [ "$MODE" = "install" -a -z "$NONDESTRUCTIVE" ]; then
         elif command -v fdisk > /dev/null 2>&1; then
             PARTTOOL='fdisk'            
         else
-            vterr "Both parted and fdisk are not found in the system, Ventoy can't create new partitions."
+            vterr "No se encontraron parted ni fdisk; AetherBoot no puede crear particiones."
             exit 1
         fi
     fi
     
     if [ "$PARTTOOL" = "parted" ]; then
         if parted -s $DISK p 2>&1 | grep -i -q 'sector size.*4096.*4096'; then
-            vterr "Currently Ventoy does not support 4K native device."
+            vterr "Por ahora AetherBoot no es compatible con dispositivos 4K nativos."
             exit 1
         fi
     else
         if fdisk -l $DISK | grep -i -q 'sector size.*4096.*4096'; then
-            vterr "Currently Ventoy does not support 4K native device."
+            vterr "Por ahora AetherBoot no es compatible con dispositivos 4K nativos."
             exit 1
         fi
     fi
@@ -220,9 +220,9 @@ if [ "$MODE" = "install" -a -z "$NONDESTRUCTIVE" ]; then
     version=$(get_disk_ventoy_version $DISK)
     if [ $? -eq 0 ]; then
         if [ -z "$FORCE" ]; then
-            vtwarn "$DISK already contains a Ventoy with version $version"
-            vtwarn "Use -u option to do a safe upgrade operation."
-            vtwarn "OR if you really want to reinstall Ventoy to $DISK, please use -I option."
+            vtwarn "$DISK ya contiene AetherBoot versión $version"
+            vtwarn "Use la opción -u para una actualización segura."
+            vtwarn "O, si de verdad quiere reinstalar AetherBoot en $DISK, use la opción -I."
             vtwarn ""
             exit 1
         fi
@@ -232,7 +232,7 @@ if [ "$MODE" = "install" -a -z "$NONDESTRUCTIVE" ]; then
     disk_size_gb=$(expr $disk_sector_num / 2097152)
 
     if [ $disk_sector_num -gt 4294967296 ] && [ -z "$VTGPT" ]; then
-        vterr "$DISK is over 2TB size, MBR will not work on it."
+        vterr "$DISK supera los 2 TB; MBR no funcionará en él."
         exit 1
     fi
 
@@ -241,33 +241,33 @@ if [ "$MODE" = "install" -a -z "$NONDESTRUCTIVE" ]; then
         reserve_sector_num=$(expr $sum_size_mb \* 2048)
 
         if [ $disk_sector_num -le $reserve_sector_num ]; then
-            vterr "Can't reserve $RESERVE_SIZE_MB MiB space from $DISK"
+            vterr "No se pueden reservar $RESERVE_SIZE_MB MiB en $DISK"
             exit 1
         fi
     fi
 
     #Print disk info
-    echo "Disk : $DISK"
+    echo "Disco  : $DISK"
     parted -s $DISK p 2>&1 | grep Model
-    echo "Size : $disk_size_gb GiB"
+    echo "Tamaño : $disk_size_gb GiB"
     if [ -n "$VTGPT" ]; then
-        echo "Style: GPT"
+        echo "Estilo : GPT"
     else
-        echo "Style: MBR"
+        echo "Estilo : MBR"
     fi
     echo ''
 
     if [ -n "$RESERVE_SPACE" ]; then
-        echo "You will reserve $RESERVE_SIZE_MB MiB disk space "
+        echo "Se reservarán $RESERVE_SIZE_MB MiB del disco "
     fi
     echo ''
 
-    vtwarn "Attention:"
-    vtwarn "You will install Ventoy to $DISK."
-    vtwarn "All the data on the disk $DISK will be lost!!!"
+    vtwarn "Atención:"
+    vtwarn "Va a instalar AetherBoot en $DISK."
+    vtwarn "¡¡¡Se perderán todos los datos del disco $DISK!!!"
     echo ""
 
-    read -p 'Continue? (y/n) '  Answer
+    read -p '¿Continuar? (y/n) '  Answer
     if [ "$Answer" != "y" ]; then
         if [ "$Answer" != "Y" ]; then
             exit 0
@@ -275,8 +275,8 @@ if [ "$MODE" = "install" -a -z "$NONDESTRUCTIVE" ]; then
     fi
 
     echo ""
-    vtwarn "All the data on the disk $DISK will be lost!!!"
-    read -p 'Double-check. Continue? (y/n) '  Answer
+    vtwarn "¡¡¡Se perderán todos los datos del disco $DISK!!!"
+    read -p 'Segunda confirmación. ¿Continuar? (y/n) '  Answer
     if [ "$Answer" != "y" ]; then
         if [ "$Answer" != "Y" ]; then
             exit 0
@@ -284,7 +284,7 @@ if [ "$MODE" = "install" -a -z "$NONDESTRUCTIVE" ]; then
     fi
 
     if [ $disk_sector_num -le $VENTOY_SECTOR_NUM ]; then
-        vterr "No enough space in disk $DISK"
+        vterr "No hay espacio suficiente en el disco $DISK"
         exit 1
     fi
 
@@ -292,7 +292,7 @@ if [ "$MODE" = "install" -a -z "$NONDESTRUCTIVE" ]; then
     check_umount_disk "$DISK"
 
     if ! dd if=/dev/zero of=$DISK bs=64 count=512 status=none conv=fsync; then
-        vterr "Write data to $DISK failed, please check whether it's in use."
+        vterr "No se pudo escribir en $DISK; compruebe si está en uso."
         exit 1
     fi
 
@@ -323,23 +323,23 @@ if [ "$MODE" = "install" -a -z "$NONDESTRUCTIVE" ]; then
     #format part1
     wait_and_create_part ${PART1} ${PART2}    
     if [ -b ${PART1} ]; then
-        vtinfo "Format partition 1 ${PART1} ..."
+        vtinfo "Formateando la partición 1 ${PART1} ..."
         mkexfatfs -n "$VTNEW_LABEL" -s $cluster_sectors ${PART1}
         if [ $? -ne 0 ]; then
-            echo "mkexfatfs failed, now retry..."
+            echo "mkexfatfs falló; reintentando..."
             mkexfatfs -n "$VTNEW_LABEL" -s $cluster_sectors ${PART1}
             if [ $? -ne 0 ]; then
-                echo "######### mkexfatfs failed, exit ########"
+                echo "######### mkexfatfs falló; saliendo ########"
                 exit 1
             fi
         else
-            echo "mkexfatfs success"
+            echo "mkexfatfs correcto"
         fi        
     else
-        vterr "${PART1} NOT exist"
+        vterr "${PART1} NO existe"
     fi
 
-    vtinfo "writing data to disk ..."
+    vtinfo "escribiendo datos en el disco ..."
     dd status=none conv=fsync if=./boot/boot.img of=$DISK bs=1 count=446
 
     if [ -n "$VTGPT" ]; then
@@ -365,10 +365,10 @@ if [ "$MODE" = "install" -a -z "$NONDESTRUCTIVE" ]; then
     #disk signature
     vtoy_gen_uuid | dd status=none conv=fsync of=${DISK} skip=12 seek=440 bs=1 count=4
 
-    vtinfo "sync data ..."
+    vtinfo "sincronizando datos ..."
     sync
 
-    vtinfo "esp partition processing ..."
+    vtinfo "procesando la partición ESP ..."
 
     if [ "$SECUREBOOT" != "YES" ]; then 
         sleep 2
@@ -377,7 +377,7 @@ if [ "$MODE" = "install" -a -z "$NONDESTRUCTIVE" ]; then
     fi
 
     echo ""
-    vtinfo "Install Ventoy to $DISK successfully finished."
+    vtinfo "AetherBoot se instaló correctamente en $DISK."
     echo ""
 
 elif [ "$MODE" = "install" -a -n "$NONDESTRUCTIVE" ]; then
@@ -386,8 +386,8 @@ elif [ "$MODE" = "install" -a -n "$NONDESTRUCTIVE" ]; then
     version=$(get_disk_ventoy_version $DISK)
     if [ $? -eq 0 ]; then
         if [ -z "$FORCE" ]; then
-            vtwarn "$DISK already contains a Ventoy with version $version."
-            vtwarn "You can not do and don not need non-destructive installation."
+            vtwarn "$DISK ya contiene AetherBoot versión $version."
+            vtwarn "No puede ni necesita hacer una instalación no destructiva."
             vtwarn ""
             exit 1
         fi
@@ -403,17 +403,17 @@ elif [ "$MODE" = "install" -a -n "$NONDESTRUCTIVE" ]; then
     fi
 
     #Print disk info
-    echo "Disk : $DISK"
+    echo "Disco  : $DISK"
     parted -s $DISK p 2>&1 | grep Model
-    echo "Size : $disk_size_gb GiB" 
-    echo "Style: $OldStyle"    
+    echo "Tamaño : $disk_size_gb GiB" 
+    echo "Estilo : $OldStyle"    
     echo ''
 
-    vtwarn "Attention:"
-    vtwarn "Ventoy will try non-destructive installation on $DISK if possible."
+    vtwarn "Atención:"
+    vtwarn "AetherBoot intentará una instalación no destructiva en $DISK si es posible."
     echo ""
 
-    read -p 'Continue? (y/n) '  Answer
+    read -p '¿Continuar? (y/n) '  Answer
     if [ "$Answer" != "y" ]; then
         if [ "$Answer" != "Y" ]; then
             exit 0
@@ -421,7 +421,7 @@ elif [ "$MODE" = "install" -a -n "$NONDESTRUCTIVE" ]; then
     fi
 
     if [ $disk_sector_num -le $VENTOY_SECTOR_NUM ]; then  
-        vterr "No enough space in disk $DISK"
+        vterr "No hay espacio suficiente en el disco $DISK"
         exit 1
     fi
 
@@ -434,10 +434,10 @@ elif [ "$MODE" = "install" -a -n "$NONDESTRUCTIVE" ]; then
     PART1_MB=$(expr $PART1_4K / 256)
     PART1_NEW_MB=$(expr $PART1_MB - 32)
 
-    echo "$PART1 is ${PART1_MB}MiB"
+    echo "$PART1 tiene ${PART1_MB} MiB"
 
     #check partition layout
-    echo "check partition layout ..."
+    echo "comprobando la distribución de particiones ..."
     vtoycli partresize -c $DISK
     vtRet=$?
     if [ $vtRet -eq 0 ]; then
@@ -449,20 +449,20 @@ elif [ "$MODE" = "install" -a -n "$NONDESTRUCTIVE" ]; then
         check_umount_disk "$DISK"
     
         if [ $vtRet -eq 1 ]; then
-            echo "Free space enough, start install..."
+            echo "Hay espacio libre suficiente; iniciando la instalación..."
             part2_start_sector=$(expr $PART1_SECTORS + 2048)
         elif [ $vtRet -eq 2 ]; then
-            echo "We need to shrink partition 1 firstly ..."
+            echo "Primero hay que reducir la partición 1 ..."
             
             PART1_BLKID=$(blkid $PART1)
             blkid $PART1
             
             if echo $PART1_BLKID | grep -E -q -i 'TYPE=ntfs|TYPE=.ntfs'; then
-                echo "Partition 1 contains NTFS filesystem"
+                echo "La partición 1 contiene un sistema de archivos NTFS"
                 
                 which ntfsresize
                 if [ $? -ne 0 ]; then
-                    echo "###[FAIL] ntfsresize not found. Please install ntfs-3g package."
+                    echo "###[ERROR] No se encontró ntfsresize. Instale el paquete ntfs-3g."
                     exit 1
                 fi
                 
@@ -472,15 +472,15 @@ elif [ "$MODE" = "install" -a -n "$NONDESTRUCTIVE" ]; then
                 echo "ntfsresize --size ${PART1_NEW_MB}Mi $PART1 ..."
                 ntfsresize -f --size ${PART1_NEW_MB}Mi $PART1
                 if [ $? -ne 0 ]; then
-                    echo "###[FAIL] ntfsresize failed." 
+                    echo "###[ERROR] ntfsresize falló." 
                     exit 1
                 fi
             elif echo $PART1_BLKID | grep -E -q -i 'TYPE=ext[2-4]|TYPE=.ext[2-4]'; then
-                echo "Partition 1 contains EXT filesystem"
+                echo "La partición 1 contiene un sistema de archivos EXT"
                 
                 which resize2fs
                 if [ $? -ne 0 ]; then
-                    echo "###[FAIL] resize2fs not found. Please install e2fsprogs package."
+                    echo "###[ERROR] No se encontró resize2fs. Instale el paquete e2fsprogs."
                     exit 1
                 fi
                 
@@ -490,11 +490,11 @@ elif [ "$MODE" = "install" -a -n "$NONDESTRUCTIVE" ]; then
                 echo "resize2fs $PART1 ${PART1_NEW_MB}M ..."
                 resize2fs $PART1 ${PART1_NEW_MB}M
                 if [ $? -ne 0 ]; then
-                    echo "###[FAIL] resize2fs failed." 
+                    echo "###[ERROR] resize2fs falló." 
                     exit 1
                 fi
             else
-                echo "###[FAIL] Unsupported filesystem in partition 1."
+                echo "###[ERROR] Sistema de archivos no compatible en la partición 1."
                 exit 1
             fi
             
@@ -504,7 +504,7 @@ elif [ "$MODE" = "install" -a -n "$NONDESTRUCTIVE" ]; then
         fi
     fi
 
-    vtinfo "writing data to disk part2_start=$part2_start_sector ..."
+    vtinfo "escribiendo datos en el disco part2_start=$part2_start_sector ..."
     
     dd status=none conv=fsync if=./boot/boot.img of=$DISK bs=1 count=440
     
@@ -525,24 +525,24 @@ elif [ "$MODE" = "install" -a -n "$NONDESTRUCTIVE" ]; then
     #disk uuid
     vtoy_gen_uuid | dd status=none conv=fsync of=${DISK} seek=384 bs=1 count=16
     
-    vtinfo "sync data ..."
+    vtinfo "sincronizando datos ..."
     sync
     
-    vtinfo "esp partition processing ..."
+    vtinfo "procesando la partición ESP ..."
     if [ "$SECUREBOOT" != "YES" ]; then
         vtoycli partresize -s $DISK $part2_start_sector
     fi
 
-    vtinfo "update partition table $DISK $part2_start_sector ..."
+    vtinfo "actualizando la tabla de particiones $DISK $part2_start_sector ..."
     vtoycli partresize -p $DISK $part2_start_sector
     if [ $? -eq 0 ]; then
         sync
         echo ""
-        vtinfo "Ventoy non-destructive installation on $DISK successfully finished."
+        vtinfo "La instalación no destructiva de AetherBoot en $DISK terminó correctamente."
         echo ""
     else
         echo ""
-        vterr "Ventoy non-destructive installation on $DISK failed."
+        vterr "Falló la instalación no destructiva de AetherBoot en $DISK."
         echo ""
     fi
     
@@ -554,9 +554,9 @@ else
         if is_disk_contains_ventoy $DISK; then
             oldver="Unknown"
         else
-            vtwarn "$DISK does not contain Ventoy or data corrupted"
+            vtwarn "$DISK no contiene AetherBoot o los datos están dañados"
             echo ""
-            vtwarn "Please use -i option if you want to install ventoy to $DISK"
+            vtwarn "Use la opción -i si quiere instalar AetherBoot en $DISK"
             echo ""
             exit 1
         fi
@@ -573,10 +573,10 @@ else
 
     curver=$(cat ./ventoy/version)
 
-    vtinfo "Upgrade operation is safe, all the data in the 1st partition (iso files and other) will be unchanged!"
+    vtinfo "La actualización es segura: los datos de la 1.ª partición (imágenes ISO y demás) no se modifican."
     echo ""
 
-    read -p "Update Ventoy  $oldver ===> $curver   Continue? (y/n) "  Answer
+    read -p "Actualizar AetherBoot  $oldver ===> $curver   ¿Continuar? (y/n) "  Answer
     if [ "$Answer" != "y" ]; then
         if [ "$Answer" != "Y" ]; then
             exit 0
@@ -629,7 +629,7 @@ else
     xzcat ./ventoy/ventoy.disk.img.xz | dd status=none conv=fsync of=$DISK bs=512 count=$VENTOY_SECTOR_NUM seek=$part2_start
     sync
 
-    vtinfo "esp partition processing ..."
+    vtinfo "procesando la partición ESP ..."
     if [ "$SECUREBOOT" != "YES" ]; then
         sleep 2
         check_umount_disk "$DISK"
@@ -638,14 +638,14 @@ else
 
     
     if [ "$PART1_TYPE" = "EE" ]; then    
-        vtinfo "update esp partition attribute"
+        vtinfo "actualizando los atributos de la partición ESP"
         vtoycli gpt -f $DISK
         sync
     fi
 
 
     echo ""
-    vtinfo "Update Ventoy on $DISK successfully finished."
+    vtinfo "AetherBoot se actualizó correctamente en $DISK."
     echo ""
 
 fi

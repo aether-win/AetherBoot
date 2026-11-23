@@ -203,7 +203,7 @@ while true; do
         
         while true; do
             echo ""
-            echo " <1> Install Ventoy to $DEV"
+            echo " <1> Instalar AetherBoot en $DEV"
             echo " <2> Set Configuration"
             echo " <0> Back to previous menu"
             echo ""
@@ -245,8 +245,8 @@ while true; do
         
         while true; do
             echo ""
-            echo " <1> Update Ventoy in $DEV from $DevVtVer ==> $VTVER"
-            echo " <2> Re-install Ventoy to $DEV"
+            echo " <1> Actualizar AetherBoot en $DEV de $DevVtVer ==> $VTVER"
+            echo " <2> Reinstalar AetherBoot en $DEV"
             echo " <3> Set Configuration"
             echo " <0> Back to previous menu"
             echo ""

@@ -1,5 +1,4 @@
-For Ventoy2Disk.exe (Windows) or Ventoy2Disk.sh (Linux).
+Para Aether2Disk (Windows) o Aether2Disk.sh (Linux).
 
-You should download the install package, decompress it, and run the exe/sh there.
-They should NOT be run in the source tree(INSTALL directory).
-
+Descargue el paquete de instalación, descomprímalo y ejecute el programa desde ahí.
+NO lo ejecute dentro del árbol de código fuente (carpeta INSTALL).
