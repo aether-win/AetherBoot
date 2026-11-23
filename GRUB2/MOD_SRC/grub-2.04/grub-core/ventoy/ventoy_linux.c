@@ -164,6 +164,12 @@ static grub_err_t ventoy_isolinux_initrd_collect(grub_file_t file, const char *p
     initrd_info *img = NULL;
 
     prefixlen = grub_strlen(prefix);
+    if (prefixlen > 200)
+    {
+        /* initrd_info.name is 256 bytes: keep room for the file name itself */
+        debug("initrd prefix too long (%d), ignored\n", prefixlen);
+        prefixlen = 0;
+    }
 
     buf = grub_zalloc(file->size + 2);
     if (!buf)
@@ -212,9 +218,9 @@ static grub_err_t ventoy_isolinux_initrd_collect(grub_file_t file, const char *p
                 break;
             }
 
-            if (*pos != '/')
+            if (*pos != '/' && prefixlen > 0)
             {
-                grub_strcpy(img->name, prefix);
+                grub_memcpy(img->name, prefix, prefixlen);
                 i = prefixlen;
             }
 

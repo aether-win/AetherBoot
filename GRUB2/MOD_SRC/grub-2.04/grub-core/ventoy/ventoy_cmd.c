@@ -2749,7 +2749,8 @@ static grub_err_t ventoy_cmd_set_fake_vlnk(grub_extcmd_context_t ctxt, int argc,
 
     g_fake_vlnk_size = (grub_uint64_t)grub_strtoull(args[2], NULL, 10);
 
-    grub_strncpy(g_fake_vlnk_dst, args[0], sizeof(g_fake_vlnk_dst));
+    grub_strncpy(g_fake_vlnk_dst, args[0], sizeof(g_fake_vlnk_dst) - 1);
+    g_fake_vlnk_dst[sizeof(g_fake_vlnk_dst) - 1] = 0;
     grub_snprintf(g_fake_vlnk_src, sizeof(g_fake_vlnk_src), "%s/________VENTOYVLNK.vlnk.%s", g_iso_path, args[1]);
 
     grub_file_vtoy_vlnk(g_fake_vlnk_src, g_fake_vlnk_dst);
@@ -5027,7 +5028,7 @@ static int ventoy_lib_module_callback(const char *filename, const struct grub_di
             {
                 if ((*(pos - 1) >= '0' && *(pos - 1) <= '9') && (*(pos + 1) >= '0' && *(pos + 1) <= '9'))
                 {
-                    grub_strncpy((char *)data, filename, 128);
+                    grub_strncpy((char *)data, filename, 127);
                     return 1;
                 }
             }

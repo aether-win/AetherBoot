@@ -528,7 +528,14 @@ int vtoy_json_scan_parse
             }
             case JSON_TYPE_STRING:
             {
-                grub_strncpy((char *)pstCurParse->pDataBuf, pstJsonCur->unData.pcStrVal, pstCurParse->uiBufSize);
+                if (pstCurParse->uiBufSize > 0)
+                {
+                    if (pstCurParse->uiBufSize > 1)
+                    {
+                        grub_strncpy((char *)pstCurParse->pDataBuf, pstJsonCur->unData.pcStrVal, pstCurParse->uiBufSize - 1);
+                    }
+                    ((char *)pstCurParse->pDataBuf)[pstCurParse->uiBufSize - 1] = 0;
+                }
                 break;
             }
             case JSON_TYPE_BOOL:
@@ -710,7 +717,15 @@ int vtoy_json_get_string
         return JSON_NOT_FOUND;
     }
 
-    grub_strncpy(pcBuf, pstJsonItem->unData.pcStrVal, uiBufLen);
+    if (uiBufLen == 0)
+    {
+        return JSON_FAILED;
+    }
+    if (uiBufLen > 1)
+    {
+        grub_strncpy(pcBuf, pstJsonItem->unData.pcStrVal, uiBufLen - 1);
+    }
+    pcBuf[uiBufLen - 1] = 0;
 
     return JSON_SUCCESS;
 }

@@ -373,7 +373,7 @@ static int ventoy_browser_iterate_dir(const char *filename, const struct grub_di
         }
 
         node->dir = 1;
-        grub_strncpy(node->filename, filename, sizeof(node->filename));
+        grub_strncpy(node->filename, filename, sizeof(node->filename) - 1);
 
         if (g_tree_view_menu_style == 0)
         {
@@ -427,7 +427,7 @@ static int ventoy_browser_iterate_dir(const char *filename, const struct grub_di
         }
         
         node->dir = 0;
-        grub_strncpy(node->filename, filename, sizeof(node->filename));
+        grub_strncpy(node->filename, filename, sizeof(node->filename) - 1);
 
         if (g_tree_view_menu_style == 0)
         {
