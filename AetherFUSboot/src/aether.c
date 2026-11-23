@@ -55,7 +55,7 @@ void AetherApplyWindowStyle(HWND hWnd)
 	static PF_AetherDwmSetWindowAttribute pfSetAttr = NULL;
 	static BOOL loaded = FALSE;
 	DWORD corner = 2;                       /* DWMWCP_ROUND */
-	COLORREF caption = RGB(10, 26, 63);     /* azul noche (#0A1A3F) */
+	COLORREF caption = RGB(6, 14, 36);      /* azul profundo (#060E24), igual que la cabecera */
 	COLORREF text = RGB(255, 255, 255);     /* blanco */
 	COLORREF border = RGB(34, 211, 238);    /* cian (#22D3EE) */
 

@@ -835,6 +835,14 @@ extern int NotificationEx(int type, const char* dont_display_setting, const noti
 extern void AetherApplyWindowStyle(HWND hWnd);
 extern int AetherQuickCapacityTest(HANDLE hDrive, uint64_t disk_size, DWORD sector_size, double* write_mbps);
 extern BOOL AetherVerifyImageWrite(HANDLE hDrive, const char* image_file, uint64_t image_size, DWORD sector_size, DWORD buf_size);
+/* AetherFUSboot: interfaz rediseñada (aether_ui.c, ui.c) */
+extern int AetherScale(int v);
+extern void AetherFillGradient(HDC hdc, const RECT* rc, COLORREF c1, COLORREF c2, BOOL horizontal);
+extern void AetherFillRound(HDC hdc, const RECT* rc, int radius, COLORREF fill, COLORREF edge, BOOL has_edge);
+extern void AetherSubclassMainControls(HWND hDlg);
+extern void AetherPaintProgress(HWND hCtrl, HDC target, const float* segments, int nsegments, COLORREF state_color, const wchar_t* text, HFONT hFont);
+extern void AetherLayoutMainDialog(HWND hDlg);
+extern void AetherPaintMainBackground(HWND hDlg, HDC hdc);
 extern int SelectionDialog(char* title, char* message, selection_dialog_options_t* options);
 extern void ListDialog(char* title, char* message, char** items, int size);
 extern SIZE GetTextSize(HWND hCtrl, char* txt);

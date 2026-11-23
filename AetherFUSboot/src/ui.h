@@ -38,13 +38,28 @@
 
 // Dark Mode Colors
 #define DARKMODE_TOOLBAR_ICON_COLOR					RGB(0x22, 0xD3, 0xEE)	// AetherFUSboot: cian
-#define DARKMODE_NORMAL_TEXT_COLOR					RGB(0xE8, 0xF0, 0xFF)
-#define DARKMODE_DISABLED_TEXT_COLOR				RGB(0x6B, 0x7A, 0x99)
-#define DARKMODE_NORMAL_DIALOG_BACKGROUND_COLOR		RGB(0x0A, 0x1A, 0x3F)	// AetherFUSboot: azul noche
-#define DARKMODE_NORMAL_CONTROL_BACKGROUND_COLOR	RGB(0x10, 0x26, 0x56)
-#define DARKMODE_HOT_CONTROL_BACKGROUND_COLOR		RGB(0x16, 0x36, 0x78)
+#define DARKMODE_NORMAL_TEXT_COLOR					RGB(0xEA, 0xF1, 0xFF)
+#define DARKMODE_DISABLED_TEXT_COLOR				RGB(0x5F, 0x72, 0x99)
+#define DARKMODE_NORMAL_DIALOG_BACKGROUND_COLOR		RGB(0x0A, 0x18, 0x38)	// AetherFUSboot: azul noche
+#define DARKMODE_NORMAL_CONTROL_BACKGROUND_COLOR	RGB(0x14, 0x2C, 0x62)
+#define DARKMODE_HOT_CONTROL_BACKGROUND_COLOR		RGB(0x1A, 0x38, 0x77)
 #define DARKMODE_NORMAL_CONTROL_EDGE_COLOR			RGB(0x2A, 0x4F, 0x9E)
 #define DARKMODE_HOT_CONTROL_EDGE_COLOR				RGB(0x22, 0xD3, 0xEE)
+
+// AetherFUSboot: paleta de la interfaz rediseñada (tema oscuro)
+#define AETHER_DEEP_COLOR							RGB(0x06, 0x0E, 0x24)	// cabecera, barra de estado, título
+#define AETHER_HEADER_END_COLOR						RGB(0x0D, 0x22, 0x55)	// final del degradado de la cabecera
+#define AETHER_CARD_COLOR							RGB(0x0F, 0x23, 0x50)	// tarjetas de sección
+#define AETHER_CARD_EDGE_COLOR						RGB(0x1C, 0x3A, 0x7C)
+#define AETHER_LABEL_COLOR							RGB(0xA3, 0xB8, 0xDF)	// etiquetas secundarias
+#define AETHER_TITLE_COLOR							RGB(0xFF, 0xFF, 0xFF)
+#define AETHER_ELECTRIC_COLOR						RGB(0x1E, 0x6B, 0xFF)
+#define AETHER_ELECTRIC_HOT_COLOR					RGB(0x3B, 0x82, 0xFF)
+#define AETHER_ELECTRIC_DARK_COLOR					RGB(0x14, 0x52, 0xD6)
+#define AETHER_CYAN_COLOR							RGB(0x22, 0xD3, 0xEE)
+#define AETHER_DISABLED_FILL_COLOR					RGB(0x11, 0x26, 0x55)
+#define AETHER_DISABLED_EDGE_COLOR					RGB(0x1F, 0x3B, 0x78)
+#define AETHER_TRACK_COLOR							RGB(0x0A, 0x18, 0x38)
 
 // Toolbar default style
 #define TOOLBAR_STYLE						( WS_CHILD | WS_TABSTOP | WS_VISIBLE | \

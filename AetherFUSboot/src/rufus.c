@@ -2226,6 +2226,8 @@ static void InitDialog(HWND hDlg)
 	SetSectionHeaders(hDlg, &hSectionHeaderFont);
 	PositionMainControls(hDlg);
 	AdjustForLowDPI(hDlg);
+	// AetherFUSboot: cabecera y tarjetas de la interfaz rediseñada (tema oscuro)
+	AetherLayoutMainDialog(hDlg);
 	// Because we created the log dialog before we computed our sizes, we need to send a custom message
 	SendMessage(hLogDialog, UM_RESIZE_BUTTONS, 0, 0);
 	// Limit the amount of characters for the Persistence size field
@@ -2270,6 +2272,9 @@ static void InitDialog(HWND hDlg)
 	SetBootTypeDropdownWidth();
 
 	CheckDlgButton(hMainDialog, IDC_LIST_USB_HDD, enable_HDDs ? BST_CHECKED : BST_UNCHECKED);
+
+	// AetherFUSboot: dibujo propio de botones, listas, campos y textos
+	AetherSubclassMainControls(hDlg);
 
 	PrintInfo(0, MSG_210);
 }
@@ -2920,6 +2925,15 @@ static INT_PTR CALLBACK MainCallback(HWND hDlg, UINT message, WPARAM wParam, LPA
 				DrawTextExA(pDI->hDC, szTimer, -1, &pDI->rcItem, DT_LEFT, NULL);
 				return (INT_PTR)TRUE;
 			}
+		}
+		break;
+
+	case WM_ERASEBKGND:
+		// AetherFUSboot: fondo, cabecera y tarjetas (tema oscuro)
+		if (is_darkmode_enabled) {
+			AetherPaintMainBackground(hDlg, (HDC)wParam);
+			SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE);
+			return (INT_PTR)TRUE;
 		}
 		break;
 

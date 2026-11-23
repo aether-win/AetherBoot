@@ -690,7 +690,11 @@ static LRESULT DarkToolBarNotifyCustomDraw(HWND hWnd, UINT uMsg, WPARAM wParam, 
 	case CDDS_PREPAINT:
 		if (IsAtLeastWin11())
 			roundness = 5;
-		FillRect(lpnmtbcd->nmcd.hdc, &lpnmtbcd->nmcd.rc, GetDlgBackgroundBrush());
+		// AetherFUSboot: en la ventana principal se pinta el fondo real (tarjetas)
+		if ((hMainDialog != NULL) && (GetParent(lpnmtbcd->nmcd.hdr.hwndFrom) == hMainDialog))
+			DrawThemeParentBackground(lpnmtbcd->nmcd.hdr.hwndFrom, lpnmtbcd->nmcd.hdc, &lpnmtbcd->nmcd.rc);
+		else
+			FillRect(lpnmtbcd->nmcd.hdc, &lpnmtbcd->nmcd.rc, GetDlgBackgroundBrush());
 		return CDRF_NOTIFYITEMDRAW;
 
 	case CDDS_ITEMPREPAINT:
@@ -812,7 +816,13 @@ static void PaintStatusBar(HWND hWnd, HDC hdc, StatusBarData statusBarData)
 	SetBkMode(hdc, TRANSPARENT);
 	SetTextColor(hdc, DARKMODE_NORMAL_TEXT_COLOR);
 	GetClientRect(hWnd, &rcClient);
-	FillRect(hdc, &rcClient, GetDlgBackgroundBrush());
+	{
+		// AetherFUSboot: barra de estado del mismo azul profundo que la cabecera
+		static HBRUSH hbrDeep = NULL;
+		if (hbrDeep == NULL)
+			hbrDeep = CreateSolidBrush(AETHER_DEEP_COLOR);
+		FillRect(hdc, &rcClient, hbrDeep);
+	}
 
 	for (int i = 0; i <= last_div; i++) {
 		SendMessage(hWnd, SB_GETRECT, i, (LPARAM)&rcPart);
@@ -1067,6 +1077,36 @@ static LRESULT OnCtlColorStatic(WPARAM wParam, LPARAM lParam)
 	WCHAR str[32] = { 0 };
 
 	GetClassName(hWnd, str, ARRAYSIZE(str));
+	// AetherFUSboot: en la ventana principal los textos son transparentes (van sobre
+	// las tarjetas) y los campos de solo lectura usan el color de campo desactivado.
+	if ((hMainDialog != NULL) && (GetParent(hWnd) == hMainDialog)) {
+		static HBRUSH hbrDisabledField = NULL;
+		if (_wcsicmp(str, WC_STATIC) == 0) {
+			int id = GetDlgCtrlID(hWnd);
+			COLORREF cText = AETHER_LABEL_COLOR;
+			if ((id == IDS_DRIVE_PROPERTIES_TXT) || (id == IDS_FORMAT_OPTIONS_TXT) || (id == IDS_STATUS_TXT))
+				cText = AETHER_TITLE_COLOR;
+			else if ((GetWindowLongPtr(hWnd, GWL_STYLE) & SS_NOTIFY) == SS_NOTIFY)
+				cText = color_accent;
+			SetTextColor(hdc, cText);
+			SetBkMode(hdc, TRANSPARENT);
+			return (LRESULT)GetStockObject(NULL_BRUSH);
+		}
+		if (_wcsicmp(str, TRACKBAR_CLASS) == 0) {
+			static HBRUSH hbrCard = NULL;
+			if (hbrCard == NULL)
+				hbrCard = CreateSolidBrush(AETHER_CARD_COLOR);
+			SetBkColor(hdc, AETHER_CARD_COLOR);
+			return (LRESULT)hbrCard;
+		}
+		if (_wcsicmp(str, WC_EDIT) == 0) {
+			if (hbrDisabledField == NULL)
+				hbrDisabledField = CreateSolidBrush(AETHER_DISABLED_FILL_COLOR);
+			SetTextColor(hdc, DARKMODE_DISABLED_TEXT_COLOR);
+			SetBkColor(hdc, AETHER_DISABLED_FILL_COLOR);
+			return (LRESULT)hbrDisabledField;
+		}
+	}
 	if (_wcsicmp(str, WC_STATIC) == 0) {
 		if ((GetWindowLongPtr(hWnd, GWL_STYLE) & SS_NOTIFY) == SS_NOTIFY) {
 			DWORD_PTR dwRefData = 0;

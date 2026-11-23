@@ -671,6 +671,7 @@ t MSG_390 "Verifying written data: %s"
 t MSG_391 "Possible fake or faulty drive"
 t MSG_392 "The quick real-capacity test found %d of %d blocks that were NOT stored correctly.\n\nThis drive is very likely fake (it reports more capacity than it has) or faulty. If you use it, files may get corrupted without warning.\n\nRecommendation: do not use it for important data. For a full check, enable \"Check device for bad blocks\".\n\nDo you want to continue anyway?"
 t MSG_393 "Quick real-capacity test..."
+t MSG_394 "Bootable USB creator · AetherBoot ecosystem"
 #########################################################################
 
 l "ar-SA" "Arabic (العربية)" 0x0401, 0x0801, 0x0c01, 0x1001, 0x1401, 0x1801, 0x1c01, 0x2001, 0x2401, 0x2801, 0x2c01, 0x3001, 0x3401, 0x3801, 0x3c01, 0x4001
@@ -14919,6 +14920,7 @@ t MSG_390 "Verificando lo escrito: %s"
 t MSG_391 "Posible USB falsa o dañada"
 t MSG_392 "La prueba rápida de capacidad real encontró %d de %d bloques que NO se guardaron correctamente.\n\nEs muy probable que esta memoria USB sea falsa (anuncia más capacidad de la que tiene) o que esté dañada. Si la usas, los archivos podrían corromperse sin aviso.\n\nRecomendación: no la uses para datos importantes. Para una comprobación completa, activa \"Buscar bloques dañados en dispositivo\".\n\n¿Quieres continuar de todas formas?"
 t MSG_393 "Prueba rápida de capacidad real..."
+t MSG_394 "Creador de memorias USB de arranque · ecosistema AetherBoot"
 #########################################################################
 
 l "sv-SE" "Swedish (Svenska)" 0x041d, 0x081d

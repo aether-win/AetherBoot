@@ -56,6 +56,7 @@ int cbw, ddw, ddbh = 0, bh = 0;
 static int rh, ddh, bw, hw, fw;
 // See GetFullWidth() for details on how these values are used
 static int sw, mw, bsw, sbw, ssw, tw, dbw;
+static int aether_header_height = 0;	// AetherFUSboot: alto de la cabecera (0 = sin rediseño)
 static WNDPROC progress_original_proc = NULL;
 static wchar_t wtbtext[2][128];
 static IAccPropServices* pfaps = NULL;
@@ -964,6 +965,23 @@ static INT_PTR CALLBACK ProgressCallback(HWND hCtrl, UINT message, WPARAM wParam
 
 	case WM_PAINT:
 		hDC = BeginPaint(hCtrl, &ps);
+		if (is_darkmode_enabled && (aether_header_height > 0)) {
+			// AetherFUSboot: barra redondeada con degradado
+			float seg[4];
+			int nseg = 0;
+			float range = (max > min) ? (float)(max - min) : 1.0f;
+			GetWindowTextW(hProgress, winfo, ARRAYSIZE(winfo));
+			if (marquee_mode) {
+				float a = (float)(pos - min) / range, b = a + 0.2f;
+				seg[0] = a; seg[1] = min(b, 1.0f); nseg = 1;
+				if (b > 1.0f) { seg[2] = 0.0f; seg[3] = b - 1.0f; nseg = 2; }
+			} else if (pos > min) {
+				seg[0] = 0.0f; seg[1] = (float)(pos - min) / range; nseg = 1;
+			}
+			AetherPaintProgress(hCtrl, hDC, seg, nseg, color, winfo, hInfoFont);
+			EndPaint(hCtrl, &ps);
+			return (INT_PTR)TRUE;
+		}
 		background_color = is_darkmode_enabled ? DARKMODE_NORMAL_CONTROL_BACKGROUND_COLOR : PROGRESS_BAR_BACKGROUND_COLOR;
 		text_color = is_darkmode_enabled ? PROGRESS_BAR_INVERTED_TEXT_COLOR : PROGRESS_BAR_NORMAL_TEXT_COLOR;
 		inverted_text_color = is_darkmode_enabled ? PROGRESS_BAR_NORMAL_TEXT_COLOR : PROGRESS_BAR_INVERTED_TEXT_COLOR;
@@ -1605,6 +1623,9 @@ void SetBootTypeDropdownWidth(void)
 void OnPaint(HDC hdc)
 {
 	int i;
+	// AetherFUSboot: con la interfaz rediseñada las tarjetas sustituyen a las líneas
+	if (is_darkmode_enabled && (aether_header_height > 0))
+		return;
 	COLORREF cp = is_darkmode_enabled ? DARKMODE_NORMAL_CONTROL_EDGE_COLOR : GetSysColor(COLOR_WINDOWTEXT);
 	HPEN hp = CreatePen(0, (fScale < 1.5f) ? 2 : 3, cp);
 	HPEN hop = (HPEN)SelectObject(hdc, hp);
@@ -1615,3 +1636,162 @@ void OnPaint(HDC hdc)
 	SelectObject(hdc, hop);
 	DeleteObject(hp);
 }
+
+/*
+ * AetherFUSboot: interfaz rediseñada
+ *
+ * AetherLayoutMainDialog() deja sitio para la cabecera y para el margen de las
+ * tarjetas moviendo todos los controles; AetherPaintMainBackground() dibuja el
+ * fondo, la cabecera y las tarjetas de sección (también se usa cuando un control
+ * pide el fondo de su padre con DrawThemeParentBackground()).
+ */
+void AetherLayoutMainDialog(HWND hDlg)
+{
+	HWND h;
+	RECT rc;
+	int i, dx, dy;
+
+	static HWND laid_out = NULL;
+
+	// Solo una vez por ventana (al cambiar de idioma la ventana se vuelve a crear)
+	if (!is_darkmode_enabled || (laid_out == hDlg))
+		return;
+	laid_out = hDlg;
+	aether_header_height = AetherScale(68);
+	dx = AetherScale(16);
+	dy = aether_header_height + AetherScale(8);
+
+	for (h = GetWindow(hDlg, GW_CHILD); h != NULL; h = GetWindow(h, GW_HWNDNEXT)) {
+		GetWindowRect(h, &rc);
+		MapWindowPoints(NULL, hDlg, (POINT*)&rc, 2);
+		SetWindowPos(h, NULL, rc.left + dx, rc.top + dy, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+	}
+	mw += dx;
+	for (i = 0; i < ARRAYSIZE(section_vpos); i++)
+		section_vpos[i] += dy;
+
+	GetWindowRect(hDlg, &rc);
+	SetWindowPos(hDlg, NULL, 0, 0, rc.right - rc.left + 2 * dx, rc.bottom - rc.top + dy,
+		SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+	InvalidateRect(hDlg, NULL, TRUE);
+}
+
+static void AetherGetChildRect(HWND hDlg, int id, RECT* rc)
+{
+	GetWindowRect(GetDlgItem(hDlg, id), rc);
+	MapWindowPoints(NULL, hDlg, (POINT*)rc, 2);
+}
+
+static void AetherPaintHeader(HWND hDlg, HDC hdc, const RECT* client)
+{
+	static HICON hIcon = NULL;
+	static HFONT hTitle = NULL, hSub = NULL, hVer = NULL;
+	RECT rh = *client, r;
+	int pad = AetherScale(18), isz = AetherScale(44), x;
+	char ver[32];
+	SIZE sz;
+	HFONT hof;
+
+	rh.bottom = aether_header_height;
+	AetherFillGradient(hdc, &rh, AETHER_DEEP_COLOR, AETHER_HEADER_END_COLOR, TRUE);
+	// Línea de acento inferior: azul eléctrico → cian → transparente
+	r = rh;
+	r.top = rh.bottom - AetherScale(2);
+	r.right = rh.left + (rh.right - rh.left) * 2 / 3;
+	AetherFillGradient(hdc, &r, AETHER_ELECTRIC_COLOR, AETHER_CYAN_COLOR, TRUE);
+	r.left = r.right;
+	r.right = rh.right;
+	AetherFillGradient(hdc, &r, AETHER_CYAN_COLOR, AETHER_HEADER_END_COLOR, TRUE);
+
+	if (hIcon == NULL)
+		hIcon = (HICON)LoadImage(hMainInstance, MAKEINTRESOURCE(IDI_ICON), IMAGE_ICON, isz, isz, LR_DEFAULTCOLOR);
+	if (hTitle == NULL)
+		hTitle = CreateFontA(-AetherScale(23), 0, 0, 0, FW_SEMIBOLD, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+			0, 0, CLEARTYPE_QUALITY, 0, "Segoe UI");
+	if (hSub == NULL)
+		hSub = CreateFontA(-AetherScale(13), 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+			0, 0, CLEARTYPE_QUALITY, 0, "Segoe UI");
+	if (hVer == NULL)
+		hVer = CreateFontA(-AetherScale(12), 0, 0, 0, FW_SEMIBOLD, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+			0, 0, CLEARTYPE_QUALITY, 0, "Segoe UI");
+
+	x = rh.left + pad;
+	if (hIcon != NULL)
+		DrawIconEx(hdc, x, (aether_header_height - isz) / 2, hIcon, isz, isz, 0, NULL, DI_NORMAL);
+	x += isz + AetherScale(12);
+
+	SetBkMode(hdc, TRANSPARENT);
+	hof = (HFONT)SelectObject(hdc, hTitle);
+	SetTextColor(hdc, AETHER_TITLE_COLOR);
+	r.left = x;
+	r.right = rh.right - pad;
+	r.top = aether_header_height / 2 - AetherScale(26);
+	r.bottom = aether_header_height / 2 + AetherScale(4);
+	DrawTextA(hdc, APPLICATION_NAME, -1, &r, DT_LEFT | DT_BOTTOM | DT_SINGLELINE | DT_NOPREFIX);
+
+	SelectObject(hdc, hSub);
+	SetTextColor(hdc, AETHER_LABEL_COLOR);
+	r.top = aether_header_height / 2 + AetherScale(3);
+	r.bottom = r.top + AetherScale(20);
+	DrawTextU(hdc, lmprintf(MSG_394), -1, &r, DT_LEFT | DT_TOP | DT_SINGLELINE | DT_NOPREFIX | DT_END_ELLIPSIS);
+
+	// Versión en una "píldora" a la derecha
+	SelectObject(hdc, hVer);
+	static_sprintf(ver, "v%d.%d", rufus_version[0], rufus_version[1]);
+	GetTextExtentPoint32A(hdc, ver, (int)strlen(ver), &sz);
+	r.right = rh.right - pad;
+	r.left = r.right - sz.cx - AetherScale(20);
+	r.top = (aether_header_height - sz.cy) / 2 - AetherScale(4);
+	r.bottom = r.top + sz.cy + AetherScale(8);
+	AetherFillRound(hdc, &r, r.bottom - r.top, AETHER_DEEP_COLOR, AETHER_CYAN_COLOR, TRUE);
+	SetTextColor(hdc, AETHER_CYAN_COLOR);
+	DrawTextA(hdc, ver, -1, &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX);
+	SelectObject(hdc, hof);
+}
+
+void AetherPaintMainBackground(HWND hDlg, HDC hdc)
+{
+	RECT client, card, hdr[ARRAYSIZE(section_control_ids)], rc;
+	HBRUSH hb;
+	HWND h;
+	WCHAR cls[64];
+	int i, top, limit, bottom, pad = AetherScale(14);
+
+	GetClientRect(hDlg, &client);
+	hb = CreateSolidBrush(DARKMODE_NORMAL_DIALOG_BACKGROUND_COLOR);
+	FillRect(hdc, &client, hb);
+	DeleteObject(hb);
+	if (aether_header_height <= 0)
+		return;
+	AetherPaintHeader(hDlg, hdc, &client);
+
+	for (i = 0; i < ARRAYSIZE(section_control_ids); i++)
+		AetherGetChildRect(hDlg, section_control_ids[i], &hdr[i]);
+
+	// Una tarjeta por sección, que abarca los controles visibles de esa sección
+	for (i = 0; i < ARRAYSIZE(section_control_ids); i++) {
+		top = hdr[i].top;
+		limit = (i + 1 < ARRAYSIZE(section_control_ids)) ? hdr[i + 1].top : client.bottom;
+		bottom = hdr[i].bottom;
+		for (h = GetWindow(hDlg, GW_CHILD); h != NULL; h = GetWindow(h, GW_HWNDNEXT)) {
+			if (!IsWindowVisible(h))
+				continue;
+			cls[0] = 0;
+			GetClassNameW(h, cls, ARRAYSIZE(cls));
+			if (_wcsicmp(cls, STATUSCLASSNAMEW) == 0)
+				continue;
+			GetWindowRect(h, &rc);
+			MapWindowPoints(NULL, hDlg, (POINT*)&rc, 2);
+			if ((rc.top >= top) && (rc.top < limit) && (rc.bottom > bottom))
+				bottom = rc.bottom;
+		}
+		card.left = mw - pad;
+		card.right = mw + fw + pad;
+		card.top = top - AetherScale(8);
+		card.bottom = bottom + AetherScale(10);
+		if ((i + 1 < ARRAYSIZE(section_control_ids)) && (card.bottom > limit - AetherScale(12)))
+			card.bottom = limit - AetherScale(12);
+		AetherFillRound(hdc, &card, AetherScale(14), AETHER_CARD_COLOR, AETHER_CARD_EDGE_COLOR, TRUE);
+	}
+}
+
