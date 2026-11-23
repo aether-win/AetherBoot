@@ -292,6 +292,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\aether.c" />
     <ClCompile Include="..\src\badblocks.c" />
     <ClCompile Include="..\src\cregex_compile.c" />
     <ClCompile Include="..\src\cregex_parse.c" />

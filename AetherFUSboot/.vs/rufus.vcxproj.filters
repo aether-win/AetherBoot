@@ -33,6 +33,9 @@
     <ClCompile Include="..\src\drive.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\aether.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\badblocks.c">
       <Filter>Source Files</Filter>
     </ClCompile>

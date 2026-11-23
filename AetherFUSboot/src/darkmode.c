@@ -84,14 +84,12 @@ BOOL GetDarkModeFromRegistry(void)
 	if (!IsAtLeastWin10() || IsHighContrast())
 		return FALSE;
 
-	// 0 = follow system, 1 = dark mode always, anything else = light mode always
+	// AetherFUSboot: el tema oscuro azul de AetherBoot es el predeterminado.
+	// 0 = predeterminado (oscuro), 1 = oscuro siempre, cualquier otro = claro siempre
+	(void)data; (void)size;
 	switch (ReadSetting32(SETTING_DARK_MODE)) {
 	case 0:
-		if (RegGetValueA(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
-			"AppsUseLightTheme", RRF_RT_REG_DWORD, NULL, &data, &size) == ERROR_SUCCESS)
-			// Dark mode is 0, light mode is 1
-			return (data == 0);
-		return FALSE;
+		return TRUE;
 	case 1:
 		return TRUE;
 	default:
@@ -172,6 +170,16 @@ static double CalculatePerceivedLightness(COLORREF clr)
 
 BOOL InitAccentColor(void)
 {
+	// AetherFUSboot: se usan los colores de acento fijos de la identidad AetherBoot
+	// (cian sobre fondo oscuro, azul eléctrico sobre fondo claro) en lugar del
+	// color de acento de Windows.
+	color_accent = is_darkmode_enabled ? DARKMODE_TOOLBAR_ICON_COLOR : TOOLBAR_ICON_COLOR;
+	return TRUE;
+}
+
+#if 0	/* Implementación original de Rufus (color de acento del sistema) */
+BOOL InitAccentColor(void)
+{
 	const double lightnessTreshold = 50.0 - 4.0;
 	BOOL opaque = TRUE;
 
@@ -187,6 +195,8 @@ BOOL InitAccentColor(void)
 	color_accent = TOOLBAR_ICON_COLOR;
 	return FALSE;
 }
+
+#endif
 
 // Rufus uses monocolour icons, so changing colour is easy
 BOOL ChangeIconColor(HICON* hIcon, COLORREF new_color)

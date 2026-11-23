@@ -700,7 +700,10 @@ static void SetProposedLabel(int ComboIndex)
 	app_changed_label = TRUE;
 	// If bootable ISO creation is selected, and we have an ISO selected with a valid name, use that
 	// Also some distros (eg. Arch) require the USB to have the same label as the ISO
-	if ((boot_type == BT_IMAGE) && (image_path != NULL) && (img_report.label[0] != 0)) {
+	// AetherFUSboot: las imágenes de Windows no dependen de la etiqueta, así que
+	// se usa la etiqueta AetherFUS. Las demás conservan la etiqueta de la ISO.
+	if ((boot_type == BT_IMAGE) && (image_path != NULL) && (img_report.label[0] != 0)
+		&& !HAS_WINDOWS(img_report)) {
 		SetWindowTextU(hLabel, img_report.label);
 		return;
 	}
@@ -711,13 +714,10 @@ static void SetProposedLabel(int ComboIndex)
 		return;
 	}
 
-	// Else if no existing label is available, propose one according to the size (eg: "256MB", "8GB")
-	if ((_stricmp(no_label, rufus_drive[ComboIndex].label) == 0) || (_stricmp(no_label, empty) == 0)
-		|| (safe_stricmp(lmprintf(MSG_207), rufus_drive[ComboIndex].label) == 0)) {
-		SetWindowTextU(hLabel, SelectedDrive.proposed_label);
-	} else {
-		SetWindowTextU(hLabel, rufus_drive[ComboIndex].label);
-	}
+	// AetherFUSboot: la etiqueta propuesta siempre es AetherFUS (antes: la
+	// etiqueta actual de la unidad o su tamaño, p. ej. "8GB").
+	(void)no_label; (void)empty;
+	SetWindowTextU(hLabel, SelectedDrive.proposed_label);
 }
 
 static void EnableOldBiosFixes(BOOL enable, BOOL remove_checkboxes)
@@ -930,8 +930,7 @@ static BOOL PopulateProperties(void)
 	EnableControls(TRUE, FALSE);
 
 	// Set a proposed label according to the size (eg: "256MB", "8GB")
-	static_sprintf(SelectedDrive.proposed_label, "%s",
-		SizeToHumanReadable(SelectedDrive.DiskSize, FALSE, TRUE));
+	static_sprintf(SelectedDrive.proposed_label, "%s", AETHER_DEFAULT_LABEL);
 
 	// Add a tooltip (with the size of the device in parenthesis)
 	device_tooltip = (char*) malloc(safe_strlen(rufus_drive[device_index].name) + 32);
@@ -2844,6 +2843,7 @@ static INT_PTR CALLBACK MainCallback(HWND hDlg, UINT message, WPARAM wParam, LPA
 
 	case WM_INITDIALOG:
 		InitAndSetDarkModeForMainDlg(hDlg);
+		AetherApplyWindowStyle(hDlg);
 		// Make sure fScale is set before the first call to apply localization, so that move/resize scale appropriately
 		hDC = GetDC(hDlg);
 		fScale = GetDeviceCaps(hDC, LOGPIXELSX) / 96.0f;
@@ -3355,7 +3355,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #endif
 {
 	const char* rufus_loc = "rufus.loc";
-	int i, opt, option_index = 0, argc = 0, si = 0, lcid = GetUserDefaultUILanguage();
+	int i, opt, option_index = 0, argc = 0, si = 0, lcid = 0x080a;	// AetherFUSboot: español por defecto
 	int wait_for_mutex = 0, forced_windows_version = 0;
 	uint32_t wue_options;
 	FILE* fd;
@@ -3646,7 +3646,7 @@ skip_args_processing:
 		uprintf("AppStore version detected");
 
 	// Look for a .ini file in the current app directory
-	static_sprintf(ini_path, "%srufus.ini", app_dir);
+	static_sprintf(ini_path, "%saetherfusboot.ini", app_dir);
 	fd = fopenU(ini_path, ini_flags);	// Will create the file if portable mode is requested
 #if !defined(ALPHA)
 	// Using the string directly in safe_strcmp() would call GetSignatureName() twice
@@ -3863,6 +3863,9 @@ relaunch:
 	if (get_loc_data_file(loc_file, selected_locale))
 		WriteSettingStr(SETTING_LOCALE, selected_locale->txt[0]);
 
+	// AetherFUSboot: es un derivado de Rufus con nombre propio, no se hace pasar por
+	// la versión oficial; por eso no se muestra el aviso de "versión no oficial".
+	vc = TRUE;
 	if (!vc) {
 		if (MessageBoxExU(NULL, lmprintf(MSG_296), lmprintf(MSG_295),
 			MB_YESNO | MB_ICONWARNING | MB_IS_RTL | MB_SYSTEMMODAL, selected_langid) != IDYES)

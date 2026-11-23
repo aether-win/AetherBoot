@@ -636,6 +636,12 @@ static DWORD WINAPI CheckForUpdatesThread(LPVOID param)
 	PrintInfoDebug(3000, MSG_352);
 	CheckForDBXUpdates(verbose);
 
+	// AetherFUSboot: no se consulta el servidor de versiones de Rufus (ofrecería
+	// instalar Rufus en lugar de AetherFUSboot). Solo se actualizan los datos de
+	// revocación de Secure Boot (DBX) de arriba. Las versiones nuevas de
+	// AetherFUSboot se publican en el repositorio del proyecto.
+	goto out;
+
 	PrintInfoDebug(3000, MSG_243);
 	status++;	// 1
 

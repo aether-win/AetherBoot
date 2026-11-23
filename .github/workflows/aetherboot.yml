@@ -70,6 +70,57 @@ jobs:
           name: ejecutables-windows
           path: exe/
 
+  aetherfusboot:
+    name: Compilar AetherFUSboot (derivado de Rufus)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: microsoft/setup-msbuild@v2
+
+      - name: Compilar AetherFUSboot
+        shell: pwsh
+        working-directory: AetherFUSboot
+        run: |
+          function Compilar($plat, $obligatorio) {
+            foreach ($ts in 'v145', 'v143', 'v144') {
+              Write-Host "::group::AetherFUSboot | $plat | $ts"
+              msbuild rufus.sln /m /nologo /v:m /p:Configuration=Release /p:Platform=$plat `
+                      /p:PlatformToolset=$ts
+              $rc = $LASTEXITCODE
+              Write-Host "::endgroup::"
+              if ($rc -eq 0) { Write-Host "OK  AetherFUSboot ($plat, $ts)"; return }
+            }
+            if ($obligatorio) { throw "Falló la compilación de AetherFUSboot ($plat)" }
+            Write-Host "::warning::AetherFUSboot ($plat) no se pudo compilar; se omite"
+          }
+          Compilar 'x64'   $true
+          Compilar 'x86'   $false
+          Compilar 'arm64' $false
+
+      - name: Reunir ejecutables
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force salida | Out-Null
+          $mapa = @{ 'x64' = 'AetherFUSboot.exe'; 'x86' = 'AetherFUSboot_x86.exe'; 'arm64' = 'AetherFUSboot_ARM64.exe' }
+          foreach ($k in $mapa.Keys) {
+            $f = Join-Path "AetherFUSboot\$k\Release" 'rufus.exe'
+            if (Test-Path $f) { Copy-Item $f "salida\$($mapa[$k])"; Write-Host "OK  $($mapa[$k])" }
+            else { Write-Host "--  $($mapa[$k]) (no generado)" }
+          }
+          if (-not (Test-Path 'salida\AetherFUSboot.exe')) { throw 'Falta AetherFUSboot.exe' }
+          Copy-Item AetherFUSboot\LICENSE.txt salida\LICENCIA.txt
+          Copy-Item AetherFUSboot\LEEME_AetherFUSboot.md salida\LEEME.md
+          Get-ChildItem salida | Get-FileHash -Algorithm SHA256 |
+            ForEach-Object { "$($_.Hash.ToLower())  $(Split-Path $_.Path -Leaf)" } |
+            Set-Content salida\SHA256SUMS.txt
+          Get-Content salida\SHA256SUMS.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aetherfusboot-windows
+          path: salida/
+
   paquete:
     name: Armar paquete de AetherBoot
     needs: windows

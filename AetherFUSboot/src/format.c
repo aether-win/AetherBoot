@@ -314,9 +314,10 @@ static void ToValidLabel(char* Label, BOOL bFAT)
 			// size (eg: "256 MB", "7.9 GB"). Note that we can't use SelectedDrive.proposed_label
 			// here as it may contain localized character for GB or MB, so make sure that the
 			// effective label we use is an English one, and also make sure we convert the dot.
-			static_sprintf(label, "%s", SizeToHumanReadable(SelectedDrive.DiskSize, TRUE, FALSE));
+			// AetherFUSboot: se usa la etiqueta AetherFUS en lugar del tamaño
+			static_sprintf(label, "%s", AETHER_DEFAULT_LABEL);
 			for (i = 0; label[i] != 0; i++)
-				wLabel[i] = (label[i] == '.') ? '_' : label[i];
+				wLabel[i] = (label[i] == '.') ? '_' : (wchar_t)toupper(label[i]);
 			wLabel[i] = 0;
 			uprintf("FAT label is mostly underscores. Using '%S' label instead.", wLabel);
 		}
@@ -1416,6 +1417,11 @@ static BOOL WriteDrive(HANDLE hPhysicalDrive, BOOL bZeroDrive)
 				goto out;
 		}
 		uprintfs("\r\n");
+		// AetherFUSboot: verificar que la unidad contiene exactamente la imagen
+		if (vhd_path == NULL) {
+			if (!AetherVerifyImageWrite(hPhysicalDrive, image_path, target_size, SelectedDrive.SectorSize, buf_size))
+				goto out;
+		}
 	}
 	RefreshDriveLayout(hPhysicalDrive);
 	ret = TRUE;
@@ -1552,6 +1558,28 @@ DWORD WINAPI FormatThread(void* param)
 		goto out;
 	}
 	RefreshDriveLayout(hPhysicalDrive);
+
+	// AetherFUSboot: prueba rápida de capacidad real (detecta USB falsas). Se omite si
+	// se desactivó la detección de unidades falsas o si se va a hacer la búsqueda
+	// completa de bloques dañados, que ya incluye esa comprobación.
+	if (detect_fakes && !IsChecked(IDC_BAD_BLOCKS)) {
+		int aether_bad;
+		double aether_mbps = 0.0;
+		PrintInfo(0, MSG_393);
+		aether_bad = AetherQuickCapacityTest(hPhysicalDrive, SelectedDrive.DiskSize, SelectedDrive.SectorSize, &aether_mbps);
+		if (aether_mbps > 0.0)
+			uprintf("Velocidad de escritura medida: %.2f MB/s%s", aether_mbps,
+				(aether_mbps < 1.0) ? " (muy lenta: la causa es la memoria USB)" : "");
+		CHECK_FOR_USER_CANCEL;
+		if (aether_bad > 0) {
+			if (Notification(MB_YESNO | MB_ICONWARNING, lmprintf(MSG_391), lmprintf(MSG_392, aether_bad, 32)) != IDYES) {
+				uprintf("Operación cancelada por el usuario tras la prueba de capacidad.");
+				ErrorStatus = RUFUS_ERROR(ERROR_CANCELLED);
+				goto out;
+			}
+			uprintf("El usuario decidió continuar pese a la prueba de capacidad.");
+		}
+	}
 
 	// If we write an image that contains an ESP, Windows forcibly reassigns/removes the target
 	// drive, which causes a write error. To work around this, we must lock the logical drive.

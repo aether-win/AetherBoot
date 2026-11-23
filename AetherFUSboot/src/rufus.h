@@ -44,7 +44,7 @@
  */
 //#define RUFUS_TEST
 
-#define APPLICATION_NAME            "Rufus"
+#define APPLICATION_NAME            "AetherFUSboot"	// AetherFUSboot: basado en Rufus (Pete Batard)
 #if defined(_M_AMD64)
 #define APPLICATION_ARCH            "x64"
 #elif defined(_M_IX86)
@@ -56,7 +56,8 @@
 #else
 #define APPLICATION_ARCH            "(Unknown Arch)"
 #endif
-#define COMPANY_NAME                "Akeo Consulting"
+#define COMPANY_NAME                "AetherBoot"
+#define AETHER_DEFAULT_LABEL        "AetherFUS"	// Etiqueta propuesta por defecto
 #define STR_NO_LABEL                "NO_LABEL"
 #define LEFT_TO_RIGHT_MARK          "\u200e"
 #define RIGHT_TO_LEFT_MARK          "\u200f"
@@ -830,6 +831,10 @@ extern void DestroyTooltip(HWND hControl);
 extern void DestroyAllTooltips(void);
 extern int NotificationEx(int type, const char* dont_display_setting, const notification_info* more_info, const char* title, const char* format, ...);
 #define Notification(type, title, ...) NotificationEx(type, NULL, NULL, title, __VA_ARGS__)
+/* AetherFUSboot (aether.c) */
+extern void AetherApplyWindowStyle(HWND hWnd);
+extern int AetherQuickCapacityTest(HANDLE hDrive, uint64_t disk_size, DWORD sector_size, double* write_mbps);
+extern BOOL AetherVerifyImageWrite(HANDLE hDrive, const char* image_file, uint64_t image_size, DWORD sector_size, DWORD buf_size);
 extern int SelectionDialog(char* title, char* message, selection_dialog_options_t* options);
 extern void ListDialog(char* title, char* message, char** items, int size);
 extern SIZE GetTextSize(HWND hCtrl, char* txt);
