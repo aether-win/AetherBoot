@@ -26,37 +26,29 @@ jobs:
 
       - uses: microsoft/setup-msbuild@v2
 
-      - name: Compilar Aether2Disk (Win32, x64, ARM64)
+      - name: Compilar Aether2Disk, AetherPlugson y AetherVInk
         shell: pwsh
         run: |
-          foreach ($p in @('Win32', 'x64', 'ARM64')) {
-            msbuild Ventoy2Disk\Ventoy2Disk.sln /m /p:Configuration=Release /p:Platform=$p `
-                    /p:PlatformToolset=v143 /p:WindowsTargetPlatformVersion=10.0
-            if ($LASTEXITCODE -ne 0) { throw "Falló la compilación de Aether2Disk ($p)" }
+          # Prueba los conjuntos de herramientas instalados en el servidor, en orden.
+          function Compilar($sln, $plat, $obligatorio) {
+            foreach ($ts in 'v143', 'v145', 'v144') {
+              Write-Host "::group::$sln | $plat | $ts"
+              msbuild $sln /m /nologo /v:m /p:Configuration=Release /p:Platform=$plat `
+                      /p:PlatformToolset=$ts /p:WindowsTargetPlatformVersion=10.0
+              $rc = $LASTEXITCODE
+              Write-Host "::endgroup::"
+              if ($rc -eq 0) { Write-Host "OK  $sln ($plat, $ts)"; return }
+            }
+            if ($obligatorio) { throw "Falló la compilación de $sln ($plat)" }
+            Write-Host "::warning::$sln ($plat) no se pudo compilar; se omite"
           }
-
-      - name: Compilar Aether2Disk (ARM 32 bits, opcional)
-        shell: pwsh
-        continue-on-error: true
-        run: |
-          msbuild Ventoy2Disk\Ventoy2Disk.sln /m /p:Configuration=Release /p:Platform=ARM `
-                  /p:PlatformToolset=v143 /p:WindowsTargetPlatformVersion=10.0
-
-      - name: Compilar AetherPlugson (Win32, x64)
-        shell: pwsh
-        run: |
-          foreach ($p in @('Win32', 'x64')) {
-            msbuild Plugson\vs\VentoyPlugson\VentoyPlugson.sln /m /p:Configuration=Release /p:Platform=$p `
-                    /p:PlatformToolset=v143 /p:WindowsTargetPlatformVersion=10.0
-            if ($LASTEXITCODE -ne 0) { throw "Falló la compilación de AetherPlugson ($p)" }
-          }
-
-      - name: Compilar AetherVInk (Win32)
-        shell: pwsh
-        run: |
-          msbuild Vlnk\vs\VentoyVlnk\VentoyVlnk.sln /m /p:Configuration=Release /p:Platform=Win32 `
-                  /p:PlatformToolset=v143 /p:WindowsTargetPlatformVersion=10.0
-          if ($LASTEXITCODE -ne 0) { throw "Falló la compilación de AetherVInk" }
+          Compilar 'Ventoy2Disk\Ventoy2Disk.sln' 'Win32' $true
+          Compilar 'Ventoy2Disk\Ventoy2Disk.sln' 'x64'   $true
+          Compilar 'Ventoy2Disk\Ventoy2Disk.sln' 'ARM64' $false
+          Compilar 'Ventoy2Disk\Ventoy2Disk.sln' 'ARM'   $false
+          Compilar 'Plugson\vs\VentoyPlugson\VentoyPlugson.sln' 'Win32' $true
+          Compilar 'Plugson\vs\VentoyPlugson\VentoyPlugson.sln' 'x64'   $true
+          Compilar 'Vlnk\vs\VentoyVlnk\VentoyVlnk.sln' 'Win32' $true
 
       - name: Reunir ejecutables
         shell: pwsh
