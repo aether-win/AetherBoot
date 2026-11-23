@@ -245,6 +245,7 @@ void LogFlush(void);
 BOOL IsPathExist(BOOL Dir, const char *Fmt, ...);
 void DumpWindowsVersion(void);
 const CHAR* GetLocalVentoyVersion(void);
+void AetherApplyWindowStyle(HWND hWnd);
 const CHAR* ParseVentoyVersionFromString(CHAR *Buf);
 CHAR GetFirstUnusedDriveLetter(void);
 const CHAR * GetBusTypeString(STORAGE_BUS_TYPE Type);

@@ -403,7 +403,7 @@
     <Image Include="Res\refresh.ico" />
     <Image Include="Res\secure.ico" />
     <Image Include="Res\secure2.ico" />
-    <Image Include="Res\ventoy.ico" />
+    <Image Include="Res\aether2disk.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

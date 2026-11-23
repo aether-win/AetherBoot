@@ -171,7 +171,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Res\ventoy.ico">
+    <Image Include="Res\aether2disk.ico">
       <Filter>资源文件</Filter>
     </Image>
     <Image Include="res\icon2.ico">
