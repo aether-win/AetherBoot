@@ -140,7 +140,7 @@ static int find_disk_by_sig(uint8_t *sig, char *diskname)
         rc = vtoy_get_disk_guid(p->d_name, vtguid, vtsig);
         if (rc == 0 && memcmp(vtsig, sig, 4) == 0)
         {
-            sprintf(diskname, "%s", p->d_name);
+            snprintf(diskname, 128, "%s", p->d_name); /* caller buffer is 128 bytes */
             count++;
         }
     }
@@ -333,7 +333,18 @@ static int parse_vlnk(char *infile)
     }
     debug("moutpoint of %s is <%s>\n", partpath, mntpoint);
 
-    strcat(mntpoint, vlnk.filepath);
+    /* vlnk.filepath comes from an untrusted file and may lack a NUL */
+    {
+        size_t mlen = strlen(mntpoint);
+        size_t flen = strnlen(vlnk.filepath, sizeof(vlnk.filepath));
+        if (mlen + flen >= sizeof(mntpoint))
+        {
+            printf("Vlnk path too long!\n");
+            return 1;
+        }
+        memcpy(mntpoint + mlen, vlnk.filepath, flen);
+        mntpoint[mlen + flen] = 0;
+    }
     printf("Vlnk Point: %s\n", mntpoint);
     if (access(mntpoint, F_OK) >= 0)
     {

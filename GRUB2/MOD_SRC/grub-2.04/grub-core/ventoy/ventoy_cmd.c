@@ -1779,6 +1779,18 @@ static int ventoy_check_vlnk_data(ventoy_vlnk *vlnk, int print, char *dst, int s
         return 1;
     }
 
+    /* the crc is not a security check: make sure the path is NUL terminated */
+    if (vlnk->filepath[sizeof(vlnk->filepath) - 1] != 0)
+    {
+        vlnk->filepath[sizeof(vlnk->filepath) - 1] = 0;
+        if (print)
+        {
+            grub_printf("VLNK path not terminated\n");
+            grub_refresh();
+        }
+        return 1;
+    }
+
     if (!g_vlnk_part_list)
     {
         grub_disk_dev_iterate(ventoy_vlnk_iterate_disk, NULL);
