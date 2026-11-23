@@ -18,6 +18,33 @@
 
 Para equipos ARM o para usar la versión de 64 bits, vea `FOR_X64_ARM.txt` (carpeta `altexe`).
 
+### Comprobaciones automáticas de Aether2Disk
+
+Antes de borrar el dispositivo, Aether2Disk revisa:
+
+- **Disco de Windows:** si el disco elegido contiene Windows, la operación se bloquea.
+- **Protección contra escritura:** si la memoria o el adaptador está bloqueado (interruptor *LOCK*),
+  se avisa y no se continúa.
+- **Disco que no es USB** (SATA, NVMe…, visible con *Mostrar todos los dispositivos*): se pide una
+  confirmación extra porque podría ser un disco interno.
+
+Durante la instalación se hace una **prueba rápida de capacidad real**: se escriben y se vuelven a
+leer 32 bloques de 64 KB repartidos por todo el disco, incluido el final. Si alguno no vuelve igual,
+es muy probable que la memoria sea falsa (anuncia más capacidad de la que tiene) o esté dañada, y
+Aether2Disk pregunta si quiere continuar (la respuesta predeterminada es **No**). La prueba tarda
+unos segundos en una memoria normal.
+
+Al terminar, `log.txt` incluye un **resumen en español**: operación, dispositivo, resultado,
+duración, resultado de la prueba de capacidad y velocidad de escritura medida. Si algo falla,
+Aether2Disk ofrece abrir el registro.
+
+### Restaurar la USB a memoria normal
+
+**Opción → Restaurar USB (quitar AetherBoot)** borra AetherBoot y deja la memoria con una sola
+partición formateada y con la etiqueta `USB`: FAT32 si mide 32 GB o menos (máxima compatibilidad
+con televisores, radios y consolas) y exFAT si es más grande. En discos de más de 2 TB queda una
+tabla GPT vacía que hay que formatear desde el Explorador de Windows.
+
 ## En Linux
 
 ```sh

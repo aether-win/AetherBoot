@@ -63,3 +63,25 @@ generan también las herramientas de Linux con las correcciones de seguridad.
 | `Scripts/plugson_es/` | Extracción y aplicación de la traducción de AetherPlugson |
 | `Scripts/auditoria_referencias.py` | Auditoría de referencias (A/B/C) |
 | `Scripts/limpiar_logo.py`, `quitar_sombra_negra.py`, `lema_es.py`, `derivados.py` | Preparación de los logotipos e iconos |
+
+## Prueba de arranque automática
+
+El trabajo **prueba-arranque** de `.github/workflows/aetherboot.yml` comprueba en cada compilación
+que el paquete realmente arranca:
+
+1. Instala AetherBoot en un disco virtual de 3 GB con el instalador de Linux del repositorio.
+2. Comprueba que la partición de datos se llama `Aether` y la de arranque `VTOYEFI`.
+3. Crea una ISO de prueba mínima (núcleo Linux + busybox) que escribe `AETHERBOOT_PRUEBA_OK` por el
+   puerto serie.
+4. Arranca el disco en QEMU en modo **BIOS** y en modo **UEFI**, captura la pantalla del menú y
+   elige la ISO.
+
+La prueba pasa solo si el menú se ve con el tema de AetherBoot y la ISO arranca en los dos modos.
+Las capturas y registros quedan en el artefacto `prueba-arranque-capturas`.
+Scripts: `AetherBoot/Tests/prueba_arranque.sh` y `AetherBoot/Tests/prueba_qemu.py`.
+
+## AetherFUSboot
+
+El trabajo **aetherfusboot** compila `AetherFUSboot/rufus.sln` para x64, x86 y ARM64 y publica el
+artefacto `aetherfusboot-windows`. Detalles en `AetherFUSboot/LEEME_AetherFUSboot.md`.
+
