@@ -248,6 +248,7 @@ cp $OPT plugin $tmpdir/
 cp $OPT CreatePersistentImg.sh $tmpdir/
 cp $OPT ExtendPersistentImg.sh $tmpdir/
 cp $OPT VerificarISOs.sh $tmpdir/
+cp $OPT Aether2Disk.sh AetherWeb.sh AetherPlugson.sh $tmpdir/
 dos2unix -q $tmpdir/Ventoy2Disk.sh
 dos2unix -q $tmpdir/VentoyWeb.sh
 dos2unix -q $tmpdir/VentoyPlugson.sh
@@ -327,6 +328,7 @@ cp $OPT $LANG_DIR/languages.json $tmpdir/tool/
 chmod +x $tmpdir/CreatePersistentImg.sh
 chmod +x $tmpdir/ExtendPersistentImg.sh
 chmod +x $tmpdir/VerificarISOs.sh
+chmod +x $tmpdir/Aether2Disk.sh $tmpdir/AetherWeb.sh $tmpdir/AetherPlugson.sh
 
 tar -czvf ventoy-${curver}-linux.tar.gz $tmpdir
 

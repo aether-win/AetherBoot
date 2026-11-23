@@ -13,7 +13,7 @@ print_usage() {
 
 uid=$(id -u)
 if [ $uid -ne 0 ]; then
-    echo "Please use sudo or run the script as root."
+    echo "Use sudo o ejecute el script como root."
     exit 1
 fi
 
@@ -45,7 +45,7 @@ fi
 
 
 if ! [ -f "$OLDDIR/tool/plugson.tar.xz" ]; then
-    echo "Please run under the correct directory!" 
+    echo "¡Ejecútelo desde la carpeta correcta!" 
     exit 1
 fi
 
@@ -114,7 +114,7 @@ if [ -z "$DISK" ]; then
 fi
 
 if ps -ef | grep "tool/$TOOLDIR/Plugson.*$HOST.*$PORT" | grep -q -v grep; then
-    echo "Another ventoy server is running now, please close it first."
+    echo "Ya hay otro servidor de AetherBoot en marcha; ciérrelo primero."
     exit 1
 fi
 
@@ -137,7 +137,7 @@ fi
 
 version=$(get_disk_ventoy_version $DISK)
 if [ $? -eq 0 ]; then
-    echo "Ventoy version in Disk: $version"
+    echo "Versión de AetherBoot en el disco: $version"
     
     vtPart1Type=$(dd if=$DISK bs=1 count=1 skip=450 status=none | hexdump -n1 -e  '1/1 "%02X"')
     if [ "$vtPart1Type" = "EE" ]; then            
@@ -156,7 +156,7 @@ if [ $? -eq 0 ]; then
         secureboot=0
     fi
 else
-    echo "$DISK is NOT Ventoy disk."
+    echo "$DISK NO es un disco AetherBoot."
     exit 1
 fi
 
@@ -204,15 +204,15 @@ if [ -f /proc/$wID/maps ]; then
     echo ""
     echo "==============================================================="
     if [ "$LANG" = "zh_CN.UTF-8" ]; then
-        echo "  Ventoy Plugson Server 已经启动 ..."
+        echo "  AetherPlugson 已经启动 ..."
         echo "  请打开浏览器，访问 http://${HOST}:${PORT}"
     else
-        echo "  Ventoy Plugson Server is running ..."
-        echo "  Please open your browser and visit http://${HOST}:${PORT}"
+        echo "  AetherPlugson está en marcha ..."
+        echo "  Abra el navegador y visite http://${HOST}:${PORT}"
     fi
     echo "==============================================================="
     echo ""
-    echo "################## Press Ctrl + C to exit #####################"
+    echo "############## Presione Ctrl + C para salir ##################"
     echo ""
 
     wait $wID

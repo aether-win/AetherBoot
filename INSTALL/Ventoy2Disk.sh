@@ -24,18 +24,18 @@ export PATH="$(pwd)/tool/$TOOLDIR:$PATH"
 
 echo ''
 echo '**********************************************'
-echo "      Ventoy: $curver  $TOOLDIR"
-echo "      longpanda admin@ventoy.net"
-echo "      https://www.ventoy.net"
+echo "      AetherBoot $curver  ($TOOLDIR)"
+echo "      Aether2Disk - instalador de AetherBoot"
+echo "      Basado en la tecnología Ventoy (GPLv3)"
 echo '**********************************************'
 echo ''
 
 
 if ! [ -f ./boot/boot.img ]; then
     if [ -d ./grub ]; then
-        echo "Don't run Ventoy2Disk.sh here, please download the released install package, and run the script in it."
+        echo "No ejecute Aether2Disk aquí: descargue el paquete de instalación publicado y ejecútelo desde su carpeta."
     else
-        echo "Please run under the correct directory!" 
+        echo "¡Ejecútelo desde la carpeta correcta!" 
     fi
     exit 1
 fi

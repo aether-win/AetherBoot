@@ -43,10 +43,10 @@ PATH=./tool/$TOOLDIR:$PATH
 
 if [ ! -f ./boot/boot.img ]; then
     if [ -d ./grub ]; then
-        echo "Don't run VentoyWeb.sh here, please download the released install package, and run the script in it."
+        echo "No ejecute Aether2Disk aquí: descargue el paquete de instalación publicado y ejecútelo desde su carpeta."
     else
         echo "Current directory is $PWD"
-        echo "Please run under the correct directory!" 
+        echo "¡Ejecútelo desde la carpeta correcta!" 
     fi
     exit 1
 fi
@@ -109,15 +109,15 @@ vtVer=$(cat ventoy/version)
 echo ""
 echo "==============================================================="
 if [ "$LANG" = "zh_CN.UTF-8" ]; then
-    echo "  Ventoy Server $vtVer 已经启动 ..."
+    echo "  Aether2Disk $vtVer 已经启动 ..."
     echo "  请打开浏览器，访问 http://${HOST}:${PORT}"
 else
-    echo "  Ventoy Server $vtVer is running ..."
-    echo "  Please open your browser and visit http://${HOST}:${PORT}"
+    echo "  Aether2Disk $vtVer está en marcha ..."
+    echo "  Abra el navegador y visite http://${HOST}:${PORT}"
 fi
 echo "==============================================================="
 echo ""
-echo "################## Press Ctrl + C to exit #####################"
+echo "############## Presione Ctrl + C para salir ##################"
 echo ""
 
 wait $wID
