@@ -59,7 +59,7 @@ static const WCHAR *AetherBusName(STORAGE_BUS_TYPE Bus)
         case BusTypeMmc:     return L"MMC";
         case BusTypeVirtual: return L"Virtual";
         case BusTypeFileBackedVirtual: return L"Disco virtual (VHD)";
-        case Bus1394:        return L"FireWire";
+        case BusType1394:    return L"FireWire";
         default:             return L"desconocido";
     }
 }
