@@ -150,6 +150,16 @@ if swapon --help 2>&1 | grep -q '^ -s,'; then
     fi
 fi
 
+#check device-mapper users (LVM / LUKS / software RAID). Their partitions are
+#not listed in /proc/mounts under $DISK, e.g. an encrypted system root.
+vtDiskName=${DISK#/dev/}
+for vtholder in /sys/class/block/$vtDiskName/holders/* /sys/class/block/$vtDiskName/$vtDiskName*/holders/*; do
+    if [ -e "$vtholder" ]; then
+        vterr "$DISK is in use by $(basename $vtholder) (LVM/LUKS/RAID), please release it first!"
+        exit 1
+    fi
+done
+
 #check access
 if dd if="$DISK" of=/dev/null bs=1 count=1 >/dev/null 2>&1; then
     vtdebug "root permission check ok ..."
