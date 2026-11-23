@@ -31,6 +31,7 @@
 #include <oleacc.h>
 #include <winioctl.h>
 #include <assert.h>
+#include <math.h>
 
 #include "rufus.h"
 #include "drive.h"
@@ -57,6 +58,7 @@ static int rh, ddh, bw, hw, fw;
 // See GetFullWidth() for details on how these values are used
 static int sw, mw, bsw, sbw, ssw, tw, dbw;
 static int aether_header_height = 0;	// AetherFUSboot: alto de la cabecera (0 = sin rediseño)
+static int aether_fade_alpha = 255;
 static WNDPROC progress_original_proc = NULL;
 static wchar_t wtbtext[2][128];
 static IAccPropServices* pfaps = NULL;
@@ -906,6 +908,8 @@ static INT_PTR CALLBACK ProgressCallback(HWND hCtrl, UINT message, WPARAM wParam
 	static BOOL marquee_mode = FALSE;
 	static uint32_t pos = 0, min = 0, max = 0xFFFF;
 	static COLORREF color = PROGRESS_BAR_NORMAL_COLOR;
+	// AetherFUSboot: posición mostrada (se acerca suavemente a la real) y brillo animado
+	static float aether_shown = 0.0f, aether_sheen = -0.3f;
 
 	switch (message) {
 
@@ -934,6 +938,8 @@ static INT_PTR CALLBACK ProgressCallback(HWND hCtrl, UINT message, WPARAM wParam
 	case PBM_SETPOS:
 		CallWindowProc(progress_original_proc, hCtrl, message, wParam, lParam);
 		pos = (WORD)wParam;
+		if (is_darkmode_enabled && (aether_header_height > 0))
+			SetTimer(hCtrl, TID_AETHER_PROGRESS, 16, NULL);
 		InvalidateRect(hProgress, NULL, TRUE);
 		return (INT_PTR)TRUE;
 
@@ -954,6 +960,24 @@ static INT_PTR CALLBACK ProgressCallback(HWND hCtrl, UINT message, WPARAM wParam
 		return (INT_PTR)TRUE;
 
 	case WM_TIMER:
+		if (wParam == TID_AETHER_PROGRESS) {
+			float range = (max > min) ? (float)(max - min) : 1.0f;
+			float target = (pos > min) ? (float)(pos - min) / range : 0.0f;
+			BOOL active = (pos > min) && (pos < max) && !marquee_mode;
+			if (target < aether_shown - 0.05f)
+				aether_shown = target;		// reinicio: sin animación hacia atrás
+			else
+				aether_shown += (target - aether_shown) * 0.22f;
+			aether_sheen = active ? aether_sheen + 0.012f : -1.5f;
+			if (aether_sheen > 1.3f)
+				aether_sheen = -0.3f;
+			if (!active && (fabsf(target - aether_shown) < 0.002f)) {
+				aether_shown = target;
+				KillTimer(hCtrl, TID_AETHER_PROGRESS);
+			}
+			InvalidateRect(hProgress, NULL, FALSE);
+			return (INT_PTR)TRUE;
+		}
 		if ((wParam == TID_MARQUEE_TIMER) && marquee_mode) {
 			pos += max((max - min) / (1000 / MARQUEE_TIMER_REFRESH), 1);
 			if ((pos > max) || (pos < min))
@@ -975,10 +999,11 @@ static INT_PTR CALLBACK ProgressCallback(HWND hCtrl, UINT message, WPARAM wParam
 				float a = (float)(pos - min) / range, b = a + 0.2f;
 				seg[0] = a; seg[1] = min(b, 1.0f); nseg = 1;
 				if (b > 1.0f) { seg[2] = 0.0f; seg[3] = b - 1.0f; nseg = 2; }
-			} else if (pos > min) {
-				seg[0] = 0.0f; seg[1] = (float)(pos - min) / range; nseg = 1;
+			} else if (aether_shown > 0.0005f) {
+				seg[0] = 0.0f; seg[1] = min(aether_shown, 1.0f); nseg = 1;
 			}
-			AetherPaintProgress(hCtrl, hDC, seg, nseg, color, winfo, hInfoFont);
+			AetherPaintProgress(hCtrl, hDC, seg, nseg, color, winfo, hInfoFont,
+				marquee_mode ? -2.0f : aether_sheen);
 			EndPaint(hCtrl, &ps);
 			return (INT_PTR)TRUE;
 		}
@@ -1674,6 +1699,42 @@ void AetherLayoutMainDialog(HWND hDlg)
 	SetWindowPos(hDlg, NULL, 0, 0, rc.right - rc.left + 2 * dx, rc.bottom - rc.top + dy,
 		SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
 	InvalidateRect(hDlg, NULL, TRUE);
+
+	// Aparición gradual (~200 ms) y brillo que recorre la línea de la cabecera
+	SetWindowLongPtr(hDlg, GWL_EXSTYLE, GetWindowLongPtr(hDlg, GWL_EXSTYLE) | WS_EX_LAYERED);
+	SetLayeredWindowAttributes(hDlg, 0, 0, LWA_ALPHA);
+	aether_fade_alpha = 0;
+	if (!SetTimer(hDlg, TID_AETHER_FADE, 15, NULL)) {
+		SetLayeredWindowAttributes(hDlg, 0, 255, LWA_ALPHA);
+		SetWindowLongPtr(hDlg, GWL_EXSTYLE, GetWindowLongPtr(hDlg, GWL_EXSTYLE) & ~WS_EX_LAYERED);
+	}
+	SetTimer(hDlg, TID_AETHER_GLOW, 33, NULL);
+}
+
+BOOL AetherMainTimer(HWND hDlg, WPARAM id)
+{
+	RECT rc;
+
+	if (id == TID_AETHER_FADE) {
+		aether_fade_alpha = min(255, aether_fade_alpha + 22);
+		SetLayeredWindowAttributes(hDlg, 0, (BYTE)aether_fade_alpha, LWA_ALPHA);
+		if (aether_fade_alpha >= 255) {
+			KillTimer(hDlg, TID_AETHER_FADE);
+			SetWindowLongPtr(hDlg, GWL_EXSTYLE, GetWindowLongPtr(hDlg, GWL_EXSTYLE) & ~WS_EX_LAYERED);
+			RedrawWindow(hDlg, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_FRAME | RDW_ALLCHILDREN);
+		}
+		return TRUE;
+	}
+	if (id == TID_AETHER_GLOW) {
+		if (IsWindowVisible(hDlg) && !IsIconic(hDlg) && (aether_header_height > 0)) {
+			GetClientRect(hDlg, &rc);
+			rc.top = aether_header_height - AetherScale(3);
+			rc.bottom = aether_header_height;
+			InvalidateRect(hDlg, &rc, TRUE);
+		}
+		return TRUE;
+	}
+	return FALSE;
 }
 
 static void AetherGetChildRect(HWND hDlg, int id, RECT* rc)
@@ -1702,6 +1763,20 @@ static void AetherPaintHeader(HWND hDlg, HDC hdc, const RECT* client)
 	r.left = r.right;
 	r.right = rh.right;
 	AetherFillGradient(hdc, &r, AETHER_CYAN_COLOR, AETHER_HEADER_END_COLOR, TRUE);
+	{
+		// Chispa de luz que recorre la línea (ciclo de 4 s)
+		int w = rh.right - rh.left, bw = AetherScale(150);
+		float phase = (float)(GetTickCount64() % 4000) / 4000.0f;
+		int cx = rh.left - bw + (int)(phase * (float)(w + 2 * bw));
+		r.top = rh.bottom - AetherScale(2);
+		r.bottom = rh.bottom;
+		r.left = cx - bw / 2;
+		r.right = cx;
+		AetherFillGradient(hdc, &r, AETHER_ELECTRIC_COLOR, RGB(0xE6, 0xFB, 0xFF), TRUE);
+		r.left = cx;
+		r.right = cx + bw / 2;
+		AetherFillGradient(hdc, &r, RGB(0xE6, 0xFB, 0xFF), AETHER_CYAN_COLOR, TRUE);
+	}
 
 	if (hIcon == NULL)
 		hIcon = (HICON)LoadImage(hMainInstance, MAKEINTRESOURCE(IDI_ICON), IMAGE_ICON, isz, isz, LR_DEFAULTCOLOR);

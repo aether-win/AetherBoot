@@ -275,7 +275,10 @@ enum timer_type {
 	TID_APP_TIMER,
 	TID_BLOCKING_TIMER,
 	TID_REFRESH_TIMER,
-	TID_MARQUEE_TIMER
+	TID_MARQUEE_TIMER,
+	TID_AETHER_PROGRESS,	// AetherFUSboot: progreso suave
+	TID_AETHER_FADE,		// AetherFUSboot: aparición gradual de la ventana
+	TID_AETHER_GLOW			// AetherFUSboot: brillo de la línea de la cabecera
 };
 
 /* Action type, for progress bar breakdown */
@@ -840,9 +843,10 @@ extern int AetherScale(int v);
 extern void AetherFillGradient(HDC hdc, const RECT* rc, COLORREF c1, COLORREF c2, BOOL horizontal);
 extern void AetherFillRound(HDC hdc, const RECT* rc, int radius, COLORREF fill, COLORREF edge, BOOL has_edge);
 extern void AetherSubclassMainControls(HWND hDlg);
-extern void AetherPaintProgress(HWND hCtrl, HDC target, const float* segments, int nsegments, COLORREF state_color, const wchar_t* text, HFONT hFont);
+extern void AetherPaintProgress(HWND hCtrl, HDC target, const float* segments, int nsegments, COLORREF state_color, const wchar_t* text, HFONT hFont, float sheen);
 extern void AetherLayoutMainDialog(HWND hDlg);
 extern void AetherPaintMainBackground(HWND hDlg, HDC hdc);
+extern BOOL AetherMainTimer(HWND hDlg, WPARAM id);
 extern int SelectionDialog(char* title, char* message, selection_dialog_options_t* options);
 extern void ListDialog(char* title, char* message, char** items, int size);
 extern SIZE GetTextSize(HWND hCtrl, char* txt);

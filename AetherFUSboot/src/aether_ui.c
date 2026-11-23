@@ -49,10 +49,16 @@
 #define AETHER_KIND_EDIT        3
 #define AETHER_KIND_STATIC      4
 
+#define AETHER_ANIM_TIMER       0xAE01
+#define AETHER_ANIM_STEP        0.16f	// ~6 pasos de 15 ms: transición de unos 100 ms
+
 typedef struct {
 	int kind;
 	BOOL hot;
 	BOOL tracking;
+	BOOL timer_on;
+	float hot_t;		// 0 = reposo, 1 = ratón encima (animado)
+	float focus_t;		// 0 = sin foco, 1 = con foco (animado)
 } AetherCtrlData;
 
 int AetherScale(int v)
@@ -194,10 +200,9 @@ static void AetherPaintButton(HWND hWnd, HDC hdc, AetherCtrlData* d)
 	BOOL enabled = IsWindowEnabled(hWnd);
 	BOOL primary = (GetDlgCtrlID(hWnd) == IDC_START);
 	BOOL split = (type == BS_SPLITBUTTON) || (type == BS_DEFSPLITBUTTON);
-	BOOL hot = d->hot || ((state & BST_HOT) != 0);
 	BOOL pushed = (state & BST_PUSHED) != 0;
-	BOOL focus = (GetFocus() == hWnd);
 	int radius = AetherScale(8), split_w = 0;
+	int ht = (int)(d->hot_t * 100.0f), ft = (int)(d->focus_t * 100.0f);
 	COLORREF fill1, fill2 = 0, edge, txt;
 	HFONT hFont, hOldFont;
 
@@ -206,31 +211,27 @@ static void AetherPaintButton(HWND hWnd, HDC hdc, AetherCtrlData* d)
 
 	if (primary) {
 		if (!enabled) {
-			fill1 = fill2 = AETHER_DISABLED_FILL_COLOR;
-			edge = AETHER_DISABLED_EDGE_COLOR;
-			txt = DARKMODE_DISABLED_TEXT_COLOR;
-		} else if (pushed) {
-			fill1 = AETHER_ELECTRIC_DARK_COLOR;
-			fill2 = AETHER_ELECTRIC_DARK_COLOR;
-			edge = AETHER_ELECTRIC_DARK_COLOR;
-			txt = RGB(255, 255, 255);
-		} else {
-			fill1 = hot ? AETHER_ELECTRIC_HOT_COLOR : AETHER_ELECTRIC_COLOR;
-			fill2 = hot ? AETHER_ELECTRIC_COLOR : AETHER_ELECTRIC_DARK_COLOR;
-			edge = focus ? AETHER_CYAN_COLOR : fill1;
-			txt = RGB(255, 255, 255);
-		}
-		AetherFillRoundGradient(hdc, &rc, radius, fill1, fill2, FALSE);
-		if (enabled && (focus || !pushed)) {
-			HPEN hp = CreatePen(PS_SOLID, 1, edge);
-			HPEN hop = (HPEN)SelectObject(hdc, hp);
-			HBRUSH hob = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
-			RoundRect(hdc, rc.left, rc.top, rc.right, rc.bottom, radius, radius);
-			SelectObject(hdc, hob);
-			SelectObject(hdc, hop);
-			DeleteObject(hp);
-		} else if (!enabled) {
 			AetherFillRound(hdc, &rc, radius, AETHER_DISABLED_FILL_COLOR, AETHER_DISABLED_EDGE_COLOR, TRUE);
+			txt = DARKMODE_DISABLED_TEXT_COLOR;
+		} else {
+			if (pushed) {
+				fill1 = fill2 = AETHER_ELECTRIC_DARK_COLOR;
+			} else {
+				fill1 = AetherMix(AETHER_ELECTRIC_COLOR, AETHER_ELECTRIC_HOT_COLOR, ht, 100);
+				fill2 = AetherMix(AETHER_ELECTRIC_DARK_COLOR, AETHER_ELECTRIC_COLOR, ht, 100);
+			}
+			AetherFillRoundGradient(hdc, &rc, radius, fill1, fill2, FALSE);
+			edge = AetherMix(fill1, AETHER_CYAN_COLOR, max(ft, ht / 2), 100);
+			{
+				HPEN hp = CreatePen(PS_SOLID, 1, edge);
+				HPEN hop = (HPEN)SelectObject(hdc, hp);
+				HBRUSH hob = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
+				RoundRect(hdc, rc.left, rc.top, rc.right, rc.bottom, radius, radius);
+				SelectObject(hdc, hob);
+				SelectObject(hdc, hop);
+				DeleteObject(hp);
+			}
+			txt = RGB(255, 255, 255);
 		}
 	} else {
 		if (!enabled) {
@@ -238,9 +239,10 @@ static void AetherPaintButton(HWND hWnd, HDC hdc, AetherCtrlData* d)
 			edge = AETHER_DISABLED_EDGE_COLOR;
 			txt = DARKMODE_DISABLED_TEXT_COLOR;
 		} else {
-			fill1 = pushed ? AETHER_CARD_COLOR : (hot ? DARKMODE_HOT_CONTROL_BACKGROUND_COLOR : DARKMODE_NORMAL_CONTROL_BACKGROUND_COLOR);
-			edge = (hot || focus || pushed) ? AETHER_CYAN_COLOR : DARKMODE_NORMAL_CONTROL_EDGE_COLOR;
-			txt = DARKMODE_NORMAL_TEXT_COLOR;
+			fill1 = pushed ? AETHER_CARD_COLOR : AetherMix(DARKMODE_NORMAL_CONTROL_BACKGROUND_COLOR,
+				DARKMODE_HOT_CONTROL_BACKGROUND_COLOR, ht, 100);
+			edge = pushed ? AETHER_CYAN_COLOR : AetherMix(DARKMODE_NORMAL_CONTROL_EDGE_COLOR, AETHER_CYAN_COLOR, max(ht, ft), 100);
+			txt = AetherMix(DARKMODE_NORMAL_TEXT_COLOR, RGB(255, 255, 255), ht, 100);
 		}
 		AetherFillRound(hdc, &rc, radius, fill1, edge, TRUE);
 	}
@@ -304,8 +306,10 @@ static void AetherPaintCombo(HWND hWnd, HDC hdc, AetherCtrlData* d)
 		edge = AETHER_DISABLED_EDGE_COLOR;
 		txt = DARKMODE_DISABLED_TEXT_COLOR;
 	} else {
-		fill = (d->hot || dropped) ? DARKMODE_HOT_CONTROL_BACKGROUND_COLOR : DARKMODE_NORMAL_CONTROL_BACKGROUND_COLOR;
-		edge = (focus || dropped) ? AETHER_CYAN_COLOR : (d->hot ? RGB(0x3B, 0x6F, 0xD8) : DARKMODE_NORMAL_CONTROL_EDGE_COLOR);
+		int ht = dropped ? 100 : (int)(d->hot_t * 100.0f);
+		int ft = (dropped || focus) ? max(80, (int)(d->focus_t * 100.0f)) : (int)(d->focus_t * 100.0f);
+		fill = AetherMix(DARKMODE_NORMAL_CONTROL_BACKGROUND_COLOR, DARKMODE_HOT_CONTROL_BACKGROUND_COLOR, ht, 100);
+		edge = AetherMix(AetherMix(DARKMODE_NORMAL_CONTROL_EDGE_COLOR, RGB(0x3B, 0x6F, 0xD8), ht, 100), AETHER_CYAN_COLOR, ft, 100);
 		txt = DARKMODE_NORMAL_TEXT_COLOR;
 	}
 	AetherFillRound(hdc, &rc, radius, fill, edge, TRUE);
@@ -351,8 +355,9 @@ static void AetherPaintEditFrame(HWND hWnd, AetherCtrlData* d)
 
 	if (!(st & WS_BORDER) && !(ex & WS_EX_CLIENTEDGE))
 		return;
-	edge = !enabled ? AETHER_DISABLED_EDGE_COLOR : (focus ? AETHER_CYAN_COLOR :
-		(d->hot ? RGB(0x3B, 0x6F, 0xD8) : DARKMODE_NORMAL_CONTROL_EDGE_COLOR));
+	(void)focus;
+	edge = !enabled ? AETHER_DISABLED_EDGE_COLOR : AetherMix(AetherMix(DARKMODE_NORMAL_CONTROL_EDGE_COLOR,
+		RGB(0x3B, 0x6F, 0xD8), (int)(d->hot_t * 100.0f), 100), AETHER_CYAN_COLOR, (int)(d->focus_t * 100.0f), 100);
 	inner = enabled ? DARKMODE_NORMAL_CONTROL_BACKGROUND_COLOR : AETHER_DISABLED_FILL_COLOR;
 
 	hdc = GetWindowDC(hWnd);
@@ -391,6 +396,34 @@ static void AetherRedrawUnder(HWND hWnd)
 	RedrawWindow(hParent, &rc, NULL, RDW_INVALIDATE | RDW_ERASE | RDW_ALLCHILDREN | RDW_UPDATENOW);
 }
 
+/* Animación de transiciones (ratón encima / foco): ~100 ms */
+static void AetherAnimStart(HWND hWnd, AetherCtrlData* d)
+{
+	if (!d->timer_on) {
+		if (SetTimer(hWnd, AETHER_ANIM_TIMER, 15, NULL))
+			d->timer_on = TRUE;
+	}
+}
+
+static float AetherApproach(float v, float target)
+{
+	if (v < target)
+		return min(target, v + AETHER_ANIM_STEP);
+	if (v > target)
+		return max(target, v - AETHER_ANIM_STEP);
+	return v;
+}
+
+/* Avanza un paso. Devuelve TRUE si la animación debe continuar. */
+static BOOL AetherAnimStep(HWND hWnd, AetherCtrlData* d)
+{
+	float th = d->hot ? 1.0f : 0.0f;
+	float tf = (GetFocus() == hWnd) ? 1.0f : 0.0f;
+	d->hot_t = AetherApproach(d->hot_t, th);
+	d->focus_t = AetherApproach(d->focus_t, tf);
+	return (d->hot_t != th) || (d->focus_t != tf);
+}
+
 static LRESULT CALLBACK AetherCtrlSubclass(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
 	UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
 {
@@ -408,20 +441,35 @@ static LRESULT CALLBACK AetherCtrlSubclass(HWND hWnd, UINT uMsg, WPARAM wParam, 
 		if ((d->kind != AETHER_KIND_STATIC) && !d->hot) {
 			d->hot = TRUE;
 			AetherTrackMouse(hWnd, d);
-			if (d->kind == AETHER_KIND_EDIT)
-				AetherPaintEditFrame(hWnd, d);
-			else
-				InvalidateRect(hWnd, NULL, FALSE);
+			AetherAnimStart(hWnd, d);
 		}
 		break;
 
 	case WM_MOUSELEAVE:
 		d->hot = FALSE;
 		d->tracking = FALSE;
-		if (d->kind == AETHER_KIND_EDIT)
-			AetherPaintEditFrame(hWnd, d);
-		else if (d->kind != AETHER_KIND_STATIC)
-			InvalidateRect(hWnd, NULL, FALSE);
+		if (d->kind != AETHER_KIND_STATIC)
+			AetherAnimStart(hWnd, d);
+		break;
+
+	case WM_SETFOCUS:
+	case WM_KILLFOCUS:
+		if (d->kind != AETHER_KIND_STATIC)
+			AetherAnimStart(hWnd, d);
+		break;
+
+	case WM_TIMER:
+		if (wParam == AETHER_ANIM_TIMER) {
+			if (!AetherAnimStep(hWnd, d)) {
+				KillTimer(hWnd, AETHER_ANIM_TIMER);
+				d->timer_on = FALSE;
+			}
+			if (d->kind == AETHER_KIND_EDIT)
+				AetherPaintEditFrame(hWnd, d);
+			else
+				InvalidateRect(hWnd, NULL, FALSE);
+			return 0;
+		}
 		break;
 
 	default:
@@ -616,7 +664,7 @@ static void AetherFillSegment(HDC hdc, const RECT* track, int x1, int x2, int ra
  * proporción 0..1 (hasta dos segmentos, para el modo marquesina).
  */
 void AetherPaintProgress(HWND hCtrl, HDC target, const float* segments, int nsegments,
-	COLORREF state_color, const wchar_t* text, HFONT hFont)
+	COLORREF state_color, const wchar_t* text, HFONT hFont, float sheen)
 {
 	RECT rc, track;
 	HDC hdc;
@@ -638,6 +686,31 @@ void AetherPaintProgress(HWND hCtrl, HDC target, const float* segments, int nseg
 	for (i = 0; i < nsegments; i++)
 		AetherFillSegment(hdc, &track, track.left + (int)(segments[2 * i] * w),
 			track.left + (int)(segments[2 * i + 1] * w), radius, state_color, normal);
+
+	/* Brillo que recorre la parte llena mientras se trabaja */
+	if (normal && (sheen > -1.0f) && (nsegments == 1)) {
+		int fill_l = track.left + (int)(segments[0] * w), fill_r = track.left + (int)(segments[1] * w);
+		int bw = max(AetherScale(40), w / 6), cx = track.left + (int)(sheen * w);
+		RECT band = track;
+		HRGN rgn;
+		int saved = SaveDC(hdc);
+		POINT org;
+		GetViewportOrgEx(hdc, &org);
+		rgn = CreateRoundRectRgn(track.left, track.top, track.right + 1, track.bottom + 1, radius, radius);
+		OffsetRgn(rgn, org.x, org.y);
+		ExtSelectClipRgn(hdc, rgn, RGN_AND);
+		IntersectClipRect(hdc, fill_l, track.top, fill_r, track.bottom);
+		band.left = cx - bw / 2;
+		band.right = cx;
+		AetherFillGradient(hdc, &band, AetherMix(AETHER_ELECTRIC_COLOR, AETHER_CYAN_COLOR, max(0, band.left - track.left), max(1, w)),
+			AetherMix(AETHER_CYAN_COLOR, RGB(255, 255, 255), 45, 100), TRUE);
+		band.left = cx;
+		band.right = cx + bw / 2;
+		AetherFillGradient(hdc, &band, AetherMix(AETHER_CYAN_COLOR, RGB(255, 255, 255), 45, 100),
+			AetherMix(AETHER_ELECTRIC_COLOR, AETHER_CYAN_COLOR, min(w, max(0, band.right - track.left)), max(1, w)), TRUE);
+		RestoreDC(hdc, saved);
+		DeleteObject(rgn);
+	}
 
 	if (hFont != NULL)
 		hof = (HFONT)SelectObject(hdc, AetherBoldFont(hFont));

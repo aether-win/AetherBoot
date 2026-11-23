@@ -2928,6 +2928,12 @@ static INT_PTR CALLBACK MainCallback(HWND hDlg, UINT message, WPARAM wParam, LPA
 		}
 		break;
 
+	case WM_TIMER:
+		// AetherFUSboot: animaciones de la ventana principal
+		if (AetherMainTimer(hDlg, wParam))
+			return (INT_PTR)TRUE;
+		break;
+
 	case WM_ERASEBKGND:
 		// AetherFUSboot: fondo, cabecera y tarjetas (tema oscuro)
 		if (is_darkmode_enabled) {
