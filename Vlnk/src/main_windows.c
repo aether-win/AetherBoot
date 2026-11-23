@@ -86,7 +86,53 @@ const WCHAR *g_msg_en[MSGID_BUTT] =
     L"Invalid vlnk file suffix!",
 };
 
+/* AetherVInk: textos en español (idioma por defecto) */
+const WCHAR *g_msg_es[MSGID_BUTT] =
+{
+    L"Error",
+    L"Información",
+    L"Crear",
+    L"Analizar",
+    L"¡El archivo indicado no existe!",
+    L"Este archivo no admite enlaces vlnk",
+    L"¡Sistema de archivos no compatible!",
+    L"¡Extensión de archivo no compatible!",
+    L"Error al obtener la información del disco",
+    L"¡Archivo vlnk creado correctamente!",
+    L"¡Cierre primero la otra ventana de AetherVInk que está abierta!",
+    L"¡No se pudo crear el archivo!",
+    L"¡Este archivo ya es un archivo vlnk!",
+    L"¡Archivo vlnk no válido!",
+    L"Este archivo vlnk apunta a ",
+    L"¡El archivo al que apunta el vlnk NO existe!",
+    L"¡La ruta completa del archivo es demasiado larga!",
+    L"¡Extensión de archivo vlnk no válida!",
+};
+
 const WCHAR **g_msg_lang = NULL;
+
+/* AetherBoot: estilo Windows 11 (esquinas redondeadas y paleta de la marca).
+   Se carga dinámicamente; en versiones anteriores de Windows no hace nada. */
+typedef HRESULT (WINAPI *PF_DwmSetWindowAttribute)(HWND, DWORD, LPCVOID, DWORD);
+static void AetherApplyWindowStyle(HWND hWnd)
+{
+    PF_DwmSetWindowAttribute pfSetAttr = NULL;
+    HMODULE hDwm = LoadLibraryW(L"dwmapi.dll");
+    DWORD corner = 2;
+    COLORREF caption = RGB(10, 26, 63), text = RGB(255, 255, 255), border = RGB(34, 211, 238);
+
+    if (hDwm)
+    {
+        pfSetAttr = (PF_DwmSetWindowAttribute)GetProcAddress(hDwm, "DwmSetWindowAttribute");
+    }
+    if (pfSetAttr)
+    {
+        pfSetAttr(hWnd, 33, &corner, sizeof(corner));
+        pfSetAttr(hWnd, 34, &border, sizeof(border));
+        pfSetAttr(hWnd, 35, &caption, sizeof(caption));
+        pfSetAttr(hWnd, 36, &text, sizeof(text));
+    }
+}
 
 HINSTANCE g_hInst;
 
@@ -778,6 +824,8 @@ INT_PTR CALLBACK DialogProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lPara
         case WM_INITDIALOG:
         {
             InitDialog(hWnd, wParam, lParam);
+            SetWindowTextW(hWnd, L"AetherVInk");
+            AetherApplyWindowStyle(hWnd);
             break;
         }        
         case WM_CLOSE:
@@ -893,14 +941,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
     DllProtect();
 
-    if (GetUserDefaultUILanguage() == 0x0804)
-    {
-        g_msg_lang = g_msg_cn;
-    }
-    else
-    {
-        g_msg_lang = g_msg_en;
-    }
+    /* AetherBoot: interfaz siempre en español */
+    g_msg_lang = g_msg_es;
 
     hMutex = CreateMutexA(NULL, TRUE, "VtoyVlnkMUTEX");
     if ((hMutex != NULL) && (GetLastError() == ERROR_ALREADY_EXISTS))
@@ -919,7 +961,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
     if (g_ShowHelp)
     {
-        VtoyMessageBox(NULL, L"VentoyVlnk.exe  CMD\r\n  -i  Input file path\r\n  -o  Output vlnk file path\r\n  -q  Quite mode (no log)", L"Tip", MB_OK);
+        VtoyMessageBox(NULL, L"AetherVInk.exe  ORDEN\r\n  -i  Ruta del archivo de entrada\r\n  -o  Ruta del archivo vlnk de salida\r\n  -q  Modo silencioso (sin registro)", L"Ayuda", MB_OK);
         return 0;
     }
     else if (g_CmdInFile[0] && g_CmdOutFile[0])
